@@ -4,6 +4,7 @@ from accounts.models import CustomUser
 from .serializers import CustomUserSuperAdminSerializer, CustomUserPictureUpdateSerializer, \
     CustomUserSubAdminSerializer
 from .permissions import IsSuperAdmin
+from .paginations import CustomPagination
 
 
 class SuperAdminDetailView(generics.RetrieveAPIView):
@@ -52,6 +53,7 @@ class SubAdminCreateView(generics.CreateAPIView):
 
     
 class SubAdminListView(generics.ListAPIView):
+    pagination_class = CustomPagination
     queryset = CustomUser.active_objects.filter(is_admin=True)
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]

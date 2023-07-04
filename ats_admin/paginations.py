@@ -1,6 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
 
-class StandardResultPagination(PageNumberPagination):
+class CustomPagination(PageNumberPagination):
     page_size=10
     ordering ='id'
     page_size_query_param='page_size'
