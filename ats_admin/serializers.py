@@ -22,10 +22,12 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['full_name', 'username', 'email', 'position', 'permission_level', 'password', 'confirm_password']
+        fields = ['first_name', 'last_name', 'username', 'email', 'position',
+                  'permission_level', 'password', 'profile_picture' 'confirm_password']
         extra_kwargs = {
             'position': {'required': True},
-            'permission_level': {'required': True}
+            'permission_level': {'required': True},
+            'full_name' : {'read_only': True }
         }
     
     def validate(self, attrs):

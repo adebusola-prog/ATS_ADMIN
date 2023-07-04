@@ -87,6 +87,9 @@ class CustomUser(AbstractUser):
     active_objects = ActiveManager()
     inactive_objects = InActiveManager()
 
+    class Meta:
+        ordering =  ['date_joined']
+    
     def __str__(self):
         return self.username
     
@@ -97,6 +100,7 @@ class CustomUser(AbstractUser):
         if self.is_superadmin:
             return "Admin"
         return ''
+    
     
     @property
     def image_URL(self):
