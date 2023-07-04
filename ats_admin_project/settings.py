@@ -29,7 +29,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://ats-admin-dashboard.onrender.com', '*']
 
 
 # Application definition
@@ -53,14 +53,14 @@ INSTALLED_APPS = [
 
 ]
 
-#  CSRF_TRUSTED_ORIGINS = ['https://houserentmanagementsystem-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://ats-admin-dashboard.onrender.com']
 
-# CORS_ALLOWED_ORIGINS = ['https://houserentmanagementsystem-production.up.railway.app', 'http://localhost:3000',
-#                         'http://localhost:8000', 'http://127.0.0.1:3000', 'http://127.0.0.1:8000']
-#                         # "https://zippy-dango-7ea3fe.netlify.app", "https://afex-web-project.netlify.app"]
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = ['https://ats-admin-dashboard.onrender.com', 'http://localhost:4000',
+                        'http://localhost:8000', 'http://127.0.0.1:4000', 'http://127.0.0.1:8000']
+                        # "https://zippy-dango-7ea3fe.netlify.app", "https://afex-web-project.netlify.app"]
+CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 

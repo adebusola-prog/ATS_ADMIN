@@ -70,7 +70,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=30, null=False, blank=False)
     email = models.EmailField(unique=True)
     phone_number = PhoneNumberField(unique=True, null=True)
-    profile_picture = models.ImageField(upload_to="images/user_profile_picture", default="avatar.svg",
+    profile_picture = models.ImageField(upload_to="images/user_profile_picture", default="pi.png",
                                         validators=[validate_image_size, validate_image_file_extension])
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
