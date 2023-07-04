@@ -1,7 +1,7 @@
 from rest_framework import generics,  status, permissions, exceptions
 from rest_framework.status import HTTP_403_FORBIDDEN
 from accounts.models import CustomUser
-from .serializers import CustomUserSuperAdminSerializer, CustomUserUserPictureUpdateSerializer, \
+from .serializers import CustomUserSuperAdminSerializer, CustomUserPictureUpdateSerializer, \
     CustomUserSubAdminSerializer
 from .permissions import IsSuperAdmin
 
@@ -26,7 +26,7 @@ class SuperAdminDetailView(generics.RetrieveAPIView):
 # this should be done by only the useradmin
 class ProfilePictureUpdateView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserUserPictureUpdateSerializer
+    serializer_class = CustomUserPictureUpdateSerializer
     permission_classes = [IsSuperAdmin]
 
     def get_object(self):

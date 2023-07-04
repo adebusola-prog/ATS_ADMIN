@@ -9,7 +9,7 @@ class CustomUserSuperAdminSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'email', 'position', "is_superadmin")
 
 
-class CustomUserUserPictureUpdateSerializer(serializers.ModelSerializer):
+class CustomUserPictureUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('profile_picture',)
