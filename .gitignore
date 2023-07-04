@@ -1,0 +1,6 @@
+.env
+env/
+ENV
+*/ATS_ADMIN_VENV/*
+.ATS_ADMIN_VENV
+ATS_ADMIN_VENV/
