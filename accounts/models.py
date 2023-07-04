@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .validators import validate_image_size
 from django.core.validators import validate_image_file_extension
 from base import constants
+
 class ActiveManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
