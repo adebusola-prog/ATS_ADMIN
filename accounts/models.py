@@ -5,7 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from .validators import validate_image_size
 from django.core.validators import validate_image_file_extension
-
+from base import constants
 class ActiveManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
@@ -48,19 +48,31 @@ class MyAccountManager(BaseUserManager):
 class CustomUser(AbstractUser):
     """Custom User Model that takes extra fields for easier authentication"""
 
+    CONTENT_MANAGER = constants.CONTENT_MANAGER
+    MEMBERSHIP_MANAGER = constants.MEMBERSHIP_MANAGER
+    ASSESSMENT_MANAGER = constants.ASSESSMENT_MANAGER
+    APPLICATIION_MANAGER = constants.APPLICATION_MANAGER
+    SUPER_ADMIN = constants.SUPER_ADMIN
+
     PERMISSION_LEVEL_CHOICES = (
-        ('content_manager', _('Content Manager')),
-        ('membership_manager', _('Membership Manager')),
-        ('assessment_manager', _('Assessment Manager')),
-        ('application_manager', _('Application Manager')),
-        ('superadmin', _('Super Admin')),
+        ('Content_manager', _(CONTENT_MANAGER)),
+        ('Membership_manager', _(MEMBERSHIP_MANAGER)),
+        ('Assessment_manager', _(ASSESSMENT_MANAGER)),
+        ('Application_manager', _(APPLICATIION_MANAGER)),
+        ('Superadmin', _(SUPER_ADMIN)),
     )
+    
+    BACKEND_DEVELOPER = constants.BACKEND_DEVELOPER
+    FRONTEND_DEVEOPER = constants.FRONTEND_DEVEOPER
+    MOBILE_DEVELOPER = constants.MOBILE_DEVELOPER 
+    PRODUCT_MANAGER = constants.PRODUCT_MANAGER
+   
 
     POSITION_CHOICES = (
-        ('backend_developer', _('Backend Developer')),
-        ('frontend_developer', _('Frontend Developer')),
-        ('mobile_developer', _('Mobile Developer')),
-        ('product_designer', _('Product Designer')),
+        ('Backend_developer', _(BACKEND_DEVELOPER)),
+        ('Frontend_developer', _(FRONTEND_DEVEOPER)),
+        ('Mobile_developer', _( MOBILE_DEVELOPER )),
+        ('Product_Manager', _( PRODUCT_MANAGER)),
     )
 
 

@@ -1,0 +1,21 @@
+CONTENT_MANAGER = 'Content Manager'
+MEMBERSHIP_MANAGER = 'Membership Manager'
+ASSESSMENT_MANAGER = 'Assessment Manager'
+APPLICATION_MANAGER = 'Application Manager'
+SUPER_ADMIN = 'Super Admin'
+
+DB_CONTENT_MANAGER ='Content_manager'
+DB_MEMBERSHIP_MANAGER = 'Membership_manager'
+DB_ASSESSMENT_MANAGER = 'Assessment_manager'
+DB_APPLICATION_MANAGER = 'Application_manager'
+DB_SUPER_ADMIN = 'Superadmin'
+
+BACKEND_DEVELOPER = 'Backend Developer'
+FRONTEND_DEVEOPER = 'Frontend Developer'
+MOBILE_DEVELOPER = 'Mobile Developer'
+PRODUCT_MANAGER = 'Product Manager'
+
+DB_BACKEND_DEVELOPER = 'Backend_developer'
+DB_FRONTEND_DEVEOPER = 'Frontend_developer'
+DB_MOBILE_DEVELOPER = 'Mobile_developer'
+DB_PRODUCT_MANAGER = 'Product_manager'
