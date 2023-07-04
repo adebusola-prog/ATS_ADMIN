@@ -18,7 +18,7 @@ class CustomUserPictureUpdateSerializer(serializers.ModelSerializer):
 class CustomUserSubAdminSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
     confirm_password = serializers.CharField(write_only=True)
-    full_name = serializers.CharField(source='get_full_name')
+    full_name = serializers.CharField(source='get_full_name', read_only=True)
 
     class Meta:
         model = CustomUser
@@ -27,7 +27,6 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'position': {'required': True},
             'permission_level': {'required': True},
-            'full_name' : {'read_only': True }
         }
     
     def validate(self, attrs):
