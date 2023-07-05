@@ -43,13 +43,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ats_admin',
     'accounts',
-    
+    'job',
+    'dashboard',
+
     "rest_framework",
     "rest_framework_simplejwt",
     "phonenumber_field",
     'corsheaders',
     'rest_framework_swagger',
     'drf_yasg',
+    'cities_light'
+    
 
 ]
 

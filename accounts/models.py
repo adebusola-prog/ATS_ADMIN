@@ -27,15 +27,14 @@ class MyAccountManager(BaseUserManager):
                           last_name=last_name, email=self.normalize_email(email))
         # user.password = make_password(password)
         user.set_password(password)
-        user.gender = gender
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, first_name, last_name, username, email, password, gender=None):
+    def create_superuser(self, first_name, last_name, username, email, password):
         existing_superadmin = self.filter(permission_level='superadmin').exists()
         if existing_superadmin:
             raise ValueError("Only one user can have the 'superadmin' permission level.")
-        user = self.create_user(first_name=first_name, last_name=last_name, gender=gender or None,
+        user = self.create_user(first_name=first_name, last_name=last_name,
                                 username=username, email=self.normalize_email(email), password=password)
         
         user.is_staff = True
@@ -90,7 +89,7 @@ class CustomUser(AbstractUser):
     permission_level = models.CharField(max_length=20, choices=PERMISSION_LEVEL_CHOICES, blank=True, null=True)
     position = models.CharField(max_length=20, choices=POSITION_CHOICES, blank=True, null=True)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 

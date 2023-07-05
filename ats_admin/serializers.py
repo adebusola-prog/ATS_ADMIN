@@ -19,11 +19,14 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
     confirm_password = serializers.CharField(write_only=True)
     full_name = serializers.CharField(source='get_full_name', read_only=True)
+    first_name = serializers.CharField(write_only=True)
+    last_name = serializers.CharField(write_only=True)
+    username = serializers.CharField(write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['full_name', 'first_name', 'last_name', 'username', 'email',  'profile_picture', 'position',
-                  'permission_level', 'password', 'confirm_password']
+        fields = ('full_name', 'first_name', 'last_name', 'username', 'email',  'profile_picture', 'position',
+                  'permission_level', 'password', 'confirm_password')
         extra_kwargs = {
             'position': {'required': True},
             'permission_level': {'required': True},
