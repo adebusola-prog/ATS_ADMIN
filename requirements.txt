@@ -11,6 +11,7 @@ django-autoslug==1.9.9
 django-brotli==0.2.1
 django-cities-light==3.9.2
 django-cors-headers==4.1.0
+django-multiselectfield==0.1.12
 django-phonenumber-field==7.1.0
 django-phonenumbers==1.0.1
 django-rest-swagger==2.2.0

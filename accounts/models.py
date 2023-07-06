@@ -5,62 +5,48 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from .validators import validate_image_size
 from django.core.validators import validate_image_file_extension
+from django.core.exceptions import ValidationError
+from datetime import date
 from base import constants
+from base.managers import ActiveManager, InActiveManager
 
-class ActiveManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(is_active=True)
-
-
-class InActiveManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(is_active=False)
-
+def validate_date_of_birth(value):
+    if value.year > date.today().year:
+        raise ValidationError("Date of birth cannot be in the future.")
+    
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, first_name, last_name, username, email, gender, password=None):
+    def create_user(self, first_name, last_name, username, email, password=None):
         if not username:
             raise ValueError("User must have a username")
         if not email:
             raise ValueError("User must have an email address")
         user = self.model(username=username, first_name=first_name,
                           last_name=last_name, email=self.normalize_email(email))
-        # user.password = make_password(password)
+    
         user.set_password(password)
         user.save(using=self._db)
         return user
-
+       
     def create_superuser(self, first_name, last_name, username, email, password):
-        existing_superadmin = self.filter(permission_level='superadmin').exists()
-        if existing_superadmin:
-            raise ValueError("Only one user can have the 'superadmin' permission level.")
         user = self.create_user(first_name=first_name, last_name=last_name,
                                 username=username, email=self.normalize_email(email), password=password)
-        
+        user.is_admin = True
         user.is_staff = True
         user.is_superadmin = True
         user.is_active = True
-        user.permission_level = 'superadmin'
         user.save(using=self._db)
+
         return user
 
+class PermissionLevel(models.Model):
+    name = models.CharField(max_length=250, blank=False, null=False)
+
+    def __str__(self):
+        return self.name
 
 class CustomUser(AbstractUser):
     """Custom User Model that takes extra fields for easier authentication"""
-
-    CONTENT_MANAGER = constants.CONTENT_MANAGER
-    MEMBERSHIP_MANAGER = constants.MEMBERSHIP_MANAGER
-    ASSESSMENT_MANAGER = constants.ASSESSMENT_MANAGER
-    APPLICATIION_MANAGER = constants.APPLICATION_MANAGER
-    SUPER_ADMIN = constants.SUPER_ADMIN
-
-    PERMISSION_LEVEL_CHOICES = (
-        ('Content_manager', _(CONTENT_MANAGER)),
-        ('Membership_manager', _(MEMBERSHIP_MANAGER)),
-        ('Assessment_manager', _(ASSESSMENT_MANAGER)),
-        ('Application_manager', _(APPLICATIION_MANAGER)),
-        ('Superadmin', _(SUPER_ADMIN)),
-    )
     
     BACKEND_DEVELOPER = constants.BACKEND_DEVELOPER
     FRONTEND_DEVEOPER = constants.FRONTEND_DEVEOPER
@@ -85,8 +71,9 @@ class CustomUser(AbstractUser):
     profile_picture = models.ImageField(upload_to="images/user_profile_picture", default="pi.png",
                                         validators=[validate_image_size, validate_image_file_extension])
     date_joined = models.DateTimeField(auto_now_add=True)
+    date_of_birth = models.DateField(validators=[validate_date_of_birth], null=True)
     last_login = models.DateTimeField(auto_now=True)
-    permission_level = models.CharField(max_length=20, choices=PERMISSION_LEVEL_CHOICES, blank=True, null=True)
+    permission_level = models.ManyToManyField(PermissionLevel)
     position = models.CharField(max_length=20, choices=POSITION_CHOICES, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -100,7 +87,7 @@ class CustomUser(AbstractUser):
     inactive_objects = InActiveManager()
 
     class Meta:
-        ordering =  ['date_joined']
+        ordering =  ['-date_joined']
     
     def __str__(self):
         return self.username
@@ -112,6 +99,9 @@ class CustomUser(AbstractUser):
         if self.is_superadmin:
             return "Admin"
         return ''
+    
+    def get_short_name(self):
+        return self.first_name[0] + self.last_name[0]
     
     
     @property

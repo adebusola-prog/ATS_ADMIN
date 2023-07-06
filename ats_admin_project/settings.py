@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cities_light',
     'ats_admin',
     'accounts',
     'job',
@@ -52,7 +53,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_swagger',
     'drf_yasg',
-    'cities_light'
+    'multiselectfield',
+   
     
 
 ]
@@ -193,3 +195,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOUTH_MIGRATION_MODULES = {
+    'cities_light': 'cities_light.south_migrations',
+}

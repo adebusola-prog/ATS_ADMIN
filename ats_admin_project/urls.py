@@ -57,11 +57,11 @@ schema_view = get_schema_view(
 )
 
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include('accounts.urls')),
     path("api/ats_admin/", include("ats_admin.urls", namespace = "ats")),
+    path("api/job/", include('job.urls', namespace='jobs')),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
    
