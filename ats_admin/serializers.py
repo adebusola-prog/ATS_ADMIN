@@ -35,7 +35,7 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('detail_url', 'full_name', 'first_name', 'last_name', 'username', 'email',  'profile_picture', 'position',
+        fields = ('detail_url','full_name', 'first_name', 'last_name', 'username', 'email',  'profile_picture', 'position',
                   'permission_level', 'password', 'confirm_password')
         extra_kwargs = {
             'position': {'required': True},
@@ -44,7 +44,7 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
 
     def get_detail_url(self, obj):
         request = self.context.get('request')
-        absolute_url = reverse('sub_admin_detail', args=[str(obj.id)], request=request)
+        absolute_url = reverse('ats:sub_admin_detail', args=[str(obj.id)], request=request)
         return absolute_url
         
     

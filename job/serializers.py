@@ -28,17 +28,17 @@ class JobSerializer(serializers.ModelSerializer):
     
     def get_detail_url(self, obj):
         request = self.context.get('request')
-        absolute_url = reverse('job_detail_update', args=[str(obj.id)], request=request)
+        absolute_url = reverse('jobs:job_detail_update', args=[str(obj.id)], request=request)
         return absolute_url
         
     def get_update_url(self, obj):
         request = self.context.get('request')
-        update_url = reverse('job_detail_update', args=[str(obj.id)], request=request)
+        update_url = reverse('jobs:job_detail_update', args=[str(obj.id)], request=request)
         return update_url
     
     def get_delete_url(self, obj):
         request = self.context.get('request')
-        delete_url =  reverse('job_delete', args=[str(obj.id)], request=request)
+        delete_url =  reverse('jobs:job_delete', args=[str(obj.id)], request=request)
         return delete_url
 
 class JobApplicationListCreateSerializer(serializers.ModelSerializer):
@@ -52,5 +52,5 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
 
     def get_detail_url(self, obj):
         request = self.context.get('request')
-        absolute_url = reverse('job_application_detail', args=[str(obj.id)], request=request)
+        absolute_url = reverse('jobs:job_application_detail', args=[str(obj.id)], request=request)
         return absolute_url

@@ -13,8 +13,7 @@ urlpatterns = [
     path('<int:pk>/job_delete', JobDeleteAPIView.as_view(), name='job_delete'),
     path('job_application_create', JobApplicantCreateAPIView.as_view(), name='job_application_create'),
     path('job_application_list', JobApplicantListAPIView.as_view(), name='job_application_list'),
-    path('job_application_detail', JobApplicantDetailAPIView.as_view(), name='job_application_detail')
-  
+    path('<int:pk>/job_application_detail', JobApplicantDetailAPIView.as_view(), name='job_application_detail')
    
 ]
 
