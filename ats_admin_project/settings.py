@@ -14,11 +14,11 @@ from pathlib import Path
 from datetime import timedelta
 from decouple import config
 from pathlib import Path
-# import dj_database_url
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# DATABASE_URL= config('DATABASE_URL')
+DATABASE_URL= config('DATABASE_URL')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -62,14 +62,14 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
-# CSRF_TRUSTED_ORIGINS = ['https://ats-admin-dashboard.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://ats-admin-dashboard.onrender.com']
 
-# CORS_ALLOWED_ORIGINS = ['https://ats-admin-dashboard.onrender.com', 'http://localhost:4000',
-#                         'http://localhost:8000', 'http://127.0.0.1:4000', 'http://127.0.0.1:8000']
-#                         # "https://zippy-dango-7ea3fe.netlify.app", "https://afex-web-project.netlify.app"]
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = ['https://ats-admin-dashboard.onrender.com', 'http://localhost:4000',
+                        'http://localhost:8000', 'http://127.0.0.1:4000', 'http://127.0.0.1:8000']
+                        # "https://zippy-dango-7ea3fe.netlify.app", "https://afex-web-project.netlify.app"]
+CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 
@@ -111,15 +111,15 @@ WSGI_APPLICATION = 'ats_admin_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': dj_database_url.parse(config('DATABASE_URL'), conn_max_age=600),
-    "default": {
-        'ENGINE': config('DB_ENGINE'),
-        'NAME': config('DB_NAME'),
-        "USER": config('DB_USER'),
-        "PASSWORD": config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT')
-    }
+    'default': dj_database_url.parse(config('DATABASE_URL'), conn_max_age=600),
+    # "default": {
+    #     'ENGINE': config('DB_ENGINE'),
+    #     'NAME': config('DB_NAME'),
+    #     "USER": config('DB_USER'),
+    #     "PASSWORD": config('DB_PASSWORD'),
+    #     'HOST': config('DB_HOST'),
+    #     'PORT': config('DB_PORT')
+    # }
     
 }
 
