@@ -23,7 +23,6 @@ class LoginSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['username'] = user.username
         token['email'] = user.email
-
         return token
 
 class ResetPasswordSerializer(serializers.ModelSerializer):

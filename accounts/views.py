@@ -11,17 +11,30 @@ from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
 from .utils import Utils
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
 
+# class LogoutView(APIView):
+#     def post(self, request, *args, **kwargs):
+#         request.user.auth_token.delete()
+#         return Response(status=status.HTTP_200_OK)
+
 class LogoutView(APIView):
-    def post(self, request, *args, **kwargs):
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
-    
+    def post(self, request):
+        try:
+            refresh_token = request.data['refresh_token']
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"message": "Logout successful."})
+        except Exception as e:
+            return Response({"message": "Invalid token.", "error": str(e)}, status=400)
+
 
 class ForgotPasswordView(APIView):
     serializer_class = ResetPasswordSerializer
