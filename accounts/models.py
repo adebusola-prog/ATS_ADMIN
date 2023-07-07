@@ -27,16 +27,25 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
        
-    def create_superuser(self, first_name, last_name, username, email, password):
-        user = self.create_user(first_name=first_name, last_name=last_name,
-                                username=username, email=self.normalize_email(email), password=password)
-        user.is_admin = True
-        user.is_staff = True
-        user.is_superadmin = True
-        user.is_active = True
-        user.save(using=self._db)
+    # def create_superuser(self, first_name, last_name, username, email, password):
+    #     user = self.create_user(first_name=first_name, last_name=last_name,
+    #                             username=username, email=self.normalize_email(email), password=password)
+    #     user.is_admin = True
+    #     user.is_staff = True
+    #     user.is_superadmin = True
+    #     user.is_active = True
+    #     user.save(using=self._db)
 
-        return user
+    #     return user
+
+    def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
+        """ creates superuser"""
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_admin", True)
+        extra_fields.setdefault("is_superadmin", True)
+        return self.create_user(email, password, first_name, last_name **extra_fields)
+
 
 class PermissionLevel(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False)
