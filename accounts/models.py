@@ -7,8 +7,9 @@ from .validators import validate_image_size
 from django.core.validators import validate_image_file_extension
 from django.core.exceptions import ValidationError
 from datetime import date
-from base import constants
+from base.constants import BACKEND_DEVELOPER, PRODUCT_MANAGER, MOBILE_DEVELOPER, FRONTEND_DEVEOPER
 from base.managers import ActiveManager, InActiveManager
+
 
 def validate_date_of_birth(value):
     if value.year > date.today().year:
@@ -21,12 +22,13 @@ class MyAccountManager(BaseUserManager):
         if not email:
             raise ValueError("User must have an email address")
         
-        # Check if is_superadmin is set to True
-        if is_superadmin:
-            if self.model.objects.filter(is_superadmin=True).exists():
-                raise ValueError("Superadmin already exists")
+        # # Check if is_superadmin is set to True
+        # if is_superadmin:
+        #     if self.model.objects.filter(is_superadmin=True).exists():
+        #         raise ValueError("Superadmin already exists")
         
-        user = self.model(username=username, first_name=first_name, last_name=last_name, email=self.normalize_email(email))
+        user = self.model(username=username, first_name=first_name, last_name=last_name, 
+                          email=self.normalize_email(email))
         user.set_password(password)
         user.is_superadmin = is_superadmin  # Set the is_superadmin status
         user.save(using=self._db)
@@ -48,18 +50,11 @@ class PermissionLevel(models.Model):
 
 class CustomUser(AbstractUser):
     """Custom User Model that takes extra fields for easier authentication"""
-    
-    BACKEND_DEVELOPER = constants.BACKEND_DEVELOPER
-    FRONTEND_DEVEOPER = constants.FRONTEND_DEVEOPER
-    MOBILE_DEVELOPER = constants.MOBILE_DEVELOPER 
-    PRODUCT_MANAGER = constants.PRODUCT_MANAGER
-   
-
     POSITION_CHOICES = (
-        ('Backend_developer', _(BACKEND_DEVELOPER)),
-        ('Frontend_developer', _(FRONTEND_DEVEOPER)),
-        ('Mobile_developer', _( MOBILE_DEVELOPER )),
-        ('Product_Manager', _( PRODUCT_MANAGER)),
+        (BACKEND_DEVELOPER, _(BACKEND_DEVELOPER)),
+        (FRONTEND_DEVEOPER, _(FRONTEND_DEVEOPER)),
+        (MOBILE_DEVELOPER, _(MOBILE_DEVELOPER)),
+        (PRODUCT_MANAGER, _(PRODUCT_MANAGER)),
     )
 
 
@@ -70,7 +65,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     phone_number = PhoneNumberField(unique=True, null=True)
     profile_picture = models.ImageField(upload_to="images/user_profile_picture", default="pi.png",
-                                        validators=[validate_image_size, validate_image_file_extension])
+                                validators=[validate_image_size, validate_image_file_extension])
     date_joined = models.DateTimeField(auto_now_add=True)
     date_of_birth = models.DateField(validators=[validate_date_of_birth], null=True)
     last_login = models.DateTimeField(auto_now=True)
@@ -78,7 +73,7 @@ class CustomUser(AbstractUser):
     position = models.CharField(max_length=20, choices=POSITION_CHOICES, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    is_superadmin = models.BooleanField(default=False)
+    is_superadmin = models.BooleanField(default=False, unique=True)
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
