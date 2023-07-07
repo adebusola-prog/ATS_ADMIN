@@ -14,7 +14,10 @@ class ActivityLogMixin:
         return self.action_type_mapper().get(f"{request.method.upper()}")
 
     def _build_log_message(self, request):
-        return f"User: {self._get_user(request)} -- Action Type: {self._get_action_type(request)} -- Path: {request.path} -- Path Name: {request.resolver_match.url_name}"
+        user=self._get_user(request)
+        first_name=user.first_name
+        last_name = user.last_name
+        return f" {first_name} {last_name}  {self._get_action_type(request)} {request.resolver_match.url_name}"
 
     def get_log_message(self, request):
         return self.log_message or self._build_log_message(request)

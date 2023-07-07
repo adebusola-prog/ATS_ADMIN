@@ -46,7 +46,6 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         absolute_url = reverse('ats:sub_admin_detail', args=[str(obj.id)], request=request)
         return absolute_url
-        
     
     def validate(self, attrs):
         if not attrs['position']:
