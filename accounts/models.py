@@ -14,7 +14,6 @@ def validate_date_of_birth(value):
     if value.year > date.today().year:
         raise ValidationError("Date of birth cannot be in the future.")
     
-
 class MyAccountManager(BaseUserManager):
     def create_user(self, first_name, last_name, username, email, password=None):
         if not username:

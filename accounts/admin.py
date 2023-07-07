@@ -17,6 +17,7 @@ class UserAdmin(BaseUserAdmin):
         # ("Dates", {"fields": ("last_login",)})
 
     )
+    readonly_fields = ['last_login', 'date_joined', ]
     add_fieldsets = (
         (None, {
             'classes': ('wide',),

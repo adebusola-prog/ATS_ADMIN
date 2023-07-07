@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Job, Location, JobApplication
+from .models import Job, Location, JobApplication, JobViews
 from rest_framework.reverse import reverse
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -18,8 +18,8 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = ('detail_url', 'update_url', 'delete_url', 'role', 'skill_level', 
-                'job_type', 'job_schedule', 'job_requirements', 'posted_by', 'uploaded_time', 'location')
+        fields = ('detail_url', 'update_url', 'delete_url', 'role', 'skill_level', 'views_count', 
+            'job_type', 'job_schedule', 'job_requirements', 'posted_by', 'uploaded_time', 'location')
         
         extra_kwargs = {
             'skill_level': {"write_only": True},
@@ -54,3 +54,23 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         absolute_url = reverse('jobs:job_application_detail', args=[str(obj.id)], request=request)
         return absolute_url
+    
+
+class JobViewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobViews
+        fields = (
+            "job",
+            "viewer_ip"
+        )
+
+    def create(self, validated_data):
+        blog_article = validated_data.get("blog_article")
+        ip = validated_data.get("viewer_ip")
+        view = JobViews.active_objects.get_or_create(
+            blog_article=JobViews.active_objects.get(id=blog_article.id))[0]
+
+        if ip not in view.viewer_ip:
+            view.viewer_ip.append(ip)
+            view.save()
+            return view

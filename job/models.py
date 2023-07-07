@@ -8,6 +8,9 @@ from base.managers import ActiveManager, InActiveManager
 # from cities_light.models import City
 
 
+def _json_list():
+    return list
+
 def validate_pdf_file(value):
     ext = os.path.splitext(value.name)[1]
     if ext.lower() != '.pdf':
@@ -37,7 +40,9 @@ JOB_SCHEDULE_CHOICES = (
     ('Full-time', 'Full-time'),
     ('Project-based', 'Project-based'),
 )
-    
+
+
+
 class Job(models.Model):
     role = models.CharField(max_length=100)
     skill_level = models.CharField(max_length=20, choices=SKILL_LEVEL_CHOICES)
@@ -62,6 +67,23 @@ class Job(models.Model):
             return "uploaded now"
         return f"Uploaded {timesince(self.created_at, timezone.now())} ago"
 
+    def views_count(self):
+        try:
+            return len(JobViews.active_objects.filter(job_id=self.id).first().viewer_ip)
+        except:
+            return 0
+
+
+class JobViews(models.Model):
+    job = models.ForeignKey(Job, related_name="job_views", on_delete=models.SET_NULL, null=True)
+    viewer_ip = models.JSONField(default=_json_list())
+    is_active = models.BooleanField(default=True)
+    
+    objects = models.Manager()
+    active_objects = ActiveManager()
+    inactive_objects = InActiveManager()
+
+    
 
 class JobApplication(models.Model):
     job = models.ManyToManyField(Job, related_name='applications')
