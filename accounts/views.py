@@ -23,7 +23,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 
-class ForgotPassword(APIView):
+class ForgotPasswordView(APIView):
     serializer_class = ResetPasswordSerializer
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -46,7 +46,7 @@ class ForgotPassword(APIView):
         return Response({"status": "success", "message": "We have sent a password-reset link to the email you provided.Please check and reset  "}, status=status.HTTP_200_OK)
 
 
-class ResetPassword(APIView):
+class ResetPasswordView(APIView):
     serializer_class = ResetPasswordSerializer
   
     def get(self, request, uuidb64, token):
@@ -60,5 +60,5 @@ class ResetPassword(APIView):
             return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SetNewPassword(generics.GenericAPIView):
+class SetNewPasswordView(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer

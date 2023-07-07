@@ -9,7 +9,7 @@ from base.managers import ActiveManager, InActiveManager
 
 
 def validate_pdf_file(value):
-    ext = os.path.splitext(value.name)[1]  # Get the file extension
+    ext = os.path.splitext(value.name)[1]
     if ext.lower() != '.pdf':
         raise ValidationError("Only PDF files are allowed.")
 

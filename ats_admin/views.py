@@ -42,6 +42,7 @@ class SubAdminListView(generics.ListAPIView):
     permission_classes = [IsSuperAdmin]
     pagination_class = CustomPagination
 
+
 class SubAdminDetailView(generics.RetrieveAPIView):
     queryset = CustomUser.active_objects.filter(is_admin=True)
     serializer_class = CustomUserSubAdminSerializer
