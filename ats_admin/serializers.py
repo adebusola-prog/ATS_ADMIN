@@ -58,16 +58,16 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop('password')
         confirm_password = validated_data.pop('confirm_password')
-
         if password != confirm_password:
             raise serializers.ValidationError("Passwords do not match.")
-
+        permission_level_data = validated_data.pop('permission_level')
         instance = self.Meta.model(**validated_data)
         instance.set_password(password)
         instance.is_admin = True
         instance.save()
+        instance.permission_level.set(permission_level_data)
         return instance
-    
+
     def perform_create(self, validated_data):
         validated_data['is_admin'] = True 
         return super().perform_create(validated_data)
