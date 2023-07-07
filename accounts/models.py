@@ -15,35 +15,28 @@ def validate_date_of_birth(value):
         raise ValidationError("Date of birth cannot be in the future.")
     
 class MyAccountManager(BaseUserManager):
-    def create_user(self, first_name, last_name, username, email, password=None):
+    def create_user(self, first_name, last_name, username, email, password=None, is_superadmin=False):
         if not username:
             raise ValueError("User must have a username")
         if not email:
             raise ValueError("User must have an email address")
-        user = self.model(username=username, first_name=first_name,
-                          last_name=last_name, email=self.normalize_email(email))
-    
+        
+        # Check if is_superadmin is set to True
+        if is_superadmin:
+            if self.model.objects.filter(is_superadmin=True).exists():
+                raise ValueError("Superadmin already exists")
+        
+        user = self.model(username=username, first_name=first_name, last_name=last_name, email=self.normalize_email(email))
         user.set_password(password)
+        user.is_superadmin = is_superadmin  # Set the is_superadmin status
         user.save(using=self._db)
         return user
        
-    # def create_superuser(self, first_name, last_name, username, email, password):
-    #     user = self.create_user(first_name=first_name, last_name=last_name,
-    #                             username=username, email=self.normalize_email(email), password=password)
-    #     user.is_admin = True
-    #     user.is_staff = True
-    #     user.is_superadmin = True
-    #     user.is_active = True
-    #     user.save(using=self._db)
-
-    #     return user
 
     def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
         """ creates superuser"""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        extra_fields.setdefault("is_admin", True)
-        extra_fields.setdefault("is_superadmin", True)
         return self.create_user(email, password, first_name, last_name **extra_fields)
 
 
