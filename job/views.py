@@ -7,11 +7,11 @@ from ats_admin.permissions import IsAdmin, IsApplicantAccess
 from ats_admin.paginations import JobPagination
 from rest_framework.response import Response
 from .mixins import CustomMessageCreateMixin, CustomMessageUpdateMixin, CustomMessageDestroyMixin
-from rest_framework.status import HTTP_204_NO_CONTENT
-from dashboard.activity import ActivityLogMixin
+from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK
+from dashboard.activity import ActivityLogMixin, ActivityLogJobMixin
 
 
-class JobListCreateAPIView(ActivityLogMixin, CustomMessageCreateMixin, ListCreateAPIView):
+class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAdmin]
@@ -19,6 +19,16 @@ class JobListCreateAPIView(ActivityLogMixin, CustomMessageCreateMixin, ListCreat
     
     def perform_create(self, serializer):
         serializer.save(posted_by=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        self._create_activity_log(serializer.instance, request)
+        response = {
+            "message": "New Job created successfully"
+        }
+        return Response(response, status=HTTP_200_OK)
 
 
 class JobDetailUpdateAPIView(ActivityLogMixin, CustomMessageUpdateMixin, RetrieveUpdateAPIView):

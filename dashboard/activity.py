@@ -47,7 +47,7 @@ class ActivityLogMixin:
                 "actor": actor,
                 "action_type": self._get_action_type(request),
                 "status": status,
-                "remarks": self.get_log_message(request),
+                # "remarks": self.get_log_message(request),
             }
             try:
                 data["content_type"] = ContentType.objects.get_for_model(
@@ -58,11 +58,34 @@ class ActivityLogMixin:
                 data["content_type"] = None
             except AssertionError:
                 pass
-
-            ActivityLog.objects.create(**data)
-
+            object= self.get_object()
+            print('Object:', type(object))
+            message = f"{self._get_action_type(request)} {object.first_name} {object.last_name}"
+            print(message)
+            ActivityLog.objects.create(**data, data=message)
 
     def finalize_response(self, request, *args, **kwargs):
         response = super().finalize_response(request, *args, **kwargs)
         self._write_log(request, response)
         return response
+
+
+class ActivityLogJobMixin:
+    def _get_user(self, request):
+        user = request.user if request.user.is_authenticated else None
+        return user
+
+    def _create_activity_log(self, instance, request):
+        actor = self._get_user(request)
+        message = f"New job created by {instance.posted_by.first_name} {instance.posted_by.last_name}"
+        ActivityLog.objects.create(actor=actor, action_type=CREATE, content_object=instance, data=message)
+
+    def _update_activity_log(self, instance, request):
+        actor = self._get_user(request)
+        message = f"Job updated by {instance.posted_by.first_name} {instance.posted_by.last_name}"
+        ActivityLog.objects.create(actor=actor, action_type=UPDATE, content_object=instance, data=message)
+
+    def _delete_activity_log(self, instance, request):
+        actor = self._get_user(request)
+        message = f"Job deleted by {instance.posted_by.first_name} {instance.posted_by.last_name}"
+        ActivityLog.objects.create(actor=actor, action_type=DELETE, content_object=instance, data=message)

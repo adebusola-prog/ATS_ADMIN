@@ -2,6 +2,8 @@ from django.db import models
 from accounts.models import CustomUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.utils.timesince import timesince
+from django.utils import timezone
 
 
 CREATE, READ, UPDATE, DELETE = "Create", "Read", "Update", "Delete"
@@ -35,5 +37,11 @@ class ActivityLog(models.Model):
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = GenericForeignKey()
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"{self.action_type} by {self.actor} on {self.action_time}"
+    
+    def get_timesince(self):
+        time_difference = timezone.now() - self.action_time
+        if time_difference.total_seconds() < 60:
+            return "uploaded now"
+        return f"Uploaded {timesince(self.action_time, timezone.now())} ago"
