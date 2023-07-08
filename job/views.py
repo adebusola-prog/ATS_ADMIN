@@ -40,7 +40,8 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
         serializer.save(posted_by=self.request.user)
 
     def update(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        instance = self.get_object() 
+        serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         self._update_activity_log(serializer.instance, request)
@@ -48,6 +49,7 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
             "message": "Job updated successfully"
         }
         return Response(response, status=HTTP_200_OK)
+
 
 class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAPIView):
     def delete(self, request, *args, **kwargs):
@@ -57,7 +59,7 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
         return Response(status=HTTP_204_NO_CONTENT)
     
     def delete(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_object()
         serializer.is_valid(raise_exception=True)
         # self.perform_destroy(serializer)
         self._update_activity_log(serializer.instance, request)
