@@ -62,7 +62,7 @@ CSRF_TRUSTED_ORIGINS = ['https://ats-admin-dashboard.onrender.com']
 
 CORS_ALLOWED_ORIGINS = ['https://ats-admin-dashboard.onrender.com', 'http://localhost:4000',
                         'http://localhost:8000', 'http://127.0.0.1:4000', 'http://127.0.0.1:8000']
-                        # "https://zippy-dango-7ea3fe.netlify.app", "https://afex-web-project.netlify.app"]
+                    
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -148,6 +148,12 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool)
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = config("EMAIL_PORT", cast=int)
 
 
 # Password validation
