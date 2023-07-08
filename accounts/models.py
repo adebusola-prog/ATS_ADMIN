@@ -12,8 +12,11 @@ from base.managers import ActiveManager, InActiveManager
 
 
 def validate_date_of_birth(value):
-    if value.year > date.today().year:
-        raise ValidationError("Date of birth cannot be in the future.")
+    today = date.today()
+    age_limit = today.replace(year=today.year - 18)
+    
+    if value >= age_limit:
+        raise ValidationError("You must be at least 18 years old.")
     
 # class MyAccountManager(BaseUserManager):
 #     def create_user(self, first_name, last_name, username, email, password=None, is_superadmin=False):

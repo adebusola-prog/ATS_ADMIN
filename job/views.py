@@ -31,7 +31,7 @@ class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCr
         return Response(response, status=HTTP_200_OK)
 
 
-class JobDetailUpdateAPIView(ActivityLogMixin, CustomMessageUpdateMixin, RetrieveUpdateAPIView):
+class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, RetrieveUpdateAPIView):
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAdmin]
@@ -39,14 +39,32 @@ class JobDetailUpdateAPIView(ActivityLogMixin, CustomMessageUpdateMixin, Retriev
     def perform_update(self, serializer):
         serializer.save(posted_by=self.request.user)
 
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        self._update_activity_log(serializer.instance, request)
+        response = {
+            "message": "Job updated successfully"
+        }
+        return Response(response, status=HTTP_200_OK)
 
-class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogMixin, DestroyAPIView):
+class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.is_active = False
         instance.save()
         return Response(status=HTTP_204_NO_CONTENT)
     
+    def delete(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # self.perform_destroy(serializer)
+        self._update_activity_log(serializer.instance, request)
+        response = {
+            "message": "Job deleted successfully"
+        }
+        return Response(response, status=HTTP_200_OK)
     
 class JobApplicantCreateAPIView(ActivityLogMixin, CustomMessageCreateMixin, CreateAPIView):
     queryset = JobApplication.active_objects.all()
