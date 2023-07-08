@@ -40,7 +40,7 @@ class MyAccountManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_superadmin", True)
-        return self.create_user(email, password, first_name, last_name **extra_fields)
+        return self.create_user(email, password, first_name, last_name, **extra_fields)
 
 
 class PermissionLevel(models.Model):
