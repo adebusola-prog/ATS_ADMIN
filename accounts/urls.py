@@ -9,7 +9,7 @@ app_name = "authe"
 urlpatterns = [
     path('login', LoginView.as_view(), name='log_in'), 
     path('logout', LogoutView.as_view(), name='log_out'),
-    path('forgot_password/<int:pk>', ForgotPasswordView.as_view(),\
+    path('forgot_password', ForgotPasswordView.as_view(),\
             name='forgot_password'),
     path('resetpassword/<int:uuidb64>/<token>', ResetPasswordView.as_view(), \
             name='reset_password'),
