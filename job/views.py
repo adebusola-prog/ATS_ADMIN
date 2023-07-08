@@ -60,7 +60,7 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
         instance = self.get_object()
         instance.is_active = False
         instance.save()
-        self._update_activity_log(instance, request)
+        self._delete_activity_log(instance, request)
         response = {
             "message": "Job deleted successfully"
         }
