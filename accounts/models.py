@@ -22,11 +22,16 @@ class MyAccountManager(BaseUserManager):
         if not email:
             raise ValueError("User must have an email address")
         
+        # Check if a super admin already exists
+        if is_superadmin and CustomUser.objects.filter(is_superadmin=True).exists():
+            raise ValueError("Super admin already exists.")
+
         user = self.model(username=username, first_name=first_name, last_name=last_name, 
-                          email=self.normalize_email(email))
+                          email=self.normalize_email(email), is_superadmin=is_superadmin)
         user.set_password(password)
         user.save(using=self._db)
         return user
+
        
 
     def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
