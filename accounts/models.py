@@ -22,22 +22,24 @@ class MyAccountManager(BaseUserManager):
         if not email:
             raise ValueError("User must have an email address")
         
-        # Check if a super admin already exists
-        if is_superadmin and CustomUser.objects.filter(is_superadmin=True).exists():
-            raise ValueError("Super admin already exists.")
-
+        # # Check if is_superadmin is set to True
+        # if is_superadmin:
+        #     if self.model.objects.filter(is_superadmin=True).exists():
+        #         raise ValueError("Superadmin already exists")
+        
         user = self.model(username=username, first_name=first_name, last_name=last_name, 
-                          email=self.normalize_email(email), is_superadmin=is_superadmin)
+                          email=self.normalize_email(email))
         user.set_password(password)
+        user.is_superadmin = is_superadmin  # Set the is_superadmin status
         user.save(using=self._db)
         return user
-
        
 
     def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
         """ creates superuser"""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_superadmin", True)
         return self.create_user(email, password, first_name, last_name **extra_fields)
 
 
@@ -52,8 +54,8 @@ class CustomUser(AbstractUser):
     POSITION_CHOICES = (
         (BACKEND_DEVELOPER, _(BACKEND_DEVELOPER)),
         (FRONTEND_DEVEOPER, _(FRONTEND_DEVEOPER)),
-        (MOBILE_DEVELOPER, _(MOBILE_DEVELOPER)),
-        (PRODUCT_MANAGER, _(PRODUCT_MANAGER)),
+        (MOBILE_DEVELOPER, _( MOBILE_DEVELOPER)),
+        (PRODUCT_MANAGER, _( PRODUCT_MANAGER)),
     )
 
 
