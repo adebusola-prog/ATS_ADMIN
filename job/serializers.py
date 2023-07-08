@@ -17,7 +17,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = ('detail_url', 'update_url', 'delete_url', 'role', 'skill_level', 'views_count', 
+        fields = ('id', 'detail_url', 'update_url', 'delete_url', 'role', 'skill_level', 'views_count', 
             'job_type', 'job_schedule', 'job_requirements', 'posted_by', 'uploaded_time', 'location')
         
         extra_kwargs = {
