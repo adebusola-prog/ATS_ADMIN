@@ -30,11 +30,16 @@ class MyAccountManager(BaseUserManager):
         return user
        
 
-    def create_superuser(self, first_name, last_name, email, password=None, **extra_fields):
+    def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
         """ creates superuser"""
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_superadmin", True)
+        
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+        
         return self.create_user(first_name, last_name, email=email, password=password, **extra_fields)
 
 class PermissionLevel(models.Model):

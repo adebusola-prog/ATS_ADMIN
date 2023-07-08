@@ -64,10 +64,10 @@ class JobViewsSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        blog_article = validated_data.get("blog_article")
+        job = validated_data.get("job")
         ip = validated_data.get("viewer_ip")
         view = JobViews.active_objects.get_or_create(
-            blog_article=JobViews.active_objects.get(id=blog_article.id))[0]
+            job=JobViews.active_objects.get(id=job.id))[0]
 
         if ip not in view.viewer_ip:
             view.viewer_ip.append(ip)
