@@ -56,18 +56,12 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
         instance = self.get_object()
         instance.is_active = False
         instance.save()
-        return Response(status=HTTP_204_NO_CONTENT)
-    
-    def delete(self, request, *args, **kwargs):
-        serializer = self.get_object()
-        serializer.is_valid(raise_exception=True)
-        # self.perform_destroy(serializer)
-        self._update_activity_log(serializer.instance, request)
+        self._update_activity_log(instance, request)
         response = {
             "message": "Job deleted successfully"
         }
-        return Response(response, status=HTTP_200_OK)
-    
+        return Response(response, status=status.HTTP_200_OK)
+
 class JobApplicantCreateAPIView(ActivityLogMixin, CustomMessageCreateMixin, CreateAPIView):
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
