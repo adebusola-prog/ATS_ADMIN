@@ -15,32 +15,32 @@ def validate_date_of_birth(value):
     if value.year > date.today().year:
         raise ValidationError("Date of birth cannot be in the future.")
     
-class MyAccountManager(BaseUserManager):
-    def create_user(self, first_name, last_name, username, email, password=None, is_superadmin=False):
-        if not username:
-            raise ValueError("User must have a username")
-        if not email:
-            raise ValueError("User must have an email address")
+# class MyAccountManager(BaseUserManager):
+#     def create_user(self, first_name, last_name, username, email, password=None, is_superadmin=False):
+#         if not username:
+#             raise ValueError("User must have a username")
+#         if not email:
+#             raise ValueError("User must have an email address")
         
-        user = self.model(username=username, first_name=first_name, last_name=last_name, 
-                          email=self.normalize_email(email))
-        user.set_password(password)
-        user.is_superadmin = is_superadmin  # Set the is_superadmin status
-        user.save(using=self._db)
-        return user
+#         user = self.model(username=username, first_name=first_name, last_name=last_name, 
+#                           email=self.normalize_email(email))
+#         user.set_password(password)
+#         user.is_superadmin = is_superadmin  # Set the is_superadmin status
+#         user.save(using=self._db)
+#         return user
        
 
-    def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
-        """ creates superuser"""
-        extra_fields.setdefault("is_superadmin", True)
+#     def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
+#         """ creates superuser"""
+#         extra_fields.setdefault("is_superadmin", True)
         
-        if extra_fields.get("is_staff") is not True:
-            raise ValueError("Superuser must have is_staff=True.")
+#         if extra_fields.get("is_staff") is not True:
+#             raise ValueError("Superuser must have is_staff=True.")
         
-        if extra_fields.get("is_superuser") is not True:
-            raise ValueError("Superuser must have is_superuser=True.")
+#         if extra_fields.get("is_superuser") is not True:
+#             raise ValueError("Superuser must have is_superuser=True.")
         
-        return self.create_user(first_name, last_name, email=email, password=password, **extra_fields)
+#         return self.create_user(first_name, last_name, email=email, password=password, **extra_fields)
 
 class PermissionLevel(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False)
@@ -78,7 +78,7 @@ class CustomUser(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "username"]
-    objects = MyAccountManager()
+    objects = UserManager()
     active_objects = ActiveManager()
     inactive_objects = InActiveManager()
 
