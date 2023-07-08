@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from .mixins import CustomMessageCreateMixin, CustomMessageUpdateMixin, CustomMessageDestroyMixin
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK
 from dashboard.activity import ActivityLogMixin, ActivityLogJobMixin
+from django.db.models import Count
 
 
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
@@ -91,3 +92,9 @@ class JobApplicantDetailAPIView(ActivityLogMixin, RetrieveAPIView):
 class JobViewsListCreateAPIView(ListCreateAPIView):
     queryset = JobViews.objects.all()
     serializer_class = JobViewsSerializer
+
+    def get(self, request, *args, **kwargs):
+        job_id = request.query_params.get('job_id')
+        job_views = JobViews.active_objects.filter(job_id=job_id).annotate(num_views=Count('viewer_ip'))
+        serializer = self.get_serializer(job_views, many=True)
+        return Response(serializer.data)
