@@ -22,11 +22,6 @@ class MyAccountManager(BaseUserManager):
         if not email:
             raise ValueError("User must have an email address")
         
-        # # Check if is_superadmin is set to True
-        # if is_superadmin:
-        #     if self.model.objects.filter(is_superadmin=True).exists():
-        #         raise ValueError("Superadmin already exists")
-        
         user = self.model(username=username, first_name=first_name, last_name=last_name, 
                           email=self.normalize_email(email))
         user.set_password(password)
@@ -35,13 +30,12 @@ class MyAccountManager(BaseUserManager):
         return user
        
 
-    def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
+    def create_superuser(self, first_name, last_name, email, password=None, **extra_fields):
         """ creates superuser"""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_superadmin", True)
-        return self.create_user(email, password, first_name, last_name, **extra_fields)
-
+        return self.create_user(first_name, last_name, email=email, password=password, **extra_fields)
 
 class PermissionLevel(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False)
