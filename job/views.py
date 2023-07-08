@@ -52,6 +52,10 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
 
 
 class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAPIView):
+    serializer_class = JobSerializer
+    permission_classes = [IsAdmin]
+    queryset = Job.active_objects.all()
+    
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.is_active = False
@@ -60,7 +64,8 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
         response = {
             "message": "Job deleted successfully"
         }
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(response, status=HTTP_200_OK)
+
 
 class JobApplicantCreateAPIView(ActivityLogMixin, CustomMessageCreateMixin, CreateAPIView):
     queryset = JobApplication.active_objects.all()
