@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
     CreateAPIView, ListAPIView, RetrieveAPIView
-from .serializers import JobSerializer, JobApplicationListCreateSerializer
-from .models import Job, JobApplication
+from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer
+from .models import Job, JobViews, JobApplication
 from ats_admin.permissions import IsAdmin, IsApplicantAccess
 from ats_admin.paginations import JobPagination
 from rest_framework.response import Response
@@ -55,7 +55,7 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
     serializer_class = JobSerializer
     permission_classes = [IsAdmin]
     queryset = Job.active_objects.all()
-    
+
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.is_active = False
@@ -88,3 +88,6 @@ class JobApplicantDetailAPIView(ActivityLogMixin, RetrieveAPIView):
     permission_classes = [IsAdmin]   
 
 
+class JobViewsListCreateAPIView(ListCreateAPIView):
+    queryset = JobViews.objects.all()
+    serializer_class = JobViewsSerializer
