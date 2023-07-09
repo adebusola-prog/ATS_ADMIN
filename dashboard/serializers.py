@@ -12,7 +12,7 @@ class ActivityLogSerializer(serializers.ModelSerializer):
         fields = ('actor','action_type','get_timesince', 'status', 'content_type','data')
 
     def get_actor(self, obj):
-        actor = obj.actor
+        actor = obj.posted_by.actor
         if actor is not None:
             user_id = actor.id
             user = CustomUser.objects.get(id=user_id)

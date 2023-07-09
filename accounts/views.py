@@ -46,20 +46,20 @@ class ForgotPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         if serializer.is_valid():
             lower_email = serializer.validated_data.get("email").lower()
-            # if CustomUser.objects.filter(email__iexact=lower_email).exists():
-            account = CustomUser.objects.get(email=lower_email)
-            uuidb64 = urlsafe_base64_encode(account.id)
-            token = PasswordResetTokenGenerator().make_token(account)
-            current_site = get_current_site(
-                request).domain
-            relative_path = reverse(
-                "reset-password", kwargs={"uuidb64": uuidb64, "token": token})
-            abs_url = "http://" + current_site + relative_path
+            if CustomUser.objects.filter(email__iexact=lower_email).exists():
+                account = CustomUser.objects.get(email=lower_email)
+                uuidb64 = urlsafe_base64_encode(account.id)
+                token = PasswordResetTokenGenerator().make_token(account)
+                current_site = get_current_site(
+                    request).domain
+                relative_path = reverse(
+                    "reset-password", kwargs={"uuidb64": uuidb64, "token": token})
+                abs_url = "http://" + current_site + relative_path
 
-            mail_subject = "Please Reset your CustomUser Password"
-            message = "Hi" + account.username + "," + \
-                " Please Use the Link below to reset your account passwors:" + "" + abs_url
-            Utils.send_email(mail_subject, message, account.email)
+                mail_subject = "Please Reset your CustomUser Password"
+                message = "Hi" + account.username + "," + \
+                    " Please Use the Link below to reset your account passwors:" + "" + abs_url
+                Utils.send_email(mail_subject, message, account.email)
             return Response({"status": "success", "message": "We have sent a password-reset link to the email you provided.Please check and reset  "}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
