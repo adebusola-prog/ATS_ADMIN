@@ -17,7 +17,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = ('id', 'detail_url', 'update_url', 'delete_url', 'role', 'skill_level',  
+        fields = ('id', 'detail_url', 'update_url', 'delete_url', 'role', 'skill_level',  "views_count",
             'job_type', 'job_schedule', 'job_requirements', 'posted_by', 'uploaded_time', 'location',
             'no_of_views')
         
@@ -77,7 +77,7 @@ class JobViewsSerializer(serializers.ModelSerializer):
         
 class RecentJobsSerializer(serializers.ModelSerializer):
     posted_by = serializers.CharField(source='posted_by.get_full_name', read_only=True)
-    
+
     class Meta:
         model = Job
         fields = ('id', 'role', 'posted_by', 'time_since_creation', 'no_of_views')
