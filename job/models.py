@@ -53,7 +53,7 @@ class Job(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     location = models.ManyToManyField(Location, related_name='job_locations')
     is_active = models.BooleanField(default=True)
-    
+    no_of_views = models.IntegerField(default=0, blank=True)
     objects = models.Manager()
     active_objects = ActiveManager()
     inactive_objects = InActiveManager()
