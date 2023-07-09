@@ -29,16 +29,12 @@ class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.CharField()
   
     fields = ('email',)
-    extra_kwargs = {
-        "email": {
-            "write_only": True
-        }
-    }
-
+   
     def validate_email(self, value):
         lower_email = value.lower()
 
         return lower_email
+
 
 class SetNewPasswordSerializer(serializers.Serializer):
     token = serializers.CharField(min_length=1, write_only=True)
