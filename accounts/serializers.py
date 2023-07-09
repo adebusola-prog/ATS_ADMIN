@@ -25,7 +25,7 @@ class LoginSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         return token
 
-class ResetPasswordSerializer(serializers.Serializers):
+class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.CharField()
   
     fields = ('email',)
