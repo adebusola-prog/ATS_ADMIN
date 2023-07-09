@@ -77,7 +77,7 @@ class ResetPasswordView(APIView):
             account = CustomUser.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(account, token):
                 return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
-            return Response({"status": "success", "message": "Your credentials valid", "uuidb64": uuidb64, "token": token}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "success", "message": "Your credentials valid", "uuidb64": uuidb64, "token": token}, status=status.HTTP_200_OK)
         except DjangoUnicodeDecodeError as e:
             return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -99,3 +99,9 @@ class ResetPasswordView(APIView):
 
 class SetNewPasswordView(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"status": "success", "message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
