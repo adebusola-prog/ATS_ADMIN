@@ -69,9 +69,9 @@ class Job(models.Model):
             return "uploaded now"
         return f"Uploaded {timesince(self.created_at, timezone.now())} ago"
 
-    def views_count(self):
-        total_views = Job.objects.aggregate(total_views=Sum('no_of_views'))['total_views']
-        return total_views
+    # def views_count(self):
+    #     total_views = Job.objects.aggregate(total_views=Sum('no_of_views'))['total_views']
+    #     return total_views
 
 
 class JobViews(models.Model):
