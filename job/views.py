@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from .mixins import CustomMessageCreateMixin, CustomMessageUpdateMixin, CustomMessageDestroyMixin
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK
 from dashboard.activity import ActivityLogMixin, ActivityLogJobMixin
-from django.db.models import Count
+from django.db.models import Count, F
 
 
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
@@ -42,7 +42,9 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        role=instance.role 
+        instance.no_of_views = F('no_of_views')+1
+        instance.refresh_from_db(fields=['no_of_views'])
+        instance.save()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
