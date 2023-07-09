@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
     CreateAPIView, ListAPIView, RetrieveAPIView
-from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer
+from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,\
+    RecentJobsSerializer
+from rest_framework.views import APIView
+from django.utils import timezone, timesince
+from datetime import datetime, timedelta
 from .models import Job, JobViews, JobApplication
 from ats_admin.permissions import IsAdmin, IsApplicantAccess
 from ats_admin.paginations import JobPagination
@@ -108,3 +112,50 @@ class JobViewsListCreateAPIView(ListCreateAPIView):
         job_views = JobViews.active_objects.filter(job_id=job_id).annotate(num_views=Count('viewer_ip'))
         serializer = self.get_serializer(job_views, many=True)
         return Response(serializer.data)
+    
+
+class SevenDaysRecentJobsAPIView(APIView):
+    serializer_class = RecentJobsSerializer
+
+    def get(self, request, *args, **kwargs):
+        today = timezone.now().date()
+        seven_days_ago = today - timedelta(days=7)
+        recent_jobs = Job.active_objects.filter(created_at__gte=seven_days_ago)
+        serializer = self.serializer_class(recent_jobs, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+
+class FiveDaysRecentJobsAPIView(APIView):
+    serializer_class = RecentJobsSerializer
+
+    def get(self, request, *args, **kwargs):
+        today = timezone.now().date()
+        five_days_ago = today - timedelta(days=5)
+        # three_days_ago = today - timedelta(days=3)
+        # one_day_ago = today - timedelta(days=1)
+
+        recent_jobs = Job.active_objects.filter(created_at__gte=five_days_ago)
+        serializer = self.serializer_class(recent_jobs, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+
+class ThreeDaysRecentJobsAPIView(APIView):
+    serializer_class = RecentJobsSerializer
+
+    def get(self, request, *args, **kwargs):
+        today = timezone.now().date()
+        three_days_ago = today - timedelta(days=3)
+        recent_jobs = Job.active_objects.filter(created_at__gte=three_days_ago)
+        serializer = self.serializer_class(recent_jobs, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+    
+
+class OneDayRecentJobsAPIView(APIView):
+    serializer_class = RecentJobsSerializer
+
+    def get(self, request, *args, **kwargs):
+        today = timezone.now().date()
+        one_day_ago = today - timedelta(days=1)
+        recent_jobs = Job.active_objects.filter(created_at__gte=one_day_ago)
+        serializer = self.serializer_class(recent_jobs, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)

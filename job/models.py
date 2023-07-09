@@ -73,6 +73,7 @@ class Job(models.Model):
         total_views = Job.objects.aggregate(total_views=Sum('no_of_views'))['total_views']
         return total_views
 
+
 class JobViews(models.Model):
     job = models.ForeignKey(Job, related_name="job_views", on_delete=models.SET_NULL, null=True)
     viewer_ip = models.JSONField(default=_json_list())
@@ -83,7 +84,6 @@ class JobViews(models.Model):
     inactive_objects = InActiveManager()
 
     
-
 class JobApplication(models.Model):
     job = models.ManyToManyField(Job, related_name='applications')
     applicant = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=True)

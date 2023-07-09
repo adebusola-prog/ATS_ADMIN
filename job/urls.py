@@ -1,8 +1,9 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import JobListCreateAPIView, JobDetailUpdateAPIView,\
-      JobApplicantCreateAPIView, JobDeleteAPIView, JobApplicantDetailAPIView,\
-      JobApplicantListAPIView, JobViewsListCreateAPIView
+    JobApplicantCreateAPIView, JobDeleteAPIView, JobApplicantDetailAPIView,\
+    JobApplicantListAPIView, JobViewsListCreateAPIView, SevenDaysRecentJobsAPIView, \
+    FiveDaysRecentJobsAPIView, ThreeDaysRecentJobsAPIView, OneDayRecentJobsAPIView
 from dashboard.views import ActivityLogListAPIView
 
 
@@ -19,7 +20,12 @@ urlpatterns = [
     path('<int:pk>/job_application_detail', JobApplicantDetailAPIView.as_view(), name='job_application_detail'),
 
     path('job_views', JobViewsListCreateAPIView.as_view(), name='job_views'),
-    path('activity_log', ActivityLogListAPIView.as_view(), name='activity_log')
+    path('activity_log', ActivityLogListAPIView.as_view(), name='activity_log'),
+    path('seven_days_ago', SevenDaysRecentJobsAPIView.as_view(), name='seven_days_ago'),
+    path('five_days_ago', FiveDaysRecentJobsAPIView.as_view(), name='five_days_ago'),
+    path('three_days_ago', ThreeDaysRecentJobsAPIView.as_view(), name='three_days_ago'),
+    path('one_day_ago', OneDayRecentJobsAPIView.as_view(), name='one_day_ago'),
+
    
 ]
 

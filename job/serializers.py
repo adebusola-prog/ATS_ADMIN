@@ -74,3 +74,8 @@ class JobViewsSerializer(serializers.ModelSerializer):
             view.viewer_ip.append(ip)
             view.save()
             return view
+        
+class RecentJobsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = ('id', 'role', 'posted_by', 'time_since_creation', 'no_of_views')
