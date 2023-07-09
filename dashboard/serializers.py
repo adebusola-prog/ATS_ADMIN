@@ -4,7 +4,7 @@ from accounts.models import CustomUser
 from ats_admin.serializers import CustomUserSubAdminSerializer
 
 class ActivityLogSerializer(serializers.ModelSerializer):
-    actor = serializers.SerializerMethodField()
+    # actor = serializers.SerializerMethodField()
     content_type = serializers.SerializerMethodField()
     
     class Meta:
