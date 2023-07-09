@@ -39,7 +39,9 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
     
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
+        print(instance)
         instance.no_of_views += 1
+        print(instance)
         instance.save()
 
         serializer = self.get_serializer(instance)
