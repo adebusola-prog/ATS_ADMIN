@@ -67,12 +67,27 @@ class ForgotPasswordView(APIView):
             return Response({"email": ["User with this email does not exist."]}, status=status.HTTP_404_NOT_FOUND)
 
 
+# class ResetPasswordView(APIView):
+#     serializer_class = ResetPasswordSerializer
+  
+#     def get(self, request, uuidb64, token):
+#         try:
+#             id = smart_str(urlsafe_base64_decode(uuidb64))
+#             account = CustomUser.objects.get(id=id)
+#             if not PasswordResetTokenGenerator().check_token(account, token):
+#                 return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+#             return Response({"status": "success", "message": "Your credentials valid", "uuidb64": uuidb64, "token": token}, status=status.HTTP_400_BAD_REQUEST)
+#         except DjangoUnicodeDecodeError as e:
+#             return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class ResetPasswordView(APIView):
     serializer_class = ResetPasswordSerializer
-  
+
     def get(self, request, uuidb64, token):
         try:
-            id = smart_str(urlsafe_base64_decode(uuidb64))
+            id = int.from_bytes(urlsafe_base64_decode(uuidb64), "big")
             account = CustomUser.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(account, token):
                 return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
