@@ -53,10 +53,10 @@ class ForgotPasswordView(APIView):
             uuidb64 = urlsafe_base64_encode(force_bytes(account.id))
             token = PasswordResetTokenGenerator().make_token(account)
             current_site = get_current_site(request).domain
-            relative_path = reverse("reset_password", kwargs={"uuidb64": uuidb64, "token": token})
+            relative_path = reverse("authe:reset_password", kwargs={"uuidb64": uuidb64, "token": token})
             abs_url = "https://" + current_site + relative_path
 
-            mail_subject = "Please Reset your CustomUser Password"
+            mail_subject = "Please Reset your Password"
             message = f"Hi {account.username}, please use the link below to reset your account password:\n{abs_url}"
             Utils.send_email(mail_subject, message, account.email)
 
