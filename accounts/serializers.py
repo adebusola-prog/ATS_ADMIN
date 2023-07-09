@@ -41,16 +41,14 @@ class ResetPasswordSerializer(serializers.Serializer):
 class SetNewPasswordSerializer(serializers.Serializer):
     token = serializers.CharField(min_length=1, write_only=True)
     uuidb64 = serializers.CharField(min_length=1, write_only=True)
-
-    class Meta:
-        model = CustomUser
-        fields = ("password", "confirm_password", "token", "uuidb64")
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
         try:
             if attrs.get('password') != attrs.get('confirm_password'):
-                raise serializers.ValidationError(
-                    {"password": "Password fields didn't match."})
+                raise serializers.ValidationError({"password": "Password fields didn't match."})
+
             token = attrs.get('token')
             uuidb64 = attrs.get('uuidb64')
 
@@ -59,8 +57,10 @@ class SetNewPasswordSerializer(serializers.Serializer):
 
             if not PasswordResetTokenGenerator().check_token(account, token):
                 raise AuthenticationFailed('The reset link is invalid', 401)
+
             account.set_password(attrs.get('password'))
             account.save()
         except Exception as e:
             raise AuthenticationFailed('The reset link is invalid', 401)
-        return super().validate(attrs)
+
+        return attrs
