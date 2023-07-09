@@ -27,8 +27,10 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.CharField()
-  
-    fields = ('email',)
+
+    class Meta:
+        fields = ('email',)
+
    
     # def validate_email(self, value):
     #     lower_email = value.lower()
