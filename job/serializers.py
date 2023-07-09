@@ -76,6 +76,8 @@ class JobViewsSerializer(serializers.ModelSerializer):
             return view
         
 class RecentJobsSerializer(serializers.ModelSerializer):
+    posted_by = serializers.CharField(source='posted_by.get_full_name', read_only=True)
+    
     class Meta:
         model = Job
         fields = ('id', 'role', 'posted_by', 'time_since_creation', 'no_of_views')
