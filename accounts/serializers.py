@@ -27,18 +27,18 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 class ResetPasswordSerializer(serializers.ModelSerializer):
     email = serializers.CharField()
-    class Meta:
-        fields = ('email',)
-        extra_kwargs = {
-            "email": {
-                "write_only": True
-            }
-        }
+  
+    # fields = ('email',)
+    # extra_kwargs = {
+    #     "email": {
+    #         "write_only": True
+    #     }
+    # }
 
-        def validate_email(self, value):
-            lower_email = value.lower()
+    def validate_email(self, value):
+        lower_email = value.lower()
 
-            return lower_email
+        return lower_email
 
 class SetNewPasswordSerializer(serializers.Serializer):
     token = serializers.CharField(min_length=1, write_only=True)

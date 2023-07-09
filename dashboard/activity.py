@@ -80,7 +80,7 @@ class ActivityLogJobMixin:
         message = f"New job created by {instance.posted_by.first_name} {instance.posted_by.last_name}"
         ActivityLog.objects.create(actor=actor, action_type=CREATE, content_object=instance, data=message)
 
-    def _update_activity_log(self, instance, request):
+    def _update_activity_log(self, instance, updated_instance, request):
         actor = self._get_user(request)
         message = f"{instance.role} updated by {instance.posted_by.first_name} {instance.posted_by.last_name}"
         ActivityLog.objects.create(actor=actor, action_type=UPDATE, content_object=instance, data=message)

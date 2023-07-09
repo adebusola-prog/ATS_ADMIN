@@ -45,7 +45,7 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        self._update_activity_log(serializer.instance, request)
+        self._update_activity_log(instance, serializer.instance, request)
         response = {
             "message": "Job updated successfully"
         }
