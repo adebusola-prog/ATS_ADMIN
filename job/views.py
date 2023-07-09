@@ -36,27 +36,28 @@ class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCr
         return Response(response, status=HTTP_200_OK)
 
 
-from django.db.models import F
-
 class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, RetrieveUpdateAPIView):
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAdmin]
-
+    
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.no_of_views = F('no_of_views') + 1
+        instance.no_of_views += 1
+        # instance.refresh_from_db(fields=['no_of_views'])
         instance.save()
 
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=HTTP_200_OK)
-
+    
     def perform_update(self, serializer):
         serializer.save(posted_by=self.request.user)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.no_of_views = F('no_of_views') + 1
+        instance.no_of_views += 1
+        instance.refresh_from_db(fields=['no_of_views'])
+        instance.save()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
