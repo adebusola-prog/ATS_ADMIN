@@ -30,10 +30,10 @@ class ResetPasswordSerializer(serializers.Serializer):
   
     fields = ('email',)
    
-    def validate_email(self, value):
-        lower_email = value.lower()
+    # def validate_email(self, value):
+    #     lower_email = value.lower()
 
-        return lower_email
+        # return lower_email
 
 
 class SetNewPasswordSerializer(serializers.Serializer):
