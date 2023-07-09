@@ -100,8 +100,15 @@ class ResetPasswordView(APIView):
 class SetNewPasswordView(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer
 
-    def post(self, request, *args, **kwargs):
+    # def post(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     return Response({"status": "success", "message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
+    
+    def patch(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"status": "success", "message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
+        return Response({"status": "success", "message": "Password was successfully reset"}, status=status.HTTP_200_OK)
+
