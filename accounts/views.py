@@ -10,6 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
+from django.utils.encoding import force_bytes
 from .utils import Utils
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.views import APIView
@@ -49,7 +50,7 @@ class ForgotPasswordView(APIView):
         lower_email = serializer.validated_data.get("email").lower()
         if CustomUser.objects.filter(email__iexact=lower_email).exists():
             account = CustomUser.objects.get(email=lower_email)
-            uuidb64 = urlsafe_base64_encode(account.id)
+            uuidb64 = urlsafe_base64_encode(force_bytes(account.id))
             token = PasswordResetTokenGenerator().make_token(account)
             current_site = get_current_site(request).domain
             relative_path = reverse("reset-password", kwargs={"uuidb64": uuidb64, "token": token})
@@ -67,33 +68,33 @@ class ForgotPasswordView(APIView):
             return Response({"email": ["User with this email does not exist."]}, status=status.HTTP_404_NOT_FOUND)
 
 
-# class ResetPasswordView(APIView):
-#     serializer_class = ResetPasswordSerializer
-  
-#     def get(self, request, uuidb64, token):
-#         try:
-#             id = smart_str(urlsafe_base64_decode(uuidb64))
-#             account = CustomUser.objects.get(id=id)
-#             if not PasswordResetTokenGenerator().check_token(account, token):
-#                 return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
-#             return Response({"status": "success", "message": "Your credentials valid", "uuidb64": uuidb64, "token": token}, status=status.HTTP_400_BAD_REQUEST)
-#         except DjangoUnicodeDecodeError as e:
-#             return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 class ResetPasswordView(APIView):
     serializer_class = ResetPasswordSerializer
-
+  
     def get(self, request, uuidb64, token):
         try:
-            id = int.from_bytes(urlsafe_base64_decode(uuidb64), "big")
+            id = smart_str(urlsafe_base64_decode(uuidb64))
             account = CustomUser.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(account, token):
                 return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"status": "success", "message": "Your credentials valid", "uuidb64": uuidb64, "token": token}, status=status.HTTP_400_BAD_REQUEST)
         except DjangoUnicodeDecodeError as e:
             return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# class ResetPasswordView(APIView):
+#     serializer_class = ResetPasswordSerializer
+
+#     def get(self, request, uuidb64, token):
+#         try:
+#             id = int.from_bytes(urlsafe_base64_decode(uuidb64), "big")
+#             account = CustomUser.objects.get(id=id)
+#             if not PasswordResetTokenGenerator().check_token(account, token):
+#                 return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+#             return Response({"status": "success", "message": "Your credentials valid", "uuidb64": uuidb64, "token": token}, status=status.HTTP_400_BAD_REQUEST)
+#         except DjangoUnicodeDecodeError as e:
+#             return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SetNewPasswordView(generics.GenericAPIView):
