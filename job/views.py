@@ -12,7 +12,7 @@ from ats_admin.paginations import JobPagination
 from rest_framework.response import Response
 from .mixins import CustomMessageCreateMixin, CustomMessageUpdateMixin, CustomMessageDestroyMixin
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK
-from dashboard.activity import ActivityLogMixin, ActivityLogJobMixin
+from dashboard.activity import ActivityLogJobMixin
 from django.db.models import Count, F
 
 
@@ -82,7 +82,7 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
         return Response(response, status=HTTP_200_OK)
 
 
-class JobApplicantCreateAPIView(ActivityLogMixin, CustomMessageCreateMixin, CreateAPIView):
+class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, CreateAPIView):
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsApplicantAccess]
@@ -91,13 +91,13 @@ class JobApplicantCreateAPIView(ActivityLogMixin, CustomMessageCreateMixin, Crea
         serializer.save(applicant=self.request.user)
 
 
-class JobApplicantListAPIView(ActivityLogMixin, ListAPIView):
+class JobApplicantListAPIView(ActivityLogJobMixin, ListAPIView):
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
 
 
-class JobApplicantDetailAPIView(ActivityLogMixin, RetrieveAPIView):
+class JobApplicantDetailAPIView(ActivityLogJobMixin, RetrieveAPIView):
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]   
