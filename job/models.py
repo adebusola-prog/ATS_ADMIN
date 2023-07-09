@@ -1,10 +1,12 @@
 import os
 from django.db import models
+from django.db.models import Sum
 from accounts.models import CustomUser
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.timesince import timesince
 from base.managers import ActiveManager, InActiveManager
+
 # from cities_light.models import City
 
 
@@ -68,11 +70,8 @@ class Job(models.Model):
         return f"Uploaded {timesince(self.created_at, timezone.now())} ago"
 
     def views_count(self):
-        try:
-            return len(JobViews.active_objects.filter(job_id=self.id).first().viewer_ip)
-        except:
-            return 0
-
+        total_views = Job.objects.aggregate(total_views=Sum('no_of_views'))['total_views']
+        return total_views
 
 class JobViews(models.Model):
     job = models.ForeignKey(Job, related_name="job_views", on_delete=models.SET_NULL, null=True)
