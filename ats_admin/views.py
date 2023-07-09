@@ -49,3 +49,9 @@ class SubAdminDetailView(generics.RetrieveAPIView):
     permission_classes = [IsSuperAdmin]
     
 
+class SubAdminProfileView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSubAdminSerializer
+
+    def get_object(self):
+        return self.request.user
