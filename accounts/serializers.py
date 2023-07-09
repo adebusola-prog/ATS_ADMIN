@@ -26,8 +26,8 @@ class LoginSerializer(TokenObtainPairSerializer):
         return token
 
 class ResetPasswordSerializer(serializers.ModelSerializer):
+    email = serializers.CharField()
     class Meta:
-        model = CustomUser
         fields = ('email',)
         extra_kwargs = {
             "email": {
