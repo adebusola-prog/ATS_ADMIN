@@ -150,19 +150,19 @@ SIMPLE_JWT = {
 }
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_HOST = config("EMAIL_HOST")
-EMAIL_PORT = config("EMAIL_PORT", cast=int)
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool)
+# EMAIL_HOST = config("EMAIL_HOST")
+# EMAIL_PORT = config("EMAIL_PORT", cast=int)
+# EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+# EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool)
 
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 465
 # EMAIL_HOST_USER= 'adebusolayeye@gmail.com'
 # EMAIL_HOST_PASSWORD = 'afspkpftvlaimnzf'
+# EMAIL_USE_SSL = True
 
-
-# Password validation
+# # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
