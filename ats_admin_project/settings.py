@@ -55,10 +55,20 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'drf_yasg',
     'multiselectfield',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
    
 ]
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': 'localhost:9200',
+        'http_auth': ('elastic', config('ELASTICSEARCH_PASSWORD'))
+    },
+}
 
-
+ELASTICSEARCH_INDEX_NAMES = {
+    'accounts.CustomUser': 'users',
+}
 CSRF_TRUSTED_ORIGINS = ['https://ats-admin-dashboard.onrender.com']
 
 CORS_ALLOWED_ORIGINS = ['https://ats-admin-dashboard.onrender.com', 'http://localhost:4000',
@@ -149,7 +159,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_HOST = config("EMAIL_HOST")
 EMAIL_PORT = config("EMAIL_PORT", cast=int)

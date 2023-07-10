@@ -8,9 +8,18 @@ from django.utils.encoding import force_str
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+from .documents import CustomUserDocument
 
 
+class CustomUserDocumentSerializer(DocumentSerializer):
+    class Meta:
+        document = CustomUserDocument
 
+        fields = (
+            'first_name',
+            'last_name'
+        )
 
 class LoginSerializer(TokenObtainPairSerializer):
     """

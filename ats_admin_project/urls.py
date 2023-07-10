@@ -41,6 +41,9 @@ from rest_framework_simplejwt.views import (
 from rest_framework_swagger.views import get_swagger_view
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework import routers
+
+from accounts.views import CustomUserDocumentView
 
 
 schema_view = get_schema_view(
@@ -55,7 +58,8 @@ schema_view = get_schema_view(
     public=True,
     # permission_classes=[permissions.AllowAny],
 )
-
+router = routers.SimpleRouter(trailing_slash=False)
+router.register(r'name-search', CustomUserDocumentView, basename='name-search')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -73,5 +77,5 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+urlpatterns += router.urls
 

@@ -17,7 +17,33 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import generics
+from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
+from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend,\
+      FilteringFilterBackend, SuggesterFilterBackend
+from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from .documents import CustomUserDocument
+from .serializers import CustomUserDocumentSerializer
 
+class CustomUserDocumentView(DocumentViewSet):
+    document = CustomUserDocument
+    serializer_class = CustomUserDocumentSerializer
+
+    filter_backends = [
+        # FilteringFilterBackend,
+        SearchFilterBackend,
+        SuggesterFilterBackend
+    ]
+
+    search_fields = ('first_name', "last_name")
+    
+    suggester_fields = {
+        'first_name': {
+            'field': 'title.suggest',
+            'suggesters': [
+                SUGGESTER_COMPLETION,
+            ],
+    }},
 
 class LoginView(generics.GenericAPIView):
     authentication_classes = ()
