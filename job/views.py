@@ -165,8 +165,10 @@ class OneDayRecentJobsAPIView(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
     
 class ExportApplicantsCSVView(APIView):
-     def get(self, request, *args, **kwargs):
-        approved_applicants = JobApplication.objects.all()
+    def get(self, request, *args, **kwargs):
+        selected_ids = request.GET.getlist('selected_ids[]')
+        approved_applicants = JobApplication.objects.filter(id__in=selected_ids)
+
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="approved_applicants.csv"'
 
