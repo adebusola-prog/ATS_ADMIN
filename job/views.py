@@ -128,8 +128,8 @@ class DaysRecentJobsAPIView(APIView):
         days = self.request.data.get('days', None)
         print(days)
         if not days:
-            days_ago = today - timedelta(days=days)
-            recent_jobs = Job.active_objects.filter(created_at__gte=7)
+            # days_ago = today - timedelta(days=0)
+            recent_jobs = Job.active_objects.all()
             serializer = self.serializer_class(recent_jobs, many=True)
             return Response(serializer.data, status=HTTP_200_OK)
         try:
