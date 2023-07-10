@@ -17,12 +17,11 @@ class IsAdmin(permissions.BasePermission):
     
 class IsApplicantAccess(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_authenticated == False:
+        if not request.user.is_authenticated:
             raise PermissionDenied("Kindly Login to apply for our jobs")
-        if request.user.is_superadmin == False\
-            or request.user.is_admin == False:
-            return True
-        raise PermissionDenied("You are not allowed to perform this operation.")
+        if request.user.is_superadmin or request.user.is_admin:
+            raise PermissionDenied("You are not allowed to perform this operation.")
+        return True
 
 
 class IsSubAdmin(permissions.BasePermission):
