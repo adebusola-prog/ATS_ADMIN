@@ -147,6 +147,7 @@ class ExportApplicantsCSVView(APIView):
     def post(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         approved_applicants = JobApplication.objects.filter(id__in=selected_ids).all()
+        
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="approved_applicants.csv"'
