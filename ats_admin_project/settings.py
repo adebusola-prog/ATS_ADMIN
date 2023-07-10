@@ -14,6 +14,10 @@ from pathlib import Path
 from datetime import timedelta
 from decouple import config
 from pathlib import Path
+# from elasticsearch import Elasticsearch
+
+# Create Elasticsearch client with adjusted timeout value
+# es_client = Elasticsearch(timeout=30)
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
