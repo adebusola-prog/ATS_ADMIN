@@ -22,7 +22,7 @@ urlpatterns = [
     path('job_views', JobViewsListCreateAPIView.as_view(), name='job_views'),
     path('activity_log', ActivityLogListAPIView.as_view(), name='activity_log'),
     
-    path('seven_days_ago_jobs', SevenDaysRecentJobsAPIView.as_view(), name='seven_days_ago'),
+
     path('five_days_ago_jobs', DaysRecentJobsAPIView.as_view(), name='five_days_ago'),
     path('export_csv', ExportApplicantsCSVView.as_view(), name='export_applicant')
 

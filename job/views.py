@@ -118,24 +118,21 @@ class JobViewsListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data)
     
 
-class SevenDaysRecentJobsAPIView(APIView):
-    serializer_class = RecentJobsSerializer
-
-    def get(self, request, *args, **kwargs):
-        today = timezone.now().date()
-        seven_days_ago = today - timedelta(days=7)
-        recent_jobs = Job.active_objects.filter(created_at__gte=seven_days_ago)
-        serializer = self.serializer_class(recent_jobs, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
-
-
 class DaysRecentJobsAPIView(APIView):
     serializer_class = RecentJobsSerializer
     permission_classes = [IsAdmin]
 
-    def get(self, request, *args, **kwargs):
+   
+    def post(self, request, *args, **kwargs):
         today = timezone.now().date()
-        days = self.query_params['search_query']
+        days = self.request.data.get('days', None)
+        if not days:
+            return Response({'error': 'Please provide the number of days.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            days = int(days)
+        except ValueError:
+            return Response({'error': 'Invalid number of days.'}, status=status.HTTP_400_BAD_REQUEST)
+
         days_ago = today - timedelta(days=days)
         recent_jobs = Job.active_objects.filter(created_at__gte=days_ago)
         serializer = self.serializer_class(recent_jobs, many=True)
