@@ -128,7 +128,10 @@ class DaysRecentJobsAPIView(APIView):
         days = self.request.data.get('days', None)
         print(days)
         if not days:
-            return Response({'error': 'Please provide the number of days.'}, status=HTTP_400_BAD_REQUEST)
+            days_ago = today - timedelta(days=days)
+            recent_jobs = Job.active_objects.filter(created_at__gte=7)
+            serializer = self.serializer_class(recent_jobs, many=True)
+            return Response(serializer.data, status=HTTP_200_OK)
         try:
             days = int(days)
         except ValueError:
