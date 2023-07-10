@@ -1,3 +1,4 @@
+import csv
 from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
     CreateAPIView, ListAPIView, RetrieveAPIView
@@ -14,6 +15,7 @@ from .mixins import CustomMessageCreateMixin, CustomMessageUpdateMixin, CustomMe
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK
 from dashboard.activity import ActivityLogJobMixin
 from django.db.models import Count, F
+from django.http import HttpResponse
 
 
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
@@ -161,3 +163,17 @@ class OneDayRecentJobsAPIView(APIView):
         recent_jobs = Job.active_objects.filter(created_at__gte=one_day_ago)
         serializer = self.serializer_class(recent_jobs, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
+    
+class ExportApplicantsCSVView(APIView):
+     def get(self, request, *args, **kwargs):
+        approved_applicants = JobApplication.objects.all()
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="approved_applicants.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['first_name', 'last_name', 'email', 'phone_number'])
+
+        for applicant in approved_applicants:
+            writer.writerow([applicant.first_name, applicant.last_name, applicant.email, applicant.phone_number])
+    
+        return response
