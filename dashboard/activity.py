@@ -82,7 +82,7 @@ class ActivityLogJobMixin:
 
     def _update_activity_log(self, instance, request):
         actor = self._get_user(request)
-        old_instance = self.queryset.get(pk=instance.pk)
+        old_instance = self.get_object()
         old_role = old_instance.role 
         message = f"{old_role} updated by {instance.posted_by.first_name} {instance.posted_by.last_name}"
         ActivityLog.objects.create(actor=actor, action_type=UPDATE, content_object=instance, data=message)
