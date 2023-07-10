@@ -21,7 +21,11 @@ class LoginSerializer(TokenObtainPairSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ("email", "password")
+        fields = ("email", "password", "first_name")
+
+        extra_kwargs = {
+            "first_name": {"read_only": True}
+        }
 
     def validate(self, validated_data):
         user = authenticate(**validated_data)
