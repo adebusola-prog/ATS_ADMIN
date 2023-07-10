@@ -17,7 +17,9 @@ class IsAdmin(permissions.BasePermission):
     
 class IsApplicantAccess(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_authenticated and request.user.is_superadmin == False\
+        if request.user.is_authenticated == False:
+            raise PermissionDenied("Kindly Login to apply for our jobs")
+        if request.user.is_superadmin == False\
             or request.user.is_admin == False:
             return True
         raise PermissionDenied("You are not allowed to perform this operation.")
