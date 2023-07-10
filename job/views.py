@@ -129,41 +129,19 @@ class SevenDaysRecentJobsAPIView(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
 
 
-class FiveDaysRecentJobsAPIView(APIView):
+class DaysRecentJobsAPIView(APIView):
     serializer_class = RecentJobsSerializer
     permission_classes = [IsAdmin]
 
     def get(self, request, *args, **kwargs):
         today = timezone.now().date()
-        five_days_ago = today - timedelta(days=5)
-        recent_jobs = Job.active_objects.filter(created_at__gte=five_days_ago)
+        days = self.query_params['search_query']
+        days_ago = today - timedelta(days=days)
+        recent_jobs = Job.active_objects.filter(created_at__gte=days_ago)
         serializer = self.serializer_class(recent_jobs, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
 
-class ThreeDaysRecentJobsAPIView(APIView):
-    serializer_class = RecentJobsSerializer
-    permission_classes = [IsAdmin]
-
-    def get(self, request, *args, **kwargs):
-        today = timezone.now().date()
-        three_days_ago = today - timedelta(days=3)
-        recent_jobs = Job.active_objects.filter(created_at__gte=three_days_ago)
-        serializer = self.serializer_class(recent_jobs, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
-    
-
-class OneDayRecentJobsAPIView(APIView):
-    serializer_class = RecentJobsSerializer
-    permission_classes = [IsAdmin]
-
-    def get(self, request, *args, **kwargs):
-        today = timezone.now().date()
-        one_day_ago = today - timedelta(days=1)
-        recent_jobs = Job.active_objects.filter(created_at__gte=one_day_ago)
-        serializer = self.serializer_class(recent_jobs, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
-    
 class ExportApplicantsCSVView(APIView):
     def get(self, request, *args, **kwargs):
         selected_ids = request.GET.getlist('selected_ids[]')
