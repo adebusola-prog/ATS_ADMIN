@@ -15,16 +15,26 @@ from .utils import Utils
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import generics
 
 
-class LoginView(TokenObtainPairView):
-    serializer_class = LoginSerializer
+class LoginView(generics.GenericAPIView):
+    authentication_classes = ()
+    # permission_classes = []
+    serializer_class =  LoginSerializer
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        serializer =  LoginSerializer(user)
+        token = RefreshToken.for_user(user)
+        data = serializer.data
+        data["tokens"] = {"refresh": str(
+            token), "access": str(token.access_token)}
+        return Response(data, status=status.HTTP_200_OK)
 
-# class LogoutView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         request.user.auth_token.delete()
-#         return Response(status=status.HTTP_200_OK)
 
 class LogoutView(APIView):
     def post(self, request):

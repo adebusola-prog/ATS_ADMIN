@@ -7,6 +7,8 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import authenticate
+
 
 
 
@@ -14,16 +16,19 @@ class LoginSerializer(TokenObtainPairSerializer):
     """
     Serializer for user login.
     """
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    
+    class Meta:
+        model = CustomUser
+        fields = ("email", "password")
 
-    @classmethod
-    def get_token(cls, user):
-        """
-        Retrieves the token for the authenticated user and adds custom claims.
-        """
-        token = super().get_token(user)
-        token['username'] = user.username
-        token['email'] = user.email
-        return token
+    def validate(self, validated_data):
+        user = authenticate(**validated_data)
+        if not user.is_active:
+            raise serializers.ValidationError("You have been suspended")
+        return user
+     
 
 class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.CharField()
