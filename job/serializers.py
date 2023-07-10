@@ -8,7 +8,24 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ('name',)
 
 
+
+class JobApplicationListCreateSerializer(serializers.ModelSerializer):
+    detail_url = serializers.SerializerMethodField()
+    applicant = serializers.CharField(source='applicant.get_full_name', read_only=True)
+    short_name = serializers.CharField(source='applicant.get_short_name', read_only=True)
+
+    class Meta:
+        model = JobApplication
+        fields = ('detail_url', 'job', 'applicant', 'cover_letter', 'resume', 'short_name')
+
+    def get_detail_url(self, obj):
+        request = self.context.get('request')
+        absolute_url = reverse('jobs:job_application_detail', args=[str(obj.id)], request=request)
+        return absolute_url
+    
+
 class JobSerializer(serializers.ModelSerializer):
+    applications = JobApplicationListCreateSerializer(many=True, read_only=True)
     detail_url = serializers.SerializerMethodField()
     update_url = serializers.SerializerMethodField()
     delete_url = serializers.SerializerMethodField()
@@ -17,9 +34,9 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = ('id', 'detail_url', 'update_url', 'delete_url', 'role', 'skill_level',  "views_count",
-            'job_type', 'job_schedule', 'job_requirements', 'posted_by', 'uploaded_time', 'location',
-            'no_of_views')
+        fields = ('applications','id', 'detail_url', 'update_url', 'delete_url', 'role', 
+                'skill_level',  'views_count', 'job_type', 'job_schedule', 'job_requirements', 
+                'posted_by', 'uploaded_time', 'location', 'no_of_views')
         
         extra_kwargs = {
             'skill_level': {"write_only": True},
@@ -41,20 +58,7 @@ class JobSerializer(serializers.ModelSerializer):
         delete_url =  reverse('jobs:job_delete', args=[str(obj.id)], request=request)
         return delete_url
 
-class JobApplicationListCreateSerializer(serializers.ModelSerializer):
-    detail_url = serializers.SerializerMethodField()
-    applicant = serializers.CharField(source='applicant.get_full_name', read_only=True)
-    short_name = serializers.CharField(source='applicant.get_short_name', read_only=True)
 
-    class Meta:
-        model = JobApplication
-        fields = ('detail_url', 'job', 'applicant', 'cover_letter', 'resume', 'short_name')
-
-    def get_detail_url(self, obj):
-        request = self.context.get('request')
-        absolute_url = reverse('jobs:job_application_detail', args=[str(obj.id)], request=request)
-        return absolute_url
-    
 
 class JobViewsSerializer(serializers.ModelSerializer):
     class Meta:
