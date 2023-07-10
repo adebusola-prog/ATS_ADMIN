@@ -38,12 +38,12 @@ class LoginView(generics.GenericAPIView):
 
 class LogoutView(APIView):
     def post(self, request):
-        refresh_token = request.data.get('access_token')
+        refresh_token = request.data.get('refresh_token')
         if not refresh_token:
             return Response({'error': 'refresh_token not provided.'}, status=400)
 
         try:
-            token = AccessToken(refresh_token)
+            token = RefreshToken(refresh_token)
             token.blacklist()
             return Response({'message': 'Logout successful.'})
         except Exception as e:
