@@ -25,18 +25,18 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     
 
 class JobSerializer(serializers.ModelSerializer):
-    applications = JobApplicationListCreateSerializer(many=True, read_only=True)
     detail_url = serializers.SerializerMethodField()
     update_url = serializers.SerializerMethodField()
     delete_url = serializers.SerializerMethodField()
     uploaded_time = serializers.CharField(source='time_since_creation', read_only=True)
     posted_by = serializers.CharField(source='posted_by.get_full_name', read_only=True)
+    applications = JobApplicationListCreateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Job
-        fields = ('applications','id', 'detail_url', 'update_url', 'delete_url', 'role', 
+        fields = ('id', 'detail_url', 'update_url', 'delete_url', 'role', 
                 'skill_level',  'views_count', 'job_type', 'job_schedule', 'job_requirements', 
-                'posted_by', 'uploaded_time', 'location', 'no_of_views')
+                'posted_by', 'uploaded_time', 'location', 'no_of_views', 'applications',)
         
         extra_kwargs = {
             'skill_level': {"write_only": True},

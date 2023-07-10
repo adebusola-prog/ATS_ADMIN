@@ -21,14 +21,12 @@ from rest_framework import generics
 
 class LoginView(generics.GenericAPIView):
     authentication_classes = ()
-    # permission_classes = []
     serializer_class =  LoginSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        # serializer =  LoginSerializer(user)
         token = RefreshToken.for_user(user)
         data = serializer.data
         data["tokens"] = {"refresh": str(
@@ -41,7 +39,6 @@ class LogoutView(APIView):
         refresh_token = request.data.get('refresh_token')
         if not refresh_token:
             return Response({'error': 'refresh_token not provided.'}, status=400)
-
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
@@ -91,20 +88,6 @@ class ResetPasswordView(APIView):
         except DjangoUnicodeDecodeError as e:
             return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-# class ResetPasswordView(APIView):
-#     serializer_class = ResetPasswordSerializer
-
-#     def get(self, request, uuidb64, token):
-#         try:
-#             id = int.from_bytes(urlsafe_base64_decode(uuidb64), "big")
-#             account = CustomUser.objects.get(id=id)
-#             if not PasswordResetTokenGenerator().check_token(account, token):
-#                 return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
-#             return Response({"status": "success", "message": "Your credentials valid", "uuidb64": uuidb64, "token": token}, status=status.HTTP_400_BAD_REQUEST)
-#         except DjangoUnicodeDecodeError as e:
-#             return Response({"status": "fail", "message": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SetNewPasswordView(generics.GenericAPIView):
