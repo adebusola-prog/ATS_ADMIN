@@ -174,7 +174,12 @@ class ExportApplicantsCSVView(APIView):
         writer.writerow(['first_name', 'last_name', 'email', 'phone_number'])
 
         for applicant in approved_applicants:
-            print(applicant)
-            writer.writerow([applicant.applicant.first_name, applicant.applicant.last_name, applicant.applicant.email, applicant.applicant.phone_number])
-    
+            if applicant.applicant:
+                writer.writerow([
+                    applicant.applicant.first_name if applicant.applicant.first_name else '',
+                    applicant.applicant.last_name if applicant.applicant.last_name else '',
+                    applicant.applicant.email if applicant.applicant.email else '',
+                    applicant.applicant.phone_number if applicant.applicant.phone_number else '',
+                ])
+
         return response
