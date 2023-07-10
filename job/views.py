@@ -129,13 +129,11 @@ class SevenDaysRecentJobsAPIView(APIView):
 
 class FiveDaysRecentJobsAPIView(APIView):
     serializer_class = RecentJobsSerializer
+    permission_classes = [IsAdmin]
 
     def get(self, request, *args, **kwargs):
         today = timezone.now().date()
         five_days_ago = today - timedelta(days=5)
-        # three_days_ago = today - timedelta(days=3)
-        # one_day_ago = today - timedelta(days=1)
-
         recent_jobs = Job.active_objects.filter(created_at__gte=five_days_ago)
         serializer = self.serializer_class(recent_jobs, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
@@ -143,6 +141,7 @@ class FiveDaysRecentJobsAPIView(APIView):
 
 class ThreeDaysRecentJobsAPIView(APIView):
     serializer_class = RecentJobsSerializer
+    permission_classes = [IsAdmin]
 
     def get(self, request, *args, **kwargs):
         today = timezone.now().date()
@@ -154,6 +153,7 @@ class ThreeDaysRecentJobsAPIView(APIView):
 
 class OneDayRecentJobsAPIView(APIView):
     serializer_class = RecentJobsSerializer
+    permission_classes = [IsAdmin]
 
     def get(self, request, *args, **kwargs):
         today = timezone.now().date()

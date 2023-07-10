@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('job_views', JobViewsListCreateAPIView.as_view(), name='job_views'),
     path('activity_log', ActivityLogListAPIView.as_view(), name='activity_log'),
+    
     path('seven_days_ago_jobs', SevenDaysRecentJobsAPIView.as_view(), name='seven_days_ago'),
     path('five_days_ago_jobs', FiveDaysRecentJobsAPIView.as_view(), name='five_days_ago'),
     path('three_days_ago_jobs', ThreeDaysRecentJobsAPIView.as_view(), name='three_days_ago'),

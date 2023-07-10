@@ -3,7 +3,7 @@ from rest_framework.status import HTTP_403_FORBIDDEN
 from accounts.models import CustomUser
 from .serializers import CustomUserSuperAdminSerializer, CustomUserPictureUpdateSerializer, \
     CustomUserSubAdminSerializer
-from .permissions import IsSuperAdmin
+from .permissions import IsSuperAdmin, IsSubAdmin
 from .paginations import CustomPagination
 
 
@@ -52,6 +52,7 @@ class SubAdminDetailView(generics.RetrieveAPIView):
 class SubAdminProfileView(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSubAdminSerializer
+    permission_classes = [IsSubAdmin]
 
     def get_object(self):
         return self.request.user

@@ -21,3 +21,10 @@ class IsApplicantAccess(permissions.BasePermission):
             or request.user.is_admin == False:
             return True
         raise PermissionDenied("You are not allowed to perform this operation.")
+
+
+class IsSubAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.is_admin :
+            return True
+        raise PermissionDenied("You are not an admin!!!. You are not allowed to perform this operation.")
