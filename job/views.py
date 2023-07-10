@@ -12,7 +12,7 @@ from ats_admin.permissions import IsAdmin, IsApplicantAccess
 from ats_admin.paginations import JobPagination
 from rest_framework.response import Response
 from .mixins import CustomMessageCreateMixin, CustomMessageUpdateMixin, CustomMessageDestroyMixin
-from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK
+from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK, HTTP_400_BAD_REQUEST
 from dashboard.activity import ActivityLogJobMixin
 from django.db.models import Count, F
 from django.http import HttpResponse
@@ -126,12 +126,13 @@ class DaysRecentJobsAPIView(APIView):
     def post(self, request, *args, **kwargs):
         today = timezone.now().date()
         days = self.request.data.get('days', None)
+        print(days)
         if not days:
-            return Response({'error': 'Please provide the number of days.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Please provide the number of days.'}, status=HTTP_400_BAD_REQUEST)
         try:
             days = int(days)
         except ValueError:
-            return Response({'error': 'Invalid number of days.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid number of days.'}, status=HTTP_400_BAD_REQUEST)
 
         days_ago = today - timedelta(days=days)
         recent_jobs = Job.active_objects.filter(created_at__gte=days_ago)
