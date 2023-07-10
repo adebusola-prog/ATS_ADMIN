@@ -128,8 +128,8 @@ class DaysRecentJobsAPIView(APIView):
         days = self.request.data.get('days', None)
         print(days)
         if not days:
-            # days_ago = today - timedelta(days=0)
-            recent_jobs = Job.active_objects.all()
+            days_ago = today - timedelta(days=7)
+            recent_jobs = Job.active_objects.filter(created_at__gte=days_ago)
             serializer = self.serializer_class(recent_jobs, many=True)
             return Response(serializer.data, status=HTTP_200_OK)
         try:
@@ -145,7 +145,7 @@ class DaysRecentJobsAPIView(APIView):
 
 class ExportApplicantsCSVView(APIView):
     def post(self, request, *args, **kwargs):
-        selected_ids = request.GET.getlist('selected_ids', "Pls select")
+        selected_ids = request.data.getlist('selected_ids', "Pls select")
         approved_applicants = JobApplication.objects.filter(id__in=selected_ids)
 
         response = HttpResponse(content_type='text/csv')
