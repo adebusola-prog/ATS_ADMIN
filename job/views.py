@@ -145,7 +145,7 @@ class DaysRecentJobsAPIView(APIView):
 
 class ExportApplicantsCSVView(APIView):
     def post(self, request, *args, **kwargs):
-        selected_ids = request.data.getlist('selected_ids', "Pls select")
+        selected_ids = request.data.get('selected_ids', "Pls select")
         approved_applicants = JobApplication.objects.filter(id__in=selected_ids)
 
         response = HttpResponse(content_type='text/csv')
