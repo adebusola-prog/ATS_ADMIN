@@ -2,8 +2,7 @@ from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import JobListCreateAPIView, JobDetailUpdateAPIView,\
     JobApplicantCreateAPIView, JobDeleteAPIView, JobApplicantDetailAPIView,\
-    JobApplicantListAPIView, JobViewsListCreateAPIView, SevenDaysRecentJobsAPIView, \
-    DaysRecentJobsAPIView, ExportApplicantsCSVView
+    JobApplicantListAPIView, JobViewsListCreateAPIView, DaysRecentJobsAPIView, ExportApplicantsCSVView
 from dashboard.views import ActivityLogListAPIView
 
 
