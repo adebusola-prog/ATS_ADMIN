@@ -19,7 +19,7 @@ urlpatterns = [
     path('<int:pk>/job_application_detail', JobApplicantDetailAPIView.as_view(), name='job_application_detail'),
 
     path('applicant_job_list', ApplicantJobListAPIView.as_view(), name='applicant_job_list'),
-    path('applicant_job_detail', ApplicantJobDetailAPIView.as_view(), name='applicant_job_detail'),
+    path('<int:pk>/applicant_job_detail', ApplicantJobDetailAPIView.as_view(), name='applicant_job_detail'),
     path('job_views', JobViewsListCreateAPIView.as_view(), name='job_views'),
     path('activity_log', ActivityLogListAPIView.as_view(), name='activity_log'),
 
