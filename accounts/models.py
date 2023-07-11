@@ -69,7 +69,7 @@ class CustomUser(AbstractUser):
     # gender = models.CharField()
     phone_number = PhoneNumberField(unique=True, null=True)
     profile_picture = models.FileField(upload_to="images/user_profile_picture", default="pi.png",
-                                validators=[validate_image_size, validate_image_file_extension])
+                    validators=[validate_image_size, validate_image_file_extension], null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     date_of_birth = models.DateField(validators=[validate_date_of_birth], null=True)
     last_login = models.DateTimeField(auto_now=True)
