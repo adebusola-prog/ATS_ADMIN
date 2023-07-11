@@ -208,3 +208,20 @@ class InterviewInvitationAPIView(APIView):
             )
 
         return Response("Interview invitations sent successfully.")
+
+
+class ApplicantJobListAPIView(ListAPIView):
+    queryset = Job.active_objects.all()
+    serializer_class = JobSerializer
+
+class ApplicantJobDetailAPIView(RetrieveAPIView):
+    queryset = Job.active_objects.all()
+    serializer_class = JobSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.no_of_views += 1
+        # instance.refresh_from_db(fields=['no_of_views'])
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=HTTP_200_OK)
