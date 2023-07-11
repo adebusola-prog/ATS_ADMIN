@@ -24,7 +24,7 @@ urlpatterns = [
 
     path('days_ago_jobs', DaysRecentJobsAPIView.as_view(), name='five_days_ago'),
     path('export_csv', ExportApplicantsCSVView.as_view(), name='export_applicant'),
-    path('shortlist_candidate', ShortlistCandidateView.as_view(), name='shortlist_candidate')
+    path('job_application/<int:pk>/shortlist_candidate', ShortlistCandidateView.as_view(), name='shortlist_candidate')
    
 ]
 
