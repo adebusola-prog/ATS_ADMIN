@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.exceptions import ValidationError
 from .models import ActivityLog, READ, CREATE, UPDATE, DELETE, SUCCESS, FAILED
+from django.utils import timezone
 
 
 
@@ -18,8 +19,10 @@ class ActivityLogJobMixin:
 
     def _update_activity_log(self, instance, request, old_role):
         actor = self._get_user(request)
-        message = f"{old_role} updated by {instance.posted_by.first_name} {instance.posted_by.last_name}"
-        ActivityLog.objects.create(actor=actor, action_type=UPDATE, content_object=instance, data=message)
+        current_time = timezone.now()
+        message = f"{old_role} was updated by {instance.posted_by.first_name} {instance.posted_by.last_name}"
+        ActivityLog.objects.create(actor=actor, action_type=UPDATE, content_object=instance, 
+                        data=message, action_time=current_time)
 
 
     def _delete_activity_log(self, instance, request):
