@@ -19,6 +19,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import generics
 from rest_framework.generics import ListAPIView
+from ats_admin.permissions import IsAdmin
 # from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
 # from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend,\
 #       FilteringFilterBackend, SuggesterFilterBackend
@@ -131,3 +132,4 @@ class SetNewPasswordView(generics.GenericAPIView):
 class PermissionLevelListAPIView(ListAPIView):
     queryset = PermissionLevel.objects.all()
     serializer_class = PermissionLevelSerializer
+    permission_classes = [IsAdmin]
