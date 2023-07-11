@@ -48,7 +48,6 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
         instance.no_of_views += 1
         # instance.refresh_from_db(fields=['no_of_views'])
         instance.save()
-
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=HTTP_200_OK)
     

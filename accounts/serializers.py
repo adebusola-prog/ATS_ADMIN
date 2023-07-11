@@ -89,8 +89,4 @@ class SetNewPasswordSerializer(serializers.Serializer):
     #     instance.save()
     #     return instance
 
-    def create(self, validated_data):
-        user = CustomUser.active_objects.get(id=self.context['user_id'])
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+  

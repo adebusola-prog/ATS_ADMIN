@@ -127,6 +127,7 @@ class SetNewPasswordView(generics.GenericAPIView):
         return Response({"status": "success", "message": "Password was successfully reset"}, status=status.HTTP_200_OK)
 
     def perform_create(self, serializer):
-        user = CustomUser.objects.get(id=self.request.user_id)
+        email = self.request.data.get('email')
+        user = CustomUser.objects.get(email=email)
         user.set_password(serializer.validated_data['password'])
         user.save()
