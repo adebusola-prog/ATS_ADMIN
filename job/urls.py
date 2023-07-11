@@ -3,7 +3,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from .views import JobListCreateAPIView, JobDetailUpdateAPIView,\
     JobApplicantCreateAPIView, JobDeleteAPIView, JobApplicantDetailAPIView,\
     JobApplicantListAPIView, JobViewsListCreateAPIView, DaysRecentJobsAPIView, ExportApplicantsCSVView,\
-    ShortlistCandidateView, ApplicantJobDetailAPIView, ApplicantJobListAPIView, LocationListAPIView
+    ShortlistCandidateView, ApplicantJobDetailAPIView, ApplicantJobListAPIView, LocationListAPIView,\
+    InterviewInvitationAPIView
 from dashboard.views import ActivityLogListAPIView
 
 
@@ -25,7 +26,9 @@ urlpatterns = [
 
     path('days_ago_jobs', DaysRecentJobsAPIView.as_view(), name='five_days_ago'),
     path('export_csv', ExportApplicantsCSVView.as_view(), name='export_applicant'),
-    path('job_application/<int:pk>/shortlist_candidate', ShortlistCandidateView.as_view(), name='shortlist_candidate'),
+    path('job_application/<int:pk>/shortlist_candidate', ShortlistCandidateView.as_view(),\
+          name='shortlist_candidate'),
+    path('job_application/<int:pk>/interview_applicant', InterviewInvitationAPIView.as_view(), name="interview_applicant"),
     path('location_list', LocationListAPIView.as_view(), name="location_list")
    
 ]

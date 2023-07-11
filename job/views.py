@@ -188,35 +188,67 @@ class ShortlistCandidateView(UpdateAPIView):
     
 
 
-class InterviewInvitationAPIView(APIView):
-    permission_classes = [IsAdmin]  
+# class InterviewInvitationAPIView(APIView):
+#     permission_classes = [IsAdmin]  
 
-    def post(self, request):
-        shortlisted_applications = JobApplication.objects.filter(is_shortlisted=True)
+#     def post(self, request):
+#         shortlisted_applications = JobApplication.objects.filter(is_shortlisted=True)
 
-        for application in shortlisted_applications:
-            application.is_invited_for_interview = True
-            application.save()
+#         for application in shortlisted_applications:
+#             application.is_invited_for_interview = True
+#             application.save()
 
-            serializer = InterviewInvitationSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
+#             serializer = InterviewInvitationSerializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
 
           
-            invitation = InterviewInvitation.objects.create(
-                job_application=application,
-                title=serializer.validated_data.get('title'),
-                content=serializer.validated_data.get('content'),
-            )
+#             invitation = InterviewInvitation.objects.create(
+#                 job_application=application,
+#                 title=serializer.validated_data.get('title'),
+#                 content=serializer.validated_data.get('content'),
+#             )
 
-            send_mail(
-                invitation.title,
-                invitation.content,
-                "adebusolayeye@gmail.com",
-                [application.applicant.email],
-                fail_silently=False,
-            )
+#             send_mail(
+#                 invitation.title,
+#                 invitation.content,
+#                 "adebusolayeye@gmail.com",
+#                 [application.applicant.email],
+#                 fail_silently=False,
+#             )
 
-        return Response("Interview invitations sent successfully.")
+#         return Response("Interview invitations sent successfully.")
+
+
+
+class InterviewInvitationAPIView(UpdateAPIView):
+    queryset = shortlisted_applications = JobApplication.objects.filter(is_shortlisted=True)
+    serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_invited_for_interview = True
+        instance.save()
+        serializer = InterviewInvitationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        invitation = InterviewInvitation.objects.create(
+            job_application=instance,
+            title=serializer.validated_data.get('title'),
+            content=serializer.validated_data.get('content'),
+        )
+
+        send_mail(
+            invitation.title,
+            invitation.content,
+            "adebusolayeye@gmail.com",
+            [instance.applicant.email],
+            fail_silently=False,
+        )
+        response = {
+            "message": " Candidate shortlisted successfully"
+        }
+        return Response(response, status=HTTP_200_OK)
+    
 
 
 class ApplicantJobListAPIView(ListAPIView):
