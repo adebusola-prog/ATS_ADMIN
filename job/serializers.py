@@ -30,7 +30,7 @@ class JobSerializer(serializers.ModelSerializer):
     delete_url = serializers.SerializerMethodField()
     uploaded_time = serializers.CharField(source='time_since_creation', read_only=True)
     posted_by = serializers.CharField(source='posted_by.get_full_name', read_only=True)
-    applications = JobApplicationListCreateSerializer(read_only=True)
+    applications = serializers.SerializerMethodField()
 
     class Meta:
         model = Job
@@ -57,6 +57,12 @@ class JobSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         delete_url =  reverse('jobs:job_delete', args=[str(obj.id)], request=request)
         return delete_url
+    
+    def get_applications(self, obj):
+        applications = obj.applications.all()
+        serializer = JobApplicationListCreateSerializer(applications, many=True)
+        return serializer.data
+
 
 
 
