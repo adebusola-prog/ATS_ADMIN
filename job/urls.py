@@ -2,9 +2,9 @@ from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import JobListCreateAPIView, JobDetailUpdateAPIView,\
     JobApplicantCreateAPIView, JobDeleteAPIView, JobApplicantDetailAPIView,\
-    JobApplicantListAPIView, JobViewsListCreateAPIView, DaysRecentJobsAPIView, ExportApplicantsCSVView
+    JobApplicantListAPIView, JobViewsListCreateAPIView, DaysRecentJobsAPIView, ExportApplicantsCSVView,\
+    ShortlistCandidateView
 from dashboard.views import ActivityLogListAPIView
-
 
 
 app_name = "jobs"
@@ -22,9 +22,9 @@ urlpatterns = [
     path('activity_log', ActivityLogListAPIView.as_view(), name='activity_log'),
     
 
-    path('five_days_ago_jobs', DaysRecentJobsAPIView.as_view(), name='five_days_ago'),
-    path('export_csv', ExportApplicantsCSVView.as_view(), name='export_applicant')
-
+    path('days_ago_jobs', DaysRecentJobsAPIView.as_view(), name='five_days_ago'),
+    path('export_csv', ExportApplicantsCSVView.as_view(), name='export_applicant'),
+    path('shortlist_candidate', ShortlistCandidateView.as_view(), name='shortlist_candidate')
    
 ]
 

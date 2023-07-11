@@ -1,7 +1,7 @@
 import csv
 from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
-    CreateAPIView, ListAPIView, RetrieveAPIView
+    CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,\
     RecentJobsSerializer
 from rest_framework.views import APIView
@@ -161,4 +161,16 @@ class ExportApplicantsCSVView(APIView):
                     applicant.applicant.phone_number if applicant.applicant.phone_number else '',
                 ])
 
-        return response
+        return 
+    
+
+class ShortlistCandidateView(UpdateAPIView):
+    queryset = JobApplication.objects.all()
+    serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_shortlisted = True
+        instance.save()
+        return self.partial_update(request, *args, **kwargs)
