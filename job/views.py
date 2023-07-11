@@ -179,46 +179,17 @@ class ShortlistCandidateView(UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.is_shortlisted = True
-        instance.save()
-        response = {
-            "message": " Candidate shortlisted successfully"
-        }
-        return Response(response, status=HTTP_200_OK)
+        if instance.is_shortlisted == False:
+            instance.is_shortlisted = True
+            instance.save()
+            response = {
+                "message": " Candidate shortlisted successfully"
+            }
+            return Response(response, status=HTTP_200_OK)
+        else:
+            return False
+            # raise ValidationError("This candidate is already in the list")
     
-
-
-# class InterviewInvitationAPIView(APIView):
-#     permission_classes = [IsAdmin]  
-
-#     def post(self, request):
-#         shortlisted_applications = JobApplication.objects.filter(is_shortlisted=True)
-
-#         for application in shortlisted_applications:
-#             application.is_invited_for_interview = True
-#             application.save()
-
-#             serializer = InterviewInvitationSerializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-
-          
-#             invitation = InterviewInvitation.objects.create(
-#                 job_application=application,
-#                 title=serializer.validated_data.get('title'),
-#                 content=serializer.validated_data.get('content'),
-#             )
-
-#             send_mail(
-#                 invitation.title,
-#                 invitation.content,
-#                 "adebusolayeye@gmail.com",
-#                 [application.applicant.email],
-#                 fail_silently=False,
-#             )
-
-#         return Response("Interview invitations sent successfully.")
-
-
 
 class InterviewInvitationAPIView(UpdateAPIView):
     queryset = shortlisted_applications = JobApplication.objects.filter(is_shortlisted=True)
@@ -245,7 +216,7 @@ class InterviewInvitationAPIView(UpdateAPIView):
             fail_silently=False,
         )
         response = {
-            "message": " Candidate shortlisted successfully"
+            "message": "Interview invitations sent successfully."
         }
         return Response(response, status=HTTP_200_OK)
     
@@ -254,6 +225,7 @@ class InterviewInvitationAPIView(UpdateAPIView):
 class ApplicantJobListAPIView(ListAPIView):
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
+
 
 class ApplicantJobDetailAPIView(RetrieveAPIView):
     queryset = Job.active_objects.all()
