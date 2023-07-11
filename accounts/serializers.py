@@ -28,7 +28,7 @@ class LoginSerializer(TokenObtainPairSerializer):
     """
     first_name = serializers.CharField(read_only=True)
     last_name = serializers.CharField(read_only=True)
-    profile_picture = serializers.ImageField(read_only=True)
+    profile_picture = serializers.CharField(read_only=True)
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
     
