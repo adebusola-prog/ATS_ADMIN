@@ -143,6 +143,7 @@ class DaysRecentJobsAPIView(APIView):
 
 
 class ExportApplicantsCSVView(APIView):
+    permission_classes = [IsAdmin]
     def post(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         approved_applicants = JobApplication.objects.filter(id__in=selected_ids).all()
@@ -163,7 +164,7 @@ class ExportApplicantsCSVView(APIView):
                     applicant.applicant.phone_number if applicant.applicant.phone_number else '',
                 ])
 
-        return 
+        return response
     
 
 class ShortlistCandidateView(UpdateAPIView):
