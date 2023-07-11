@@ -19,6 +19,7 @@ class CustomUserDocumentSerializer(DocumentSerializer):
         fields = (
             'first_name',
             'last_name'
+            'get_full_name'
         )
 
 class LoginSerializer(TokenObtainPairSerializer):

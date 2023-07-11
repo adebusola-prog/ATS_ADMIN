@@ -57,9 +57,10 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.no_of_views += 1
-        instance.refresh_from_db(fields=['no_of_views'])
-        instance.save()
+        # instance.no_of_views += 1
+        # instance.refresh_from_db(fields=['no_of_views'])
+        old_role = instance.role
+        print(old_role)
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)

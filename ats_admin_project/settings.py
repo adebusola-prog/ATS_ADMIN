@@ -122,15 +122,15 @@ WSGI_APPLICATION = 'ats_admin_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(config('DATABASE_URL'), conn_max_age=600),
-    # "default": {
-    #     'ENGINE': config('DB_ENGINE'),
-    #     'NAME': config('DB_NAME'),
-    #     "USER": config('DB_USER'),
-    #     "PASSWORD": config('DB_PASSWORD'),
-    #     'HOST': config('DB_HOST'),
-    #     'PORT': config('DB_PORT')
-    # }
+    # 'default': dj_database_url.parse(config('DATABASE_URL'), conn_max_age=600),
+    "default": {
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': config('DB_NAME'),
+        "USER": config('DB_USER'),
+        "PASSWORD": config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT')
+    }
     
 }
 REST_FRAMEWORK = {
