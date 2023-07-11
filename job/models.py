@@ -44,7 +44,6 @@ JOB_SCHEDULE_CHOICES = (
 )
 
 
-
 class Job(models.Model):
     role = models.CharField(max_length=100)
     skill_level = models.CharField(max_length=20, choices=SKILL_LEVEL_CHOICES)
