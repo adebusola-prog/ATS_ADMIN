@@ -187,12 +187,14 @@ class ShortlistCandidateView(UpdateAPIView):
             }
             return Response(response, status=HTTP_200_OK)
         else:
-            return False
-            # raise ValidationError("This candidate is already in the list")
+            response = {
+                "message": " Candidate has been shortlisted already"
+            }
+            return Response(response, status=HTTP_400_BAD_REQUEST)
     
 
 class InterviewInvitationAPIView(UpdateAPIView):
-    queryset = shortlisted_applications = JobApplication.objects.filter(is_shortlisted=True)
+    queryset = JobApplication.objects.filter(is_shortlisted=True)
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
 
