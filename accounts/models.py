@@ -49,7 +49,7 @@ class PermissionLevel(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}_{self.id}"
 
 class CustomUser(AbstractUser):
     """Custom User Model that takes extra fields for easier authentication"""
