@@ -176,7 +176,10 @@ class ShortlistCandidateView(UpdateAPIView):
         instance = self.get_object()
         instance.is_shortlisted = True
         instance.save()
-        return self.partial_update(request, *args, **kwargs)
+        response = {
+            "message": " Candidate shortlisted successfully"
+        }
+        return Response(response, status=HTTP_200_OK)
     
 
 
