@@ -29,12 +29,12 @@ class LoginSerializer(TokenObtainPairSerializer):
     first_name = serializers.CharField(read_only=True)
     last_name = serializers.CharField(read_only=True)
     email = serializers.EmailField()
-    profile_picture = serializers.FileField()
+    # profile_picture = serializers.FileField()
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
     
     class Meta:
         model = CustomUser
-        fields = ("email", "password", "first_name", "last_name", "profile_picture")
+        fields = ("email", "password", "first_name", "last_name")
 
 
     def validate(self, validated_data):
