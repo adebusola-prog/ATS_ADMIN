@@ -13,6 +13,7 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField()
     applicant = serializers.CharField(source='applicant.get_full_name', read_only=True)
     short_name = serializers.CharField(source='applicant.get_short_name', read_only=True)
+    
 
     class Meta:
         model = JobApplication
@@ -30,7 +31,7 @@ class JobSerializer(serializers.ModelSerializer):
     delete_url = serializers.SerializerMethodField()
     uploaded_time = serializers.CharField(source='time_since_creation', read_only=True)
     posted_by = serializers.CharField(source='posted_by.get_full_name', read_only=True)
-    # applications = serializers.SerializerMethodField()
+    applications = serializers.SerializerMethodField()
 
     class Meta:
         model = Job
