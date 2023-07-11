@@ -18,6 +18,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import generics
+from rest_framework.generics import ListAPIView
 # from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
 # from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend,\
 #       FilteringFilterBackend, SuggesterFilterBackend
@@ -127,6 +128,6 @@ class SetNewPasswordView(generics.GenericAPIView):
         return Response({"status": "success", "message": "Password was successfully reset"}, status=status.HTTP_200_OK)
 
 
-class PermissionLevelListAPIView(generics.ListView):
+class PermissionLevelListAPIView(ListAPIView):
     queryset = PermissionLevel.objects.all()
     serializer_class = PermissionLevelSerializer

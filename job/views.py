@@ -24,6 +24,7 @@ class LocationListAPIView(ListAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
+
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
