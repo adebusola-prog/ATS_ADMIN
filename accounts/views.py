@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .serializers import LoginSerializer, ResetPasswordSerializer, SetNewPasswordSerializer
-from .models import CustomUser
+from .serializers import LoginSerializer, ResetPasswordSerializer, SetNewPasswordSerializer,\
+    PermissionLevelSerializer
+from .models import CustomUser, PermissionLevel
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -125,4 +126,7 @@ class SetNewPasswordView(generics.GenericAPIView):
         serializer.save()
         return Response({"status": "success", "message": "Password was successfully reset"}, status=status.HTTP_200_OK)
 
-    
+
+class PermissionLevelListView(generics.ListView):
+    queryset = PermissionLevel.objects.all()
+    serializer_class = PermissionLevelSerializer

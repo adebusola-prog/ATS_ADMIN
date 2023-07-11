@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import CustomUser
+from .models import CustomUser, PermissionLevel
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
@@ -90,4 +90,7 @@ class SetNewPasswordSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-  
+class PermissionLevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PermissionLevel
+        fields = ('id', 'name')

@@ -66,7 +66,6 @@ class JobSerializer(serializers.ModelSerializer):
 
 
 
-
 class JobViewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobViews
@@ -85,6 +84,8 @@ class JobViewsSerializer(serializers.ModelSerializer):
             view.viewer_ip.append(ip)
             view.save()
             return view
+
+    
         
 class RecentJobsSerializer(serializers.ModelSerializer):
     posted_by = serializers.CharField(source='posted_by.get_full_name', read_only=True)
