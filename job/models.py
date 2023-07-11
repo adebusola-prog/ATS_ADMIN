@@ -85,7 +85,7 @@ class JobViews(models.Model):
 
     
 class JobApplication(models.Model):
-    job = models.ForeignKey(Job, related_name='applications')
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
     applicant = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=True)
     cover_letter = models.TextField()
     resume = models.FileField(upload_to='resumes/', validators=[validate_pdf_file], null=True, blank=True)
@@ -102,3 +102,7 @@ class JobApplication(models.Model):
     inactive_objects = InActiveManager()
 
 
+class InterviewInvitation(models.Model):
+    job_application = models.OneToOneField(JobApplication, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    content = models.TextField()

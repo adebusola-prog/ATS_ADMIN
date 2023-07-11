@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Job, Location, JobApplication, JobViews
+from .models import Job, Location, JobApplication, JobViews, InterviewInvitation
 from rest_framework.reverse import reverse
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -85,3 +85,9 @@ class RecentJobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ('id', 'role', 'posted_by', 'time_since_creation', 'no_of_views')
+
+
+class InterviewInvitationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InterviewInvitation
+        fields = ['title', 'content']

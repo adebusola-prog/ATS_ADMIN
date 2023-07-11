@@ -3,11 +3,11 @@ from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
     CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,\
-    RecentJobsSerializer
+    RecentJobsSerializer, InterviewInvitationSerializer
 from rest_framework.views import APIView
 from django.utils import timezone, timesince
 from datetime import datetime, timedelta
-from .models import Job, JobViews, JobApplication
+from .models import Job, JobViews, JobApplication, InterviewInvitation
 from ats_admin.permissions import IsAdmin, IsApplicantAccess
 from ats_admin.paginations import JobPagination
 from rest_framework.response import Response
@@ -16,6 +16,8 @@ from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK, HTTP_400_BAD
 from dashboard.activity import ActivityLogJobMixin
 from django.db.models import Count, F
 from django.http import HttpResponse
+from django.core.mail import send_mail
+
 
 
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
@@ -174,3 +176,35 @@ class ShortlistCandidateView(UpdateAPIView):
         instance.is_shortlisted = True
         instance.save()
         return self.partial_update(request, *args, **kwargs)
+    
+
+
+class InterviewInvitationAPIView(APIView):
+    permission_classes = [IsAdmin]  
+
+    def post(self, request):
+        shortlisted_applications = JobApplication.objects.filter(is_shortlisted=True)
+
+        for application in shortlisted_applications:
+            application.is_invited_for_interview = True
+            application.save()
+
+            serializer = InterviewInvitationSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+
+          
+            invitation = InterviewInvitation.objects.create(
+                job_application=application,
+                title=serializer.validated_data.get('title'),
+                content=serializer.validated_data.get('content'),
+            )
+
+            send_mail(
+                invitation.title,
+                invitation.content,
+                "adebusolayeye@gmail.com",
+                [application.applicant.email],
+                fail_silently=False,
+            )
+
+        return Response("Interview invitations sent successfully.")
