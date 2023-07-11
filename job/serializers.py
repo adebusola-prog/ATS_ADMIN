@@ -59,10 +59,10 @@ class JobSerializer(serializers.ModelSerializer):
         delete_url =  reverse('jobs:job_delete', args=[str(obj.id)], request=request)
         return delete_url
     
-    # def get_applications(self, obj):
-    #     applications = obj.applications.all()
-    #     serializer = JobApplicationListCreateSerializer(applications, many=True)
-    #     return serializer.data
+    def get_applications(self, obj):
+        applications = obj.applications.all()
+        serializer = JobApplicationListCreateSerializer(applications, many=True)
+        return serializer.data
 
 
 

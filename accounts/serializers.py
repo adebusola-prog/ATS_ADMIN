@@ -33,7 +33,7 @@ class LoginSerializer(TokenObtainPairSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ("email", "password", "first_name", "last_name")
+        fields = ("email", "password", "first_name", "last_name", "image_URL")
 
 
     def validate(self, validated_data):
