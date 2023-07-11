@@ -127,6 +127,6 @@ class SetNewPasswordView(generics.GenericAPIView):
         return Response({"status": "success", "message": "Password was successfully reset"}, status=status.HTTP_200_OK)
 
 
-class PermissionLevelListView(generics.ListView):
+class PermissionLevelListAPIView(generics.ListView):
     queryset = PermissionLevel.objects.all()
     serializer_class = PermissionLevelSerializer

@@ -3,11 +3,11 @@ from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
     CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,\
-    RecentJobsSerializer, InterviewInvitationSerializer
+    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer
 from rest_framework.views import APIView
 from django.utils import timezone, timesince
 from datetime import datetime, timedelta
-from .models import Job, JobViews, JobApplication, InterviewInvitation
+from .models import Job, JobViews, JobApplication, InterviewInvitation, Location
 from ats_admin.permissions import IsAdmin, IsApplicantAccess
 from ats_admin.paginations import JobPagination
 from rest_framework.response import Response
@@ -19,6 +19,10 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 
 
+
+class LocationListAPIView(ListAPIView):
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
 
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
     queryset = Job.active_objects.all()

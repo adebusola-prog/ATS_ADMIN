@@ -5,7 +5,7 @@ from rest_framework.reverse import reverse
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        fields = ('name',)
+        fields = ('id', 'name',)
 
 
 
