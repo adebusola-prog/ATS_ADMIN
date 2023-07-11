@@ -37,7 +37,7 @@ class JobSerializer(serializers.ModelSerializer):
         model = Job
         fields = ('id', 'detail_url', 'update_url', 'delete_url', 'role', 
                 'skill_level',  'views_count', 'job_type', 'job_schedule', 'job_requirements', 
-                'posted_by', 'uploaded_time', 'location', 'no_of_views')
+                'posted_by', 'uploaded_time', 'location', 'no_of_views', "applications")
         
         extra_kwargs = {
             'skill_level': {"write_only": True},
