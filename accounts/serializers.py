@@ -84,7 +84,13 @@ class SetNewPasswordSerializer(serializers.Serializer):
             raise AuthenticationFailed('The reset link is invalid', 401)
         return super().validate(attrs)
     
-    def update(self, instance, validated_data):
-        instance.set_password(validated_data.get('password'))
-        instance.save()
-        return instance
+    # def update(self, instance, validated_data):
+    #     instance.set_password(validated_data.get('password'))
+    #     instance.save()
+    #     return instance
+
+    def create(self, validated_data):
+        user = CustomUser.active_objects.get(id=self.context['user_id'])
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
