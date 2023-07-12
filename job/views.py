@@ -295,9 +295,9 @@ class JobApplicationFilterAPIView(ListAPIView):
         queryset = super().get_queryset()
 
         if status == 'shortlisted':
-            queryset = JobApplication.shortlisted_objects.filter()
+            queryset = JobApplication.shortlisted_only_objects.filter()
         elif status == 'interview':
-            queryset = JobApplication.interview_objects.filter()
+            queryset = JobApplication.interview_only_objects.filter()
         elif status == 'hired':
             queryset = JobApplication.hired_objects.filter()
         elif status == 'rejected':
