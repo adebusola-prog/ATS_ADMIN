@@ -19,11 +19,27 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 
 
-
 class LocationListAPIView(ListAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
+class ApplicantJobListAPIView(ListAPIView):
+    queryset = Job.active_objects.all()
+    serializer_class = JobSerializer
+
+
+class ApplicantJobDetailAPIView(RetrieveAPIView):
+    queryset = Job.active_objects.all()
+    serializer_class = JobSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.no_of_views += 1
+        # instance.refresh_from_db(fields=['no_of_views'])
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=HTTP_200_OK)
+    
 
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
     queryset = Job.active_objects.all()
@@ -306,19 +322,27 @@ class JobApplicationFilterAPIView(ListAPIView):
         return queryset
 
 
-class ApplicantJobListAPIView(ListAPIView):
-    queryset = Job.active_objects.all()
-    serializer_class = JobSerializer
+class BulkShortlistCandidateView(UpdateAPIView):
+    queryset = JobApplication.objects.all()
+    serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
 
-
-class ApplicantJobDetailAPIView(RetrieveAPIView):
-    queryset = Job.active_objects.all()
-    serializer_class = JobSerializer
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.no_of_views += 1
-        # instance.refresh_from_db(fields=['no_of_views'])
-        instance.save()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data, status=HTTP_200_OK)
+  
+    def update(self, request, *args, **kwargs):
+        selected_ids = request.data.get('selected_ids', "Pls select")
+        applicants = JobApplication.objects.filter(id__in=selected_ids).all()
+        
+        for instance in applicants:
+            if instance.is_shortlisted == False:
+                instance.is_shortlisted = True
+                instance.save()
+                response = {
+                    "message": " Candidate shortlisted successfully"
+                }
+                return Response(response, status=HTTP_200_OK)
+            else:
+                response = {
+                    "message": "This candidate has been shortlisted before"
+                }
+                return Response(response, status=HTTP_400_BAD_REQUEST)
+        return Response
