@@ -1,0 +1,14 @@
+version: '3.11.0'
+services:
+  django_server:
+    build: .
+    # image: 7957bc38925a
+    image: 0cc4f578532b56641a1a109c232db1ae7f98af95036e34875236055895b6940e 
+    restart: on-failure
+    command: bash -c "python manage.py collectstatic --no-input && gunicorn -b 0.0.0.0:4000 ats_admin_project.wsgi"
+    volumes:
+     - ./.env:/home/app/.env
+     - ./static/:/home/app/staticfiles
+     - ./media/:/home/app/media
+    ports:
+     - "4000:4000"

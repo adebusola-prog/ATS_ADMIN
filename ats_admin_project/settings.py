@@ -52,8 +52,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     "phonenumber_field",
     'corsheaders',
-    'rest_framework_swagger',
-    'drf_yasg',
     'multiselectfield',
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf',
