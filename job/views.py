@@ -333,7 +333,7 @@ class BulkShortlistCandidateView(UpdateAPIView):
         print(applicants)
         for applicant in applicants:
             if applicant.is_shortlisted == False:
-                applicant.update(is_shortlisted=True)
+                applicants.update(is_shortlisted=True)
                 response = {
                     "message": " Candidate shortlisted successfully"
                 }
