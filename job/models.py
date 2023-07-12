@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.timesince import timesince
 from base.managers import ActiveManager, InActiveManager, IsShortlistedManager, \
-    IsShortlistedInterviewInviteManager
+    InterviewInviteManager, HiredManager, RejectedManager
 
 # from cities_light.models import City
 
@@ -56,6 +56,7 @@ class Job(models.Model):
     location = models.ManyToManyField(Location, related_name='job_locations')
     is_active = models.BooleanField(default=True)
     no_of_views = models.IntegerField(default=0, blank=True)
+    
     objects = models.Manager()
     active_objects = ActiveManager()
     inactive_objects = InActiveManager()
@@ -101,7 +102,9 @@ class JobApplication(models.Model):
     active_objects = ActiveManager()
     inactive_objects = InActiveManager()
     shortlisted_objects = IsShortlistedManager()
-    shortlisted_interview_objects = IsShortlistedInterviewInviteManager()
+    interview_objects = InterviewInviteManager()
+    hired_objects = HiredManager()
+    rejected_objects = RejectedManager()
 
 
 class InterviewInvitation(models.Model):

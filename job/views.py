@@ -152,7 +152,6 @@ class ExportApplicantsCSVView(APIView):
     def post(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         approved_applicants = JobApplication.objects.filter(id__in=selected_ids).all()
-        
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="approved_applicants.csv"'
@@ -254,6 +253,7 @@ class HireCandidateView(UpdateAPIView):
             }
             return Response(response, status=HTTP_200_OK)
         
+
 class RejectCandidateView(UpdateAPIView):
     queryset = JobApplication.shortlisted_interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
@@ -283,6 +283,27 @@ class RejectCandidateView(UpdateAPIView):
             "message": "This candidate previously hired has now been rejected!!"
             }
             return Response(response, status=HTTP_200_OK)
+
+
+
+class JobApplicationFilterAPIView(ListAPIView):
+    queryset = JobApplication.active_objects.all()
+    serializer_class = JobApplicationListCreateSerializer
+
+    def get_queryset(self):
+        status = self.request.query_params.get('status')
+        queryset = super().get_queryset()
+
+        if status == 'shortlisted':
+            queryset = JobApplication.shortlisted_objects.filter()
+        elif status == 'interview':
+            queryset = JobApplication.interview_objects.filter()
+        elif status == 'hired':
+            queryset = JobApplication.hired_objects.filter()
+        elif status == 'rejected':
+            queryset = JobApplication.rejected_objects.filter()
+
+        return queryset
 
 
 class ApplicantJobListAPIView(ListAPIView):

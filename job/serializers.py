@@ -8,7 +8,6 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ('id', 'name',)
 
 
-
 class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField()
     applicant = serializers.CharField(source='applicant.get_full_name', read_only=True)

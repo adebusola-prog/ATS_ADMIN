@@ -4,7 +4,7 @@ from .views import JobListCreateAPIView, JobDetailUpdateAPIView,\
     JobApplicantCreateAPIView, JobDeleteAPIView, JobApplicantDetailAPIView,\
     JobApplicantListAPIView, JobViewsListCreateAPIView, DaysRecentJobsAPIView, ExportApplicantsCSVView,\
     ShortlistCandidateView, ApplicantJobDetailAPIView, ApplicantJobListAPIView, LocationListAPIView,\
-    InterviewInvitationAPIView, HireCandidateView, RejectCandidateView
+    InterviewInvitationAPIView, HireCandidateView, RejectCandidateView, JobApplicationFilterAPIView
 from dashboard.views import ActivityLogListAPIView
 
 
@@ -32,7 +32,8 @@ urlpatterns = [
           name="interview_applicant"),
     path('job_application/<int:pk>/hire_candidate', HireCandidateView.as_view(), name="hire_candidate"),
     path('job_application/<int:pk>/reject_candidate', RejectCandidateView.as_view(), name="reject_candidate"),
-    path('location_list', LocationListAPIView.as_view(), name="location_list")
+    path('location_list', LocationListAPIView.as_view(), name="location_list"),
+    path('application_filter', JobApplicationFilterAPIView.as_view(), name='application_filter'),
    
 ]
 

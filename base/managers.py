@@ -17,4 +17,17 @@ class IsShortlistedManager(models.Manager):
     
 class IsShortlistedInterviewInviteManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(is_shortlisted=True).filter(is_invited_for_interview=True)
+        return super().get_queryset().filter(is_shortlisted=True).\
+            filter(is_invited_for_interview=True)
+    
+
+class IsShortlistedInterviewHiredInviteManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_shortlisted=True).\
+            filter(is_invited_for_interview=True).filter(is_hired=True)
+    
+
+class IsShortlistedInterviewRejectedInviteManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_shortlisted=True).\
+            filter(is_invited_for_interview=True).filter(is_rejected=True)
