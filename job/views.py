@@ -345,3 +345,36 @@ class BulkShortlistCandidateView(UpdateAPIView):
             return Response(response, status=HTTP_400_BAD_REQUEST)
         else:
             return Response
+        
+
+class BulkInterviewInvitationAPIView(UpdateAPIView):
+    queryset = JobApplication.shortlisted_objects.all()
+    serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
+
+    def update(self, request, *args, **kwargs):
+        selected_ids = request.data.get('selected_ids', "Pls select")
+        applicants = JobApplication.shortlisted_objects.filter(id__in=selected_ids)
+        applicants.update(is_invited_for_interview=True)
+        serializer = InterviewInvitationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        for applicant in applicants:
+            invitation = InterviewInvitation.objects.create(
+                job_application=applicant,
+                title=serializer.validated_data.get('title'),
+                content=serializer.validated_data.get('content'),
+            )
+
+            send_mail(
+                invitation.title,
+                invitation.content,
+                "adebusolayeye@gmail.com",
+                [applicant.applicant.email],
+                fail_silently=False,
+            )
+            response = {
+                "message": "Interview invitations sent successfully."
+            }
+            return Response(response, status=HTTP_200_OK)
+
+    
