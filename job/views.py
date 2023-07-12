@@ -323,17 +323,16 @@ class JobApplicationFilterAPIView(ListAPIView):
 
 
 class BulkShortlistCandidateView(UpdateAPIView):
-    queryset = JobApplication.objects.all()
+    queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
-        applicants = JobApplication.objects.filter(id__in=selected_ids)
-        
+        applicants = JobApplication.active_objects.filter(id__in=selected_ids)
+        print(applicants)
         # if applicants.is_shortlisted == False:
         applicants.update(is_shortlisted=True)
-        applicants.save()
         response = {
             "message": " Candidate shortlisted successfully"
         }
