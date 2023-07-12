@@ -248,7 +248,7 @@ class HireCandidateView(UpdateAPIView):
         elif instance.is_hired == False and instance.is_rejected == True:
             instance.is_rejected = False
             instance.is_hired = True
-
+            instance.save()
             response = {
                 "message": "This candidate previously rejected, has now been hired"
             }
@@ -278,6 +278,7 @@ class RejectCandidateView(UpdateAPIView):
         elif instance.is_hired == True and instance.is_rejected == False:
             instance.is_hired = False
             instance.is_rejected = True
+            instance.save()
             response = {
             "message": "This candidate previously hired has now been rejected!!"
             }
