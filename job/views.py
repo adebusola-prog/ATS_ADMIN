@@ -280,7 +280,7 @@ class RejectCandidateView(UpdateAPIView):
             instance.is_hired == False
             instance.is_rejected == True
             response = {
-            "message": "This candidate previously rejected has now been hired!!"
+            "message": "This candidate previously hired has now been rejected!!"
             }
             return Response(response, status=HTTP_200_OK)
 
