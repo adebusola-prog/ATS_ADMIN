@@ -329,10 +329,10 @@ class BulkShortlistCandidateView(UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
-        applicants = JobApplication.objects.filter(id__in=selected_ids).all()
+        applicants = JobApplication.objects.filter(id__in=selected_ids)
         
         if applicants.is_shortlisted == False:
-            applicants.update(is_shortlisted = True)
+            applicants.update(is_shortlisted=True)
             applicants.save()
             response = {
                 "message": " Candidate shortlisted successfully"
