@@ -65,7 +65,6 @@ class JobSerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-
 class JobViewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobViews
@@ -99,3 +98,5 @@ class InterviewInvitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = InterviewInvitation
         fields = ['title', 'content']
+
+        

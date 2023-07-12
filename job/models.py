@@ -5,7 +5,8 @@ from accounts.models import CustomUser
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.timesince import timesince
-from base.managers import ActiveManager, InActiveManager
+from base.managers import ActiveManager, InActiveManager, IsShortlistedManager, \
+    IsShortlistedInterviewInviteManager
 
 # from cities_light.models import City
 
@@ -99,6 +100,8 @@ class JobApplication(models.Model):
     objects = models.Manager()
     active_objects = ActiveManager()
     inactive_objects = InActiveManager()
+    shortlisted_objects = IsShortlistedManager()
+    shortlisted_interview_objects = IsShortlistedInterviewInviteManager()
 
 
 class InterviewInvitation(models.Model):

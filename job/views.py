@@ -188,13 +188,13 @@ class ShortlistCandidateView(UpdateAPIView):
             return Response(response, status=HTTP_200_OK)
         else:
             response = {
-                "message": " Candidate has been shortlisted already"
+                "message": "This candidate has been shortlisted before"
             }
             return Response(response, status=HTTP_400_BAD_REQUEST)
     
 
 class InterviewInvitationAPIView(UpdateAPIView):
-    queryset = JobApplication.objects.filter(is_shortlisted=True)
+    queryset = JobApplication.shortlisted_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
 
@@ -222,6 +222,67 @@ class InterviewInvitationAPIView(UpdateAPIView):
         }
         return Response(response, status=HTTP_200_OK)
     
+
+
+class HireCandidateView(UpdateAPIView):
+    queryset = JobApplication.shortlisted_interview_objects.all()
+    serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.is_hired == False and instance.is_rejected == False:
+            instance.is_hired = True
+            instance.save()
+            response = {
+                "message": " Candidate hired successfully"
+            }
+            return Response(response, status=HTTP_200_OK)
+        
+        elif instance.is_hired == True and instance.is_rejected == False:
+            response = {
+                "message": "This candidate has been hired previously"
+            }
+            return Response(response, status=HTTP_400_BAD_REQUEST)
+        
+        elif instance.is_hired == False and instance.is_rejected == True:
+            instance.is_rejected == False
+            instance.is_hired == True
+
+            response = {
+                "message": "This candidate previously rejected, has now been hired"
+            }
+            return Response(response, status=HTTP_200_OK)
+        
+class RejectCandidateView(UpdateAPIView):
+    queryset = JobApplication.shortlisted_interview_objects.all()
+    serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.is_hired == False and instance.is_rejected == False:
+            instance.is_rejected = True
+            instance.save()
+            response = {
+                "message": " Candidate rejected successfully"
+            }
+            return Response(response, status=HTTP_200_OK)
+        
+        elif instance.is_hired == False and instance.is_rejected == True:
+            response = {
+                "message": "This candidate has previously been rejected"
+            }
+            return Response(response, status=HTTP_400_BAD_REQUEST)
+            
+        
+        elif instance.is_hired == True and instance.is_rejected == False:
+            instance.is_hired == False
+            instance.is_rejected == True
+            response = {
+            "message": "This candidate previously rejected has now been hired!!"
+            }
+            return Response(response, status=HTTP_200_OK)
 
 
 class ApplicantJobListAPIView(ListAPIView):
