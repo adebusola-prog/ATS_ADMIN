@@ -327,7 +327,6 @@ class BulkShortlistCandidateView(UpdateAPIView):
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
 
-  
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         applicants = JobApplication.objects.filter(id__in=selected_ids).all()
