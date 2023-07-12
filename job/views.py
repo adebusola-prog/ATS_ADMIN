@@ -355,34 +355,56 @@ class BulkInterviewInvitationAPIView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         applicants = JobApplication.shortlisted_objects.filter(id__in=selected_ids)
+        applicants.update(is_invited_for_interview=True)
+        serializer = InterviewInvitationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         for applicant in applicants:
-            if applicant.is_shortlisted == False:
-                applicants.update(is_invited_for_interview=True)
-                serializer = InterviewInvitationSerializer(data=request.data)
-                serializer.is_valid(raise_exception=True)
-                invitation = InterviewInvitation.objects.create(
-                    job_application=applicant,
-                    title=serializer.validated_data.get('title'),
-                    content=serializer.validated_data.get('content'),
-                )
+            invitation = InterviewInvitation.objects.create(
+                job_application=applicant,
+                title=serializer.validated_data.get('title'),
+                content=serializer.validated_data.get('content'),
+            )
 
-                send_mail(
-                    invitation.title,
-                    invitation.content,
-                    "adebusolayeye@gmail.com",
-                    [applicant.applicant.email],
-                    fail_silently=False,
-                )
+            send_mail(
+                invitation.title,
+                invitation.content,
+                "adebusolayeye@gmail.com",
+                [applicant.applicant.email],
+                fail_silently=False,
+            )
+            response = {
+                "message": "Interview invitations sent successfully."
+            }
+            return Response(response, status=HTTP_200_OK)
+
+
+class BulkHireCandidateView(UpdateAPIView):
+    queryset = JobApplication.interview_objects.all()
+    serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
+
+    def update(self, request, *args, **kwargs):
+        selected_ids = request.data.get('selected_ids', "Pls select")
+        applicants = JobApplication.active_objects.filter(id__in=selected_ids)
+        for applicant in applicants:
+            if applicant.is_hired == False and applicant.is_rejected == False:
+                applicants.update(is_hired=True)
                 response = {
-                    "message": "Interview invitations sent successfully."
+                    "message": " Candidate hired successfully"
                 }
                 return Response(response, status=HTTP_200_OK)
             
-            response = {
-                "message": "This candidate has been interviewed before"
-            }
-            return Response(response, status=HTTP_400_BAD_REQUEST)
-        return Response(response, status=HTTP_400_BAD_REQUEST)
+            elif applicant.is_hired == True and applicant.is_rejected == False:
+                response = {
+                    "message": "This candidate has been hired previously"
+                }
+                return Response(response, status=HTTP_400_BAD_REQUEST)
             
-
-            
+            elif applicant.is_hired == False and applicant.is_rejected == True:
+                applicants.update(is_hired=False)
+                applicants.update(is_hired = True)
+                applicant.save()
+                response = {
+                    "message": "This candidate previously rejected, has now been hired"
+                }
+                return Response(response, status=HTTP_200_OK)
