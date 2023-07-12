@@ -224,7 +224,7 @@ class InterviewInvitationAPIView(UpdateAPIView):
 
 
 class HireCandidateView(UpdateAPIView):
-    queryset = JobApplication.shortlisted_interview_objects.all()
+    queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
 
@@ -255,7 +255,7 @@ class HireCandidateView(UpdateAPIView):
         
 
 class RejectCandidateView(UpdateAPIView):
-    queryset = JobApplication.shortlisted_interview_objects.all()
+    queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
 
