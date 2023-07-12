@@ -331,15 +331,17 @@ class BulkShortlistCandidateView(UpdateAPIView):
         selected_ids = request.data.get('selected_ids', "Pls select")
         applicants = JobApplication.active_objects.filter(id__in=selected_ids)
         print(applicants)
-        if applicants.is_shortlisted == False:
-            applicants.update(is_shortlisted=True)
-            response = {
-                "message": " Candidate shortlisted successfully"
+        for applicant in applicants:
+            if applicant.is_shortlisted == False:
+                applicants.update(is_shortlisted=True)
+                response = {
+                    "message": " Candidate shortlisted successfully"
+                }
+                return Response(response, status=HTTP_200_OK)
+            else:
+                response = {
+                "message": "This candidate has been shortlisted before"
             }
-            return Response(response, status=HTTP_200_OK)
+            return Response(response, status=HTTP_400_BAD_REQUEST)
         else:
-            response = {
-            "message": "This candidate has been shortlisted before"
-        }
-        return Response(response, status=HTTP_400_BAD_REQUEST)
-    
+            return Response
