@@ -390,7 +390,7 @@ class BulkHireCandidateView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         applicants = JobApplication.interview_only_objects.filter(id__in=selected_ids)
-        rejected_once= JobApplication.rejected_objects.filter(id__in=selected_ids)
+        rejected_once = JobApplication.rejected_objects.filter(id__in=selected_ids)
        
         applicants.update(is_hired=True)
         response = {
@@ -398,8 +398,26 @@ class BulkHireCandidateView(UpdateAPIView):
         }
         rejected_once.update(is_hired=True)
         response = {
-            "message": "Candidate once hired has now been rejected"
+            "message": "Candidate once rejected has now been hired"
         }
         return Response(response, status=HTTP_200_OK)
             
-      
+class BulkRejectCandidateView(UpdateAPIView):
+    queryset = JobApplication.interview_only_objects.all()
+    serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
+
+    def update(self, request, *args, **kwargs):
+        selected_ids = request.data.get('selected_ids', "Pls select")
+        applicants = JobApplication.interview_only_objects.filter(id__in=selected_ids)
+        hired_once = JobApplication.hired_objects.filter(id__in=selected_ids)
+       
+        applicants.update(is_rejected=True)
+        response = {
+            "message": " Candidate hired successfully"
+        }
+        hired_once.update(is_rejected=True)
+        response = {
+            "message": "Candidate once hired has now been rejected"
+        }
+        return Response(response, status=HTTP_200_OK)      

@@ -5,7 +5,8 @@ from .views import JobListCreateAPIView, JobDetailUpdateAPIView,\
     JobApplicantListAPIView, JobViewsListCreateAPIView, DaysRecentJobsAPIView, ExportApplicantsCSVView,\
     ShortlistCandidateView, ApplicantJobDetailAPIView, ApplicantJobListAPIView, LocationListAPIView,\
     InterviewInvitationAPIView, HireCandidateView, RejectCandidateView, JobApplicationFilterAPIView,\
-    BulkShortlistCandidateView, BulkInterviewInvitationAPIView, BulkHireCandidateView
+    BulkShortlistCandidateView, BulkInterviewInvitationAPIView, BulkHireCandidateView, \
+      BulkRejectCandidateView
 from dashboard.views import ActivityLogListAPIView
 
 
@@ -44,7 +45,8 @@ urlpatterns = [
 
     path('bulk_shortlist', BulkShortlistCandidateView.as_view(), name='bulk_shortlist'),
     path('bulk_invite', BulkInterviewInvitationAPIView.as_view(), name="bulk_invite"),
-    path('bulk_hire', BulkHireCandidateView.as_view(), name="bulk_hire")
+    path('bulk_hire', BulkHireCandidateView.as_view(), name="bulk_hire"),
+    path('bulk_reject', BulkRejectCandidateView.as_view(), name='bulk_reject')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html'])
