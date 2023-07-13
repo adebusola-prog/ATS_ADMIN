@@ -122,12 +122,34 @@ class ResetPasswordView(APIView):
 class SetNewPasswordView(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer
     
-    def patch(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"status": "success", "message": "Password was successfully reset"}, status=status.HTTP_200_OK)
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
+        user = CustomUser.objects.get(email=email)
+        user.set_password(password)
+        user.save()   
+        return Response({"status": "success", "message": "Password set successfully"}, 
+                        status=status.HTTP_200_OK)
+     
+# class SetPasswordApiView(generics.UpdateAPIView):
+#     """
+#     An endpoint to set new password
 
+#     """
+#     serializer_class = ResetPasswordSerializer
+
+#     def update(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         email = serializer.validated_data['email']
+#         new_password = serializer.validated_data['new_password']
+#         user = CustomAdminUser.objects.get(email=email)
+#         user.set_password(new_password)
+#         user.save()   
+#         return Response({"status": "success", "message": "Password set successfully"}, 
+#                         status=status.HTTP_200_OK)
 
 class PermissionLevelListAPIView(ListAPIView):
     queryset = PermissionLevel.objects.all()
