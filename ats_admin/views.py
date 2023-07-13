@@ -37,6 +37,8 @@ class ProfilePictureUpdateView(generics.UpdateAPIView):
         context['user'] = self.get_object()
         return context
     
+
+    
 class SubAdminFilter(rest_framework.FilterSet):
     subadmin_name = rest_framework.CharFilter(lookup_expr='icontains')
 

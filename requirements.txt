@@ -13,6 +13,7 @@ django-cities-light==3.9.2
 django-cors-headers==4.1.0
 django-elasticsearch-dsl==7.3
 django-elasticsearch-dsl-drf==0.22.5
+django-filter==23.2
 django-multiselectfield==0.1.12
 django-nine==0.2.7
 django-phonenumber-field==7.1.0
