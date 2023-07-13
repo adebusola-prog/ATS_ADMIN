@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'multiselectfield',
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf',
-    # 'django_filters',
+    'django_filters',
    
 ]
 ELASTICSEARCH_DSL={

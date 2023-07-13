@@ -9,9 +9,9 @@ from .paginations import CustomPagination
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from .paginations import CustomPagination
-# from django_filters.rest_framework import DjangoFilterBackend
-# from rest_framework.filters import SearchFilter
-# from django_filters import rest_framework 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+import rest_framework
 
 
 
@@ -52,9 +52,6 @@ class SubAdminCreateView(generics.CreateAPIView):
     permission_classes = [IsSuperAdmin]
     serializer_class = CustomUserSubAdminSerializer
    
-    # filter_backends = [DjangoFilterBackend, SearchFilter]
-    # filterset_class = SubAdminFilter
-    # search_fields = ['first_name', 'last_name']
 
     
 class SubAdminListView(generics.ListAPIView):
@@ -62,6 +59,9 @@ class SubAdminListView(generics.ListAPIView):
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
     pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    # filterset_class = SubAdminFilter
+    search_fields = ['first_name', 'last_name']
 
 
 class SubAdminDetailView(generics.RetrieveAPIView):

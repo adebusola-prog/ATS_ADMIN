@@ -61,6 +61,10 @@ class Job(models.Model):
     objects = models.Manager()
     active_objects = ActiveManager()
     inactive_objects = InActiveManager()
+
+    class Meta:
+        indexes = [models.Index(fields=['role','job_type'])]
+        ordering = ['-created_at']
     
     def __str__(self):
         return self.role
@@ -112,6 +116,9 @@ class JobApplication(models.Model):
     interview_only_objects = InterviewInviteOnlyManager()
     hired_objects = HiredManager()
     rejected_objects = RejectedManager()
+
+    class Meta:
+        ordering = ['-applied_at']
 
     def __str__(self):
         return f"{self.id}/{self.applicant.email}'s applicantion for {self.job}"
