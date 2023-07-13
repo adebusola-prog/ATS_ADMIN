@@ -118,7 +118,7 @@ class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, C
 class JobApplicantListAPIView(ActivityLogJobMixin, ListAPIView):
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
 
 class JobApplicantDetailAPIView(ActivityLogJobMixin, RetrieveAPIView):
@@ -241,7 +241,7 @@ class InterviewInvitationAPIView(UpdateAPIView):
 class HireCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -272,7 +272,7 @@ class HireCandidateView(UpdateAPIView):
 class RejectCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -324,7 +324,7 @@ class JobApplicationFilterAPIView(ListAPIView):
 class BulkShortlistCandidateView(UpdateAPIView):
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', [])
@@ -347,7 +347,7 @@ class BulkShortlistCandidateView(UpdateAPIView):
 class BulkInterviewInvitationAPIView(UpdateAPIView):
     queryset = JobApplication.shortlisted_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', [])
@@ -384,7 +384,7 @@ class BulkInterviewInvitationAPIView(UpdateAPIView):
 class BulkHireCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_only_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
@@ -405,7 +405,7 @@ class BulkHireCandidateView(UpdateAPIView):
 class BulkRejectCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_only_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
