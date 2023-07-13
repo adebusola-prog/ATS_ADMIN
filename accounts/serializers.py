@@ -76,7 +76,7 @@ class SetNewPasswordSerializer(serializers.Serializer):
             uuidb64 = attrs.get('uuidb64')
 
             id = force_str(urlsafe_base64_decode(uuidb64))
-            account = CustomUser.objects.get(id=id)
+            account = CustomUser.active_objects.get(id=id)
 
             if not PasswordResetTokenGenerator().check_token(account, token):
                 raise AuthenticationFailed('The reset link is invalid', 401)
@@ -86,10 +86,10 @@ class SetNewPasswordSerializer(serializers.Serializer):
             raise AuthenticationFailed('The reset link is invalid', 401)
         return super().validate(attrs)
     
-    # def update(self, instance, validated_data):
-    #     instance.set_password(validated_data.get('password'))
-    #     instance.save()
-    #     return instance
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data.get('password'))
+        instance.save()
+        return instance
 
 class PermissionLevelSerializer(serializers.ModelSerializer):
     class Meta:

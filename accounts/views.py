@@ -84,8 +84,8 @@ class ForgotPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         
         lower_email = serializer.validated_data.get("email").lower()
-        if CustomUser.objects.filter(email__iexact=lower_email).exists():
-            account = CustomUser.objects.get(email=lower_email)
+        if CustomUser.active_objects.filter(email__iexact=lower_email).exists():
+            account = CustomUser.active_objects.get(email=lower_email)
             uuidb64 = urlsafe_base64_encode(force_bytes(account.id))
             token = PasswordResetTokenGenerator().make_token(account)
             current_site = get_current_site(request).domain
@@ -106,7 +106,6 @@ class ForgotPasswordView(APIView):
 
 class ResetPasswordView(APIView):
     serializer_class = ResetPasswordSerializer
-  
     def get(self, request, uuidb64, token):
         try:
             id = smart_str(urlsafe_base64_decode(uuidb64))
@@ -121,7 +120,6 @@ class ResetPasswordView(APIView):
 
 class SetNewPasswordView(generics.UpdateAPIView):
     serializer_class = SetNewPasswordSerializer
-    
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -135,3 +133,5 @@ class PermissionLevelListAPIView(ListAPIView):
     queryset = PermissionLevel.objects.all()
     serializer_class = PermissionLevelSerializer
     permission_classes = [IsAdmin]
+
+
