@@ -353,7 +353,7 @@ class BulkInterviewInvitationAPIView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', [])
         applicants = JobApplication.shortlisted_objects.filter(id__in=selected_ids, \
-                                is_interviewed=False)
+                                is_invited_for_interview=False)
         applicants.update(is_invited_for_interview=True)
 
         serializer = InterviewInvitationSerializer(data=request.data)
