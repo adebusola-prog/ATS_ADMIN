@@ -66,7 +66,6 @@ class CustomUser(AbstractUser):
     username = models.CharField(max_length=19, unique=True, blank=True)
     last_name = models.CharField(max_length=30, null=False, blank=False)
     email = models.EmailField(unique=True)
-    # gender = models.CharField()
     phone_number = PhoneNumberField(unique=True, null=True)
     profile_picture = models.FileField(upload_to="images/user_profile_picture", default="pi.png",
                     validators=[validate_image_size, validate_image_file_extension], null=True, blank=True)

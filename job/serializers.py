@@ -11,6 +11,9 @@ class LocationSerializer(serializers.ModelSerializer):
 class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField()
     applicant_name = serializers.CharField(source='applicant.get_full_name', read_only=True)
+    applicant_email = serializers.CharField(source='applicant.email', read_only=True)
+    applicant_DOB = serializers.CharField(source='applicant.date_of_birth', read_only=True)
+    applicant_phone_number = serializers.CharField(source='applicant.phone_number', read_only=True)
     short_name = serializers.CharField(source='applicant.get_short_name', read_only=True)
     total_applicants = serializers.CharField(source='get_total_applicants', read_only=True)
     
@@ -18,7 +21,7 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobApplication
         fields = ("id", 'detail_url', 'job', 'applicant_name', 'cover_letter', 'resume', 
-                  'short_name', 'total_applicants')
+                  'short_name', 'total_applicants', 'applicant_email', 'applicant_DOB', 'applicant_phone_number')
 
     def get_detail_url(self, obj):
         request = self.context.get('request')

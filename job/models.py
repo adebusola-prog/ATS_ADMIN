@@ -80,7 +80,6 @@ class Job(models.Model):
     
 
 
-
 class JobViews(models.Model):
     job = models.ForeignKey(Job, related_name="job_views", on_delete=models.SET_NULL, null=True)
     viewer_ip = models.JSONField(default=_json_list())
