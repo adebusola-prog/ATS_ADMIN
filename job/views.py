@@ -328,23 +328,21 @@ class BulkShortlistCandidateView(UpdateAPIView):
     permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
-        selected_ids = request.data.get('selected_ids', "Pls select")
-        applicants = JobApplication.active_objects.filter(id__in=selected_ids)
-        print(applicants)
-        for applicant in applicants:
-            if applicant.is_shortlisted == False:
-                applicants.update(is_shortlisted=True)
-                response = {
-                    "message": " Candidate shortlisted successfully"
-                }
-                return Response(response, status=HTTP_200_OK)
-            else:
-                response = {
-                "message": "This candidate has been shortlisted before"
+        selected_ids = request.data.get('selected_ids', [])
+        applicants = JobApplication.active_objects.filter(id__in=selected_ids, is_shortlisted=False)
+        
+        if applicants.exists():
+            applicants.update(is_shortlisted=True)
+            response = {
+                "message": "Candidates shortlisted successfully"
+            }
+            return Response(response, status=HTTP_200_OK)
+        else:
+            response = {
+                "message": "No candidates to update"
             }
             return Response(response, status=HTTP_400_BAD_REQUEST)
-        else:
-            return Response
+
         
 
 class BulkInterviewInvitationAPIView(UpdateAPIView):
