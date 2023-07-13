@@ -52,8 +52,7 @@ class SubAdminDetailView(generics.RetrieveAPIView):
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
     
-
-
+    
 class SubAdminProfileView(generics.RetrieveAPIView):
     queryset = CustomUser.active_objects.all()
     serializer_class = CustomUserSubAdminSerializer
@@ -62,9 +61,11 @@ class SubAdminProfileView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
 class SubAdminDeleteAPIView(DestroyAPIView):
     serializer_class = CustomUserSubAdminSerializer
     queryset = CustomUser.active_objects.all()
+    permission_classes = [IsSuperAdmin]
 
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
