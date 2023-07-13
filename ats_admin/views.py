@@ -61,6 +61,7 @@ class SubAdminListView(generics.ListAPIView):
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     # filterset_class = SubAdminFilter
+    filterset_fields = ['first_name', 'last_name']
     search_fields = ['first_name', 'last_name']
 
 
