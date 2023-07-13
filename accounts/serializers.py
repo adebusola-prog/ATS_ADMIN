@@ -64,8 +64,8 @@ class SetNewPasswordSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
 
-    class Meta:
-        fields = ("password", "confirm_password", "token", "uuidb64")
+    # class Meta:
+    #     fields = ("password", "confirm_password", "token", "uuidb64")
 
     def validate(self, attrs):
         try:

@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import SuperAdminDetailView, ProfilePictureUpdateView, SubAdminCreateView,\
-      SubAdminListView, SubAdminDetailView, SubAdminProfileView
+      SubAdminListView, SubAdminDetailView, SubAdminProfileView, SubAdminDeleteAPIView
 
 
 app_name = "ats"
@@ -12,6 +12,7 @@ urlpatterns = [
     path('create_sub_admin', SubAdminCreateView.as_view(), name='create_sub_admin'),
     path('sub_admin_list', SubAdminListView.as_view(), name="sub_admin_list"),
     path('<int:pk>/sub_admin_detail', SubAdminDetailView.as_view(), name='sub_admin_detail'),
+    path('<int:pk>/sub_admin_delete', SubAdminDeleteAPIView.as_view(), name='sub_admin_delete'),
     path('sub_admin_profile', SubAdminProfileView.as_view(), name='sub_admin_profile'),
    
 ]
