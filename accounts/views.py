@@ -84,7 +84,7 @@ class ForgotPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         
         lower_email = serializer.validated_data.get("email").lower()
-        if CustomUser.objects.filter(email__iexact=lower_email).exists():
+        if CustomUser.active_objects.filter(email__iexact=lower_email).exists():
             account = CustomUser.objects.get(email=lower_email)
             uuidb64 = urlsafe_base64_encode(force_bytes(account.id))
             token = PasswordResetTokenGenerator().make_token(account)
@@ -127,7 +127,7 @@ class SetNewPasswordView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
-        user = CustomUser.objects.get(email=email)
+        user = CustomUser.active_objects.get(email=email)
         user.set_password(password)
         user.save()   
         return Response({"status": "success", "message": "Password set successfully"}, 
