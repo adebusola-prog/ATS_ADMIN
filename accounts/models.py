@@ -1,14 +1,15 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser, UserManager, BaseUserManager
-from django.urls import reverse
-from phonenumber_field.modelfields import PhoneNumberField
-from django.utils.translation import gettext_lazy as _
-from .validators import validate_image_size
-from django.core.validators import validate_image_file_extension
-from django.core.exceptions import ValidationError
 from datetime import date
-from base.constants import BACKEND_DEVELOPER, PRODUCT_MANAGER, MOBILE_DEVELOPER, FRONTEND_DEVEOPER
-from base.managers import ActiveManager, InActiveManager
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_image_file_extension
+from django.db import models
+from django.contrib.auth.models import AbstractUser, BaseUserManager, UserManager
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+
+from base.constants import BACKEND_DEVELOPER, PRODUCT_MANAGER, MOBILE_DEVELOPER, FRONTEND_DEVELOPER
+from base.managers import ActiveManager, InactiveManager
+from .validators import validate_image_size
 
 
 def validate_date_of_birth(value):

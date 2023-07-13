@@ -1,17 +1,18 @@
 from rest_framework import generics
 from rest_framework.generics import DestroyAPIView
-from rest_framework.status import HTTP_403_FORBIDDEN
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
 from accounts.models import CustomUser
-from .serializers import CustomUserSuperAdminSerializer, CustomUserPictureUpdateSerializer, \
-    CustomUserSubAdminSerializer
+from .serializers import (
+    CustomUserSuperAdminSerializer,
+    CustomUserPictureUpdateSerializer,
+    CustomUserSubAdminSerializer,
+)
 from .permissions import IsSuperAdmin, IsSubAdmin
 from .paginations import CustomPagination
-from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
-from .paginations import CustomPagination
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
-import rest_framework
 
 
 
@@ -83,3 +84,5 @@ class SubAdminDeleteAPIView(DestroyAPIView):
             "message": "SubAdmin deleted successfully"
         }
         return Response(response, status=HTTP_200_OK)
+    
+

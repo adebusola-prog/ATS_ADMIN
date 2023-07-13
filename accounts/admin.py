@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import CustomUser, PermissionLevel
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+
+from .models import CustomUser, PermissionLevel
 
 
 
@@ -22,7 +23,7 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'password1', 'password2', 'first_name',
-             'last_name', 'username', 'date_of_birth', 'phone_number'),
+             'last_name', 'username', 'date_of_birth'),
         }),
     )
 

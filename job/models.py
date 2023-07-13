@@ -131,3 +131,5 @@ class InterviewInvitation(models.Model):
     job_application = models.OneToOneField(JobApplication, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
+    is_not_draft = models.BooleanField(default=True)
+    

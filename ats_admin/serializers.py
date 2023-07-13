@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from accounts.models import CustomUser
 from rest_framework.reverse import reverse
 from django.contrib.auth.password_validation import validate_password
+
+from accounts.models import CustomUser
 
 
 class CustomUserSuperAdminSerializer(serializers.ModelSerializer):

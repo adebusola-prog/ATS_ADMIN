@@ -1,32 +1,28 @@
 from django.shortcuts import render
-from .serializers import LoginSerializer, ResetPasswordSerializer, SetNewPasswordSerializer,\
-    PermissionLevelSerializer
-from .models import CustomUser, PermissionLevel
+from django.urls import reverse
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, smart_str, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.urls import reverse
-from django.utils.encoding import force_bytes
-from .utils import Utils
-from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import generics
 from rest_framework.generics import ListAPIView
 from ats_admin.permissions import IsAdmin
-# from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
-# from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend,\
-#       FilteringFilterBackend, SuggesterFilterBackend
-# from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend
-# from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
-# from .documents import CustomUserDocument
-# from .serializers import CustomUserDocumentSerializer
+
+from .serializers import (
+    LoginSerializer,
+    ResetPasswordSerializer,
+    SetNewPasswordSerializer,
+    PermissionLevelSerializer,
+    # CustomUserDocumentSerializer,
+)
+from .models import CustomUser, PermissionLevel
+from .utils import Utils
+
 
 # class CustomUserDocumentView(DocumentViewSet):
 #     document = CustomUserDocument

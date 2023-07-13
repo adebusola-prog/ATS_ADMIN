@@ -1,7 +1,15 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import SuperAdminDetailView, ProfilePictureUpdateView, SubAdminCreateView,\
-      SubAdminListView, SubAdminDetailView, SubAdminProfileView, SubAdminDeleteAPIView
+
+from .views import (
+    SuperAdminDetailView,
+    ProfilePictureUpdateView,
+    SubAdminCreateView,
+    SubAdminListView,
+    SubAdminDetailView,
+    SubAdminProfileView,
+    SubAdminDeleteAPIView,
+)
 
 
 app_name = "ats"

@@ -1,15 +1,17 @@
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import CustomUser, PermissionLevel
-from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.exceptions import AuthenticationFailed
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_str
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from django.utils.translation import gettext_lazy as _
+
+from rest_framework import serializers
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 # from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 # from .documents import CustomUserDocument
+
+from .models import CustomUser, PermissionLevel
 
 
 # class CustomUserDocumentSerializer(DocumentSerializer):
