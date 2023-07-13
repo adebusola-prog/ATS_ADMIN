@@ -351,30 +351,35 @@ class BulkInterviewInvitationAPIView(UpdateAPIView):
     permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
-        selected_ids = request.data.get('selected_ids', "Pls select")
-        applicants = JobApplication.shortlisted_objects.filter(id__in=selected_ids)
+        selected_ids = request.data.get('selected_ids', [])
+        applicants = JobApplication.shortlisted_objects.filter(id__in=selected_ids, \
+                                is_interviewed=False)
         applicants.update(is_invited_for_interview=True)
+
         serializer = InterviewInvitationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        for applicant in applicants:
-            invitation = InterviewInvitation.objects.create(
-                job_application=applicant,
-                title=serializer.validated_data.get('title'),
-                content=serializer.validated_data.get('content'),
-            )
 
-            send_mail(
-                invitation.title,
-                invitation.content,
-                "adebusolayeye@gmail.com",
-                [applicant.applicant.email],
-                fail_silently=False,
-            )
-            response = {
-                "message": "Interview invitations sent successfully."
-            }
-            return Response(response, status=HTTP_200_OK)
-        
+        for applicant in applicants:
+            if not applicant.is_interviewed:
+                invitation = InterviewInvitation.objects.create(
+                    job_application=applicant,
+                    title=serializer.validated_data.get('title'),
+                    content=serializer.validated_data.get('content'),
+                )
+
+                send_mail(
+                    invitation.title,
+                    invitation.content,
+                    "adebusolayeye@gmail.com",
+                    [applicant.applicant.email],
+                    fail_silently=False,
+                )
+
+        response = {
+            "message": "Interview invitations sent successfully."
+        }
+        return Response(response, status=HTTP_200_OK)
+
 
 
 class BulkHireCandidateView(UpdateAPIView):
@@ -385,25 +390,16 @@ class BulkHireCandidateView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         applicants = JobApplication.interview_only_objects.filter(id__in=selected_ids)
-        # for applicant in applicants:
-        #     if applicant.is_hired == False and applicant.is_rejected == False:
+        rejected_once= JobApplication.rejected_objects.filter(id__in=selected_ids)
+       
         applicants.update(is_hired=True)
         response = {
             "message": " Candidate hired successfully"
         }
+        rejected_once.update(is_hired=True)
+        response = {
+            "message": "Candidate once hired has now been rejected"
+        }
         return Response(response, status=HTTP_200_OK)
             
-        #     elif applicant.is_hired == True and applicant.is_rejected == False:
-        #         response = {
-        #             "message": "This candidate has been hired previously"
-        #         }
-        #         return Response(response, status=HTTP_400_BAD_REQUEST)
-            
-        #     elif applicant.is_hired == False and applicant.is_rejected == True:
-        #         applicants.update(is_hired=False)
-        #         applicants.update(is_hired=True)
-        #         response = {
-        #             "message": "This candidate previously rejected, has now been hired"
-        #         }
-        #         return Response(response, status=HTTP_200_OK)
-        # return response
+      
