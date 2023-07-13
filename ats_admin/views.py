@@ -9,9 +9,9 @@ from .paginations import CustomPagination
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from .paginations import CustomPagination
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
-from django_filters import rest_framework 
+# from django_filters.rest_framework import DjangoFilterBackend
+# from rest_framework.filters import SearchFilter
+# from django_filters import rest_framework 
 
 
 
@@ -39,12 +39,12 @@ class ProfilePictureUpdateView(generics.UpdateAPIView):
     
 
 
-class SubAdminFilter(rest_framework.FilterSet):
-    subadmin_name = rest_framework.CharFilter(lookup_expr='icontains')
+# class SubAdminFilter(rest_framework.FilterSet):
+#     subadmin_name = rest_framework.CharFilter(lookup_expr='icontains')
 
-    class Meta:
-        model = CustomUser
-        fields = ['first_name', 'last_name']
+#     class Meta:
+#         model = CustomUser
+#         fields = ['first_name', 'last_name']
 
 
 class SubAdminCreateView(generics.CreateAPIView):
