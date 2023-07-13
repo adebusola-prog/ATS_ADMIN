@@ -396,10 +396,10 @@ class BulkHireCandidateView(UpdateAPIView):
         response = {
             "message": " Candidate hired successfully"
         }
-        rejected_once.update(is_rejected=False)
-        rejected_once.update(is_hired=True)
-        response = {
-            "message": "Candidate once rejected has now been hired"
+        if rejected_once:
+            rejected_once.update(is_rejected=False, is_hired=True)
+            response = {
+                "message": "Candidate once rejected has now been hired"
         }
         return Response(response, status=HTTP_200_OK)
             
@@ -415,11 +415,11 @@ class BulkRejectCandidateView(UpdateAPIView):
        
         applicants.update(is_rejected=True)
         response = {
-            "message": " Candidate hired successfully"
+            "message": "Candidates rejected successfully"
         }
-        hired_once.update(is_hired=False)
-        hired_once.update(is_rejected=True)
-        response = {
-            "message": "Candidate once hired has now been rejected"
-        }
-        return Response(response, status=HTTP_200_OK)      
+
+        if hired_once.exists():
+            hired_once.update(is_hired=False, is_rejected=True)
+            response["message"] = "Candidates previously hired have now been rejected"
+        
+        return Response(response, status=HTTP_200_OK)  
