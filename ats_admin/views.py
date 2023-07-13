@@ -39,28 +39,18 @@ class ProfilePictureUpdateView(generics.UpdateAPIView):
     
 
 
-# class SubAdminFilter(rest_framework.FilterSet):
-#     subadmin_name = rest_framework.CharFilter(lookup_expr='icontains')
-
-#     class Meta:
-#         model = CustomUser
-#         fields = ['first_name', 'last_name']
-
-
 class SubAdminCreateView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = [IsSuperAdmin]
     serializer_class = CustomUserSubAdminSerializer
    
 
-    
 class SubAdminListView(generics.ListAPIView):
     queryset = CustomUser.objects.filter(is_admin=True)
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    # filterset_class = SubAdminFilter
     filterset_fields = ['first_name', 'last_name']
     search_fields = ['first_name', 'last_name']
 

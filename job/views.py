@@ -17,6 +17,9 @@ from dashboard.activity import ActivityLogJobMixin
 from django.db.models import Count, F
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+import rest_framework
 
 
 class LocationListAPIView(ListAPIView):
@@ -46,6 +49,11 @@ class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCr
     serializer_class = JobSerializer
     permission_classes = [IsAdmin]
     pagination_class = JobPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['role', 'skill_level', 'job_type', 'job_schedule', 'location']
+    search_fields = ['role', 'skill_level', 'job_type', 'job_schedule', 'location']
+
+
     
     def perform_create(self, serializer):
         serializer.save(posted_by=self.request.user)
