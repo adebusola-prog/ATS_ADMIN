@@ -74,6 +74,11 @@ class Job(models.Model):
     def views_count(self):
         total_views = Job.objects.aggregate(total_views=Sum('no_of_views'))['total_views']
         return total_views
+    
+    def get_total_applications(self):
+        return self.applications.count()
+    
+
 
 
 class JobViews(models.Model):
@@ -109,6 +114,12 @@ class JobApplication(models.Model):
     hired_objects = HiredManager()
     rejected_objects = RejectedManager()
 
+    def __str__(self):
+        return f"{self.id}/{self.applicant.email}'s applicantion for {self.job}"
+    
+    @classmethod
+    def get_total_applicants(cls):
+        return JobApplication.active_objects.count()
 
 class InterviewInvitation(models.Model):
     job_application = models.OneToOneField(JobApplication, on_delete=models.CASCADE)
