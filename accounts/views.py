@@ -84,7 +84,7 @@ class ForgotPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         
         lower_email = serializer.validated_data.get("email").lower()
-        if CustomUser.active_objects.filter(email__iexact=lower_email).exists():
+        if CustomUser.objects.filter(email__iexact=lower_email).exists():
             account = CustomUser.objects.get(email=lower_email)
             uuidb64 = urlsafe_base64_encode(force_bytes(account.id))
             token = PasswordResetTokenGenerator().make_token(account)
@@ -125,31 +125,11 @@ class SetNewPasswordView(generics.UpdateAPIView):
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
-        password = serializer.validated_data['password']
-        user = CustomUser.active_objects.get(email=email)
-        user.set_password(password)
-        user.save()   
-        return Response({"status": "success", "message": "Password set successfully"}, 
+        serializer.save()
+        return Response({"status": "success", "message": "Password was successfully reset"}, \
                         status=status.HTTP_200_OK)
-     
-# class SetPasswordApiView(generics.UpdateAPIView):
-#     """
-#     An endpoint to set new password
 
-#     """
-#     serializer_class = ResetPasswordSerializer
 
-#     def update(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         email = serializer.validated_data['email']
-#         new_password = serializer.validated_data['new_password']
-#         user = CustomAdminUser.objects.get(email=email)
-#         user.set_password(new_password)
-#         user.save()   
-#         return Response({"status": "success", "message": "Password set successfully"}, 
-#                         status=status.HTTP_200_OK)
 
 class PermissionLevelListAPIView(ListAPIView):
     queryset = PermissionLevel.objects.all()
