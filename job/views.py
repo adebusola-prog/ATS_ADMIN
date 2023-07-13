@@ -44,7 +44,7 @@ class ApplicantJobDetailAPIView(RetrieveAPIView):
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
     pagination_class = JobPagination
     
     def perform_create(self, serializer):
@@ -64,7 +64,7 @@ class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCr
 class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, RetrieveUpdateAPIView):
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
     
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -92,7 +92,7 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
 
 class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAPIView):
     serializer_class = JobSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
     queryset = Job.active_objects.all()
 
     def delete(self, request, *args, **kwargs):
@@ -109,7 +109,7 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
 class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, CreateAPIView):
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsApplicantAccess]
+    # permission_classes = [IsApplicantAccess]
     
     def perform_create(self, serializer):
         serializer.save(applicant=self.request.user)
@@ -124,7 +124,7 @@ class JobApplicantListAPIView(ActivityLogJobMixin, ListAPIView):
 class JobApplicantDetailAPIView(ActivityLogJobMixin, RetrieveAPIView):
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]   
+    # permission_classes = [IsAdmin]   
 
 
 class JobViewsListCreateAPIView(ListCreateAPIView):
@@ -140,7 +140,7 @@ class JobViewsListCreateAPIView(ListCreateAPIView):
 
 class DaysRecentJobsAPIView(APIView):
     serializer_class = RecentJobsSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def post(self, request, *args, **kwargs):
         today = timezone.now().date()
@@ -163,7 +163,7 @@ class DaysRecentJobsAPIView(APIView):
 
 
 class ExportApplicantsCSVView(APIView):
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
     def post(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         approved_applicants = JobApplication.objects.filter(id__in=selected_ids).all()
@@ -189,7 +189,7 @@ class ExportApplicantsCSVView(APIView):
 class ShortlistCandidateView(UpdateAPIView):
     queryset = JobApplication.objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -210,7 +210,7 @@ class ShortlistCandidateView(UpdateAPIView):
 class InterviewInvitationAPIView(UpdateAPIView):
     queryset = JobApplication.shortlisted_objects.all()
     serializer_class = JobApplicationListCreateSerializer
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()

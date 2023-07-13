@@ -63,17 +63,17 @@ class LoginView(generics.GenericAPIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class LogoutView(APIView):
-    def post(self, request):
-        refresh_token = request.data.get('refresh_token')
-        if not refresh_token:
-            return Response({'error': 'refresh_token not provided.'}, status=400)
-        try:
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({'message': 'Logout successful.'})
-        except Exception as e:
-            return Response({'error': str(e)}, status=400)
+# class LogoutView(APIView):
+#     def post(self, request):
+#         refresh_token = request.data.get('refresh_token')
+#         if not refresh_token:
+#             return Response({'error': 'refresh_token not provided.'}, status=400)
+#         try:
+#             token = RefreshToken(refresh_token)
+#             token.blacklist()
+#             return Response({'message': 'Logout successful.'})
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=400)
 
 
 class ForgotPasswordView(APIView):
