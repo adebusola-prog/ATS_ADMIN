@@ -50,8 +50,8 @@ class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCr
     permission_classes = [IsAdmin]
     pagination_class = JobPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['role', 'skill_level', 'job_type', 'job_schedule']
-    search_fields = ['role', 'skill_level', 'job_type', 'job_schedule']
+    filterset_fields = ['role', 'skill_level', 'job_type', 'job_schedule', 'location__name']
+    search_fields = ['role', 'skill_level', 'job_type', 'job_schedule', 'location__name']
 
     
     def perform_create(self, serializer):
