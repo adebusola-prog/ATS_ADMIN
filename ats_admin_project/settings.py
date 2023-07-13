@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'multiselectfield',
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf',
+    'django_filters',
    
 ]
 ELASTICSEARCH_DSL={
@@ -132,6 +133,11 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=50),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=20),

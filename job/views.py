@@ -142,7 +142,6 @@ class DaysRecentJobsAPIView(APIView):
     serializer_class = RecentJobsSerializer
     permission_classes = [IsAdmin]
 
-   
     def post(self, request, *args, **kwargs):
         today = timezone.now().date()
         days = self.request.data.get('days', None)

@@ -9,6 +9,10 @@ from .paginations import CustomPagination
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from .paginations import CustomPagination
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+from django_filters import rest_framework 
+
 
 
 class SuperAdminDetailView(generics.RetrieveAPIView):
@@ -33,11 +37,21 @@ class ProfilePictureUpdateView(generics.UpdateAPIView):
         context['user'] = self.get_object()
         return context
     
+class SubAdminFilter(rest_framework.FilterSet):
+    subadmin_name = rest_framework.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name']
+
 
 class SubAdminCreateView(generics.CreateAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.active_objects.all()
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = SubAdminFilter
+    search_fields = ['first_name', 'last_name']
 
     
 class SubAdminListView(generics.ListAPIView):
