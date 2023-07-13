@@ -38,7 +38,7 @@ class ProfilePictureUpdateView(generics.UpdateAPIView):
         return context
     
 
-    
+
 class SubAdminFilter(rest_framework.FilterSet):
     subadmin_name = rest_framework.CharFilter(lookup_expr='icontains')
 
@@ -48,7 +48,7 @@ class SubAdminFilter(rest_framework.FilterSet):
 
 
 class SubAdminCreateView(generics.CreateAPIView):
-    queryset = CustomUser.active_objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
     filter_backends = [DjangoFilterBackend, SearchFilter]
