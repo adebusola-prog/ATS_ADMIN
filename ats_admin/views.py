@@ -50,7 +50,7 @@ class ProfilePictureUpdateView(generics.UpdateAPIView):
 class SubAdminCreateView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = [IsSuperAdmin]
-    # serializer_class = CustomUserSubAdminSerializer
+    serializer_class = CustomUserSubAdminSerializer
    
     # filter_backends = [DjangoFilterBackend, SearchFilter]
     # filterset_class = SubAdminFilter
