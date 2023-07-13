@@ -18,10 +18,12 @@ urlpatterns = [
 
     path('job_application_create', JobApplicantCreateAPIView.as_view(), name='job_application_create'),
     path('job_application_list', JobApplicantListAPIView.as_view(), name='job_application_list'),
-    path('<int:pk>/job_application_detail', JobApplicantDetailAPIView.as_view(), name='job_application_detail'),
+    path('<int:pk>/job_application_detail', JobApplicantDetailAPIView.as_view(), \
+         name='job_application_detail'),
 
     path('applicant_job_list', ApplicantJobListAPIView.as_view(), name='applicant_job_list'),
-    path('<int:pk>/applicant_job_detail', ApplicantJobDetailAPIView.as_view(), name='applicant_job_detail'),
+    path('<int:pk>/applicant_job_detail', ApplicantJobDetailAPIView.as_view(), \
+         name='applicant_job_detail'),
     path('job_views', JobViewsListCreateAPIView.as_view(), name='job_views'),
     path('activity_log', ActivityLogListAPIView.as_view(), name='activity_log'),
 
@@ -32,8 +34,11 @@ urlpatterns = [
           name='shortlist_candidate'),
     path('job_application/<int:pk>/interview_applicant', InterviewInvitationAPIView.as_view(),\
           name="interview_applicant"),
-    path('job_application/<int:pk>/hire_candidate', HireCandidateView.as_view(), name="hire_candidate"),
-    path('job_application/<int:pk>/reject_candidate', RejectCandidateView.as_view(), name="reject_candidate"),
+    path('job_application/<int:pk>/hire_candidate', HireCandidateView.as_view(),\
+          name="hire_candidate"),
+    path('job_application/<int:pk>/reject_candidate', RejectCandidateView.as_view(),\
+          name="reject_candidate"),
+    
     path('location_list', LocationListAPIView.as_view(), name="location_list"),
     path('application_filter', JobApplicationFilterAPIView.as_view(), name='application_filter'),
 

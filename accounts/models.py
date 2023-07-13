@@ -103,7 +103,7 @@ class CustomUser(AbstractUser):
     def get_short_name(self):
         return self.first_name[0] + self.last_name[0]
 
-    def get_total_active_admin_users():
+    def get_total_active_admin_users(self):
         return CustomUser.objects.filter(is_active=True, is_admin=True).count()
     
     @property
