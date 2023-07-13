@@ -119,7 +119,7 @@ class ResetPasswordView(APIView):
 
 
 
-class SetNewPasswordView(generics.GenericAPIView):
+class SetNewPasswordView(generics.UpdateAPIView):
     serializer_class = SetNewPasswordSerializer
     
     def update(self, request, *args, **kwargs):
