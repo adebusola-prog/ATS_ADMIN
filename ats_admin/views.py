@@ -49,22 +49,23 @@ class SubAdminFilter(rest_framework.FilterSet):
 
 class SubAdminCreateView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
-    filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = SubAdminFilter
-    search_fields = ['first_name', 'last_name']
+    # serializer_class = CustomUserSubAdminSerializer
+   
+    # filter_backends = [DjangoFilterBackend, SearchFilter]
+    # filterset_class = SubAdminFilter
+    # search_fields = ['first_name', 'last_name']
 
     
 class SubAdminListView(generics.ListAPIView):
-    queryset = CustomUser.active_objects.filter(is_admin=True)
+    queryset = CustomUser.objects.filter(is_admin=True)
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
     pagination_class = CustomPagination
 
 
 class SubAdminDetailView(generics.RetrieveAPIView):
-    queryset = CustomUser.active_objects.filter(is_admin=True)
+    queryset = CustomUser.objects.filter(is_admin=True)
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
     
