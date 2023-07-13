@@ -132,6 +132,6 @@ class SetNewPasswordView(generics.UpdateAPIView):
 class PermissionLevelListAPIView(ListAPIView):
     queryset = PermissionLevel.objects.all()
     serializer_class = PermissionLevelSerializer
-    # permission_classes = [IsAdmin]
+    permission_classes = [IsAdmin]
 
 

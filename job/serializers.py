@@ -68,6 +68,13 @@ class JobSerializer(serializers.ModelSerializer):
         serializer = JobApplicationListCreateSerializer(applications, many=True)
         return serializer.data
 
+    def create(self, validated_data):
+        location_data = validated_data.pop('location', []) 
+        job = Job.objects.create(**validated_data)
+        job.location.set(location_data)
+        return job
+
+
 
 class JobViewsSerializer(serializers.ModelSerializer):
     class Meta:
