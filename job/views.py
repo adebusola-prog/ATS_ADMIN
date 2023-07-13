@@ -396,6 +396,7 @@ class BulkHireCandidateView(UpdateAPIView):
         response = {
             "message": " Candidate hired successfully"
         }
+        rejected_once.update(is_rejected=False)
         rejected_once.update(is_hired=True)
         response = {
             "message": "Candidate once rejected has now been hired"
@@ -416,6 +417,7 @@ class BulkRejectCandidateView(UpdateAPIView):
         response = {
             "message": " Candidate hired successfully"
         }
+        hired_once.update(is_hired=False)
         hired_once.update(is_rejected=True)
         response = {
             "message": "Candidate once hired has now been rejected"
