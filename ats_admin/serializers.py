@@ -32,11 +32,13 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
     username = serializers.CharField(write_only=True)
+    total_subadmins_created = serializers.CharField(source='get_total_active_admin_users',\
+                                                    read_only=True)
 
     class Meta:
         model = CustomUser
         fields = ('detail_url','full_name', 'first_name', 'last_name', 'username', 'email', 'profile_picture', 'position',
-                  'permission_level', 'password', 'confirm_password')
+                  'permission_level', 'password', 'confirm_password', 'total_subadmins_created')
         extra_kwargs = {
             'position': {'required': True},
             'permission_level': {'required': True},

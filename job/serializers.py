@@ -12,7 +12,7 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField()
     applicant_name = serializers.CharField(source='applicant.get_full_name', read_only=True)
     short_name = serializers.CharField(source='applicant.get_short_name', read_only=True)
-    total_applicants = serializers.CharField(source='applicant.get_total_applicants', read_only=True)
+    total_applicants = serializers.CharField(source='get_total_applicants', read_only=True)
     
 
     class Meta:
@@ -85,7 +85,6 @@ class JobViewsSerializer(serializers.ModelSerializer):
             view.save()
             return view
 
-    
         
 class RecentJobsSerializer(serializers.ModelSerializer):
     posted_by = serializers.CharField(source='posted_by.get_full_name', read_only=True)
