@@ -95,8 +95,8 @@ class JobViews(models.Model):
 
     
 class JobApplication(models.Model):
-    job = models.ManyToManyField(Job, related_name='applications')
-    applicant = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=True)
+    job = models.ForeignKey(Job, on_delete=models.SET_NULL, null=True, related_name='applications')
+    applicant = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     cover_letter = models.TextField()
     resume = models.FileField(upload_to='resumes/', validators=[validate_pdf_file], null=True, blank=True)
     applied_at = models.DateTimeField(auto_now_add=True)
