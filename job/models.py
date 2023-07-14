@@ -122,7 +122,7 @@ class JobApplication(models.Model):
         unique_together = ('job', 'applicant')
 
     def __str__(self):
-        return f"{self.id}/{self.applicant.email}'s applicantion for {self.job.role}"
+        return f"{self.id}/{self.applicant.email}"
     
     @classmethod
     def get_total_applicants(cls):
