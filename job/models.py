@@ -69,11 +69,20 @@ class Job(models.Model):
     def __str__(self):
         return self.role
 
+
     def time_since_creation(self):
         time_difference = timezone.now() - self.created_at
         if time_difference.total_seconds() < 60:
             return "uploaded now"
-        return f"Uploaded {timesince(self.created_at, timezone.now())} ago"
+        elif time_difference.total_seconds() < 86400:
+            return f"Uploaded {timesince(self.created_at, timezone.now())} ago"
+        
+        days = time_difference.days
+        if days == 1:
+            return "Uploaded 1 day ago"
+        else:
+            return f"Uploaded {days} days ago"
+
 
     def views_count(self):
         total_views = Job.objects.aggregate(total_views=Sum('no_of_views'))['total_views']
