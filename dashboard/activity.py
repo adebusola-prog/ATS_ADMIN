@@ -14,13 +14,13 @@ class ActivityLogJobMixin:
 
 
     def _create_activity_log(self, instance, request):
-        actor = self._get_user(request)
+        actor = self._get_user(request.user.first_name)
         message = f"New job created by "
         ActivityLog.objects.create(actor=actor, action_type=CREATE, content_object=instance, data=message)
 
 
     def _update_activity_log(self, instance, request, old_role):
-        actor = self._get_user(request)
+        actor = self._get_user(request.user.first_name)
         # current_time = timezone.now()
         message = f"{old_role} was updated by "
         ActivityLog.objects.create(actor=actor, action_type=UPDATE, content_object=instance, 
@@ -28,7 +28,7 @@ class ActivityLogJobMixin:
 
 
     def _delete_activity_log(self, instance, old_role, request):
-        actor = self._get_user(request)
+        actor = self._get_user(request.user.first_name)
         message = f"{instance.role} deleted by "
         ActivityLog.objects.create(actor=actor, action_type=DELETE, content_object=instance, data=message)
 
