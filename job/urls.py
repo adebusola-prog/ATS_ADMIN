@@ -7,7 +7,7 @@ from .views import JobListCreateAPIView, JobDetailUpdateAPIView,\
     InterviewInvitationAPIView, HireCandidateView, RejectCandidateView, JobApplicationFilterAPIView,\
     BulkShortlistCandidateView, BulkInterviewInvitationAPIView, BulkHireCandidateView, \
       BulkRejectCandidateView
-from dashboard.views import ActivityLogListAPIView
+from dashboard.views import ActivityLogListAdminAPIView
 
 
 app_name = "jobs"
@@ -26,7 +26,7 @@ urlpatterns = [
     path('<int:pk>/applicant_job_detail', ApplicantJobDetailAPIView.as_view(), \
          name='applicant_job_detail'),
     path('job_views', JobViewsListCreateAPIView.as_view(), name='job_views'),
-    path('activity_log', ActivityLogListAPIView.as_view(), name='activity_log'),
+    path('activity_log', ActivityLogListAdminAPIView.as_view(), name='activity_log'),
 
     path('days_ago_jobs', DaysRecentJobsAPIView.as_view(), name='five_days_ago'),
     path('export_csv', ExportApplicantsCSVView.as_view(), name='export_applicant'),

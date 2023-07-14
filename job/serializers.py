@@ -109,4 +109,6 @@ class InterviewInvitationSerializer(serializers.ModelSerializer):
         model = InterviewInvitation
         fields = ['title', 'content']
 
-        
+
+class ExportApplicantsCSVViewSerializer(serializers.Serializer):
+    selected_ids = serializers.ListField(child=serializers.IntegerField())

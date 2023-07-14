@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
     CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,\
-    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer
+    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer, ExportApplicantsCSVViewSerializer
 from rest_framework.views import APIView
 from django.utils import timezone, timesince
 from datetime import datetime, timedelta
@@ -122,6 +122,16 @@ class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, C
     def perform_create(self, serializer):
         serializer.save(applicant=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # self.perform_create(serializer)
+        self._create_application_activity_log(serializer.instance, request)
+        response = {
+            "message": "New Application created successfully"
+        }
+        return Response(response, status=HTTP_200_OK)
+
 
 class JobApplicantListAPIView(ActivityLogJobMixin, ListAPIView):
     queryset = JobApplication.active_objects.all()
@@ -172,6 +182,8 @@ class DaysRecentJobsAPIView(APIView):
 
 class ExportApplicantsCSVView(APIView):
     permission_classes = [IsAdmin]
+    serializer_class = ExportApplicantsCSVViewSerializer
+
     def post(self, request, *args, **kwargs):
         selected_ids = request.data.get('selected_ids', "Pls select")
         approved_applicants = JobApplication.objects.filter(id__in=selected_ids).all()
