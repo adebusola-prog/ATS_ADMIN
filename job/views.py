@@ -261,7 +261,9 @@ class InterviewInvitationAPIView(UpdateAPIView):
                 "message": "Interview invitations sent successfully."
             }
             return Response(response, status=status.HTTP_200_OK)
-        return Response("This User has been sent an interview request")
+        return Response({"message":"This User has been sent an interview request"})
+
+
 
 class HireCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_objects.all()
