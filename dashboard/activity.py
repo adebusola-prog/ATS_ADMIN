@@ -34,5 +34,6 @@ class ActivityLogJobMixin:
 
     def _create_application_activity_log(self, instance, request):
         actor = self._get_user(request)
-        message = f"New job Application by {instance.applicant.first_name} {instance.applicant.last_name}"
+        message = f"New job Application by {request.user.first_name}"
+# {instance.applicant.last_name}"
         ActivityLog.objects.create(actor=actor, action_type=CREATE, content_object=instance, data=message)
