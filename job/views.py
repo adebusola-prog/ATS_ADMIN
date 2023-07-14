@@ -29,6 +29,7 @@ class LocationListAPIView(ListAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
+
 class ApplicantJobListAPIView(ListAPIView):
     """A public view that lists all the jobs"""
     queryset = Job.active_objects.all()
