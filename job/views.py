@@ -3,13 +3,14 @@ from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
     CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,\
-    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer, ExportApplicantsCSVViewSerializer
+    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer, IDValidationCustomSerializer
 from rest_framework.views import APIView
 from django.utils import timezone, timesince
 from datetime import datetime, timedelta
 from .models import Job, JobViews, JobApplication, InterviewInvitation, Location
 from ats_admin.permissions import IsAdmin, IsApplicantAccess
 from ats_admin.paginations import JobPagination
+from rest_framework import status
 from rest_framework.response import Response
 from .mixins import CustomMessageCreateMixin, CustomMessageUpdateMixin, CustomMessageDestroyMixin
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -41,7 +42,7 @@ class ApplicantJobDetailAPIView(RetrieveAPIView):
         # instance.refresh_from_db(fields=['no_of_views'])
         instance.save()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
@@ -66,7 +67,7 @@ class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCr
         response = {
             "message": "New Job created successfully"
         }
-        return Response(response, status=HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, RetrieveUpdateAPIView):
@@ -80,7 +81,7 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
         # instance.refresh_from_db(fields=['no_of_views'])
         instance.save()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     def perform_update(self, serializer):
         serializer.save(posted_by=self.request.user)
@@ -95,7 +96,7 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
         response = {
             "message": "Job updated successfully"
         }
-        return Response(response, status=HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAPIView):
@@ -111,7 +112,7 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
         response = {
             "message": "Job deleted successfully"
         }
-        return Response(response, status=HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, CreateAPIView):
@@ -130,7 +131,7 @@ class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, C
         response = {
             "message": "New Application created successfully"
         }
-        return Response(response, status=HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class JobApplicantListAPIView(ActivityLogJobMixin, ListAPIView):
@@ -151,7 +152,8 @@ class JobViewsListCreateAPIView(ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         job_id = request.query_params.get('job_id')
-        job_views = JobViews.active_objects.filter(job_id=job_id).annotate(num_views=Count('viewer_ip'))
+        job_views = JobViews.active_objects.filter(job_id=job_id).\
+            annotate(num_views=Count('viewer_ip'))
         serializer = self.get_serializer(job_views, many=True)
         return Response(serializer.data)
     
@@ -168,7 +170,7 @@ class DaysRecentJobsAPIView(APIView):
             days_ago = today - timedelta(days=7)
             recent_jobs = Job.active_objects.filter(created_at__gte=days_ago)
             serializer = self.serializer_class(recent_jobs, many=True)
-            return Response(serializer.data, status=HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         try:
             days = int(days)
         except ValueError:
@@ -182,10 +184,12 @@ class DaysRecentJobsAPIView(APIView):
 
 class ExportApplicantsCSVView(APIView):
     permission_classes = [IsAdmin]
-    serializer_class = ExportApplicantsCSVViewSerializer
+    serializer_class = IDValidationCustomSerializer
 
     def post(self, request, *args, **kwargs):
-        selected_ids = request.data.get('selected_ids', "Pls select")
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        selected_ids = serializer.validated_data['selected_ids']
         approved_applicants = JobApplication.objects.filter(id__in=selected_ids).all()
 
         response = HttpResponse(content_type='text/csv')
@@ -219,12 +223,12 @@ class ShortlistCandidateView(UpdateAPIView):
             response = {
                 "message": " Candidate shortlisted successfully"
             }
-            return Response(response, status=HTTP_200_OK)
+            return Response(response, status=status.HTTP_200_OK)
         else:
             response = {
                 "message": "This candidate has been shortlisted before"
             }
-            return Response(response, status=HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
     
 
 class InterviewInvitationAPIView(UpdateAPIView):
@@ -254,7 +258,7 @@ class InterviewInvitationAPIView(UpdateAPIView):
         response = {
             "message": "Interview invitations sent successfully."
         }
-        return Response(response, status=HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
     
 
 
@@ -286,7 +290,7 @@ class HireCandidateView(UpdateAPIView):
             response = {
                 "message": "This candidate previously rejected, has now been hired"
             }
-            return Response(response, status=HTTP_200_OK)
+            return Response(response, status=status.HTTP_200_OK)
         
 
 class RejectCandidateView(UpdateAPIView):
@@ -302,13 +306,13 @@ class RejectCandidateView(UpdateAPIView):
             response = {
                 "message": " Candidate rejected successfully"
             }
-            return Response(response, status=HTTP_200_OK)
+            return Response(response, status=status.HTTP_200_OK)
         
         elif instance.is_hired == False and instance.is_rejected == True:
             response = {
                 "message": "This candidate has previously been rejected"
             }
-            return Response(response, status=HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
             
         elif instance.is_hired == True and instance.is_rejected == False:
             instance.is_hired = False
@@ -317,7 +321,7 @@ class RejectCandidateView(UpdateAPIView):
             response = {
             "message": "This candidate previously hired has now been rejected!!"
             }
-            return Response(response, status=HTTP_200_OK)
+            return Response(response, status=status.HTTP_200_OK)
 
 
 
@@ -347,7 +351,9 @@ class BulkShortlistCandidateView(UpdateAPIView):
     permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
-        selected_ids = request.data.get('selected_ids', [])
+        serializer = IDValidationCustomSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        selected_ids = serializer.validated_data['selected_ids'] 
         applicants = JobApplication.active_objects.filter(id__in=selected_ids, is_shortlisted=False)
         
         if applicants.exists():
@@ -355,12 +361,12 @@ class BulkShortlistCandidateView(UpdateAPIView):
             response = {
                 "message": "Candidates shortlisted successfully"
             }
-            return Response(response, status=HTTP_200_OK)
+            return Response(response, status=status.HTTP_200_OK)
         else:
             response = {
                 "message": "No candidates to update"
             }
-            return Response(response, status=HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         
 
