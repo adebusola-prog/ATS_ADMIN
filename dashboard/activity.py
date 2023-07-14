@@ -27,7 +27,7 @@ class ActivityLogJobMixin:
                         data=message)
 
 
-    def _delete_activity_log(self, instance, request):
+    def _delete_activity_log(self, instance, old_role, request):
         actor = self._get_user(request)
         message = f"{instance.role} deleted by "
         ActivityLog.objects.create(actor=actor, action_type=DELETE, content_object=instance, data=message)
