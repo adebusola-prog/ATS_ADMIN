@@ -9,7 +9,7 @@ class ActivityLogSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ActivityLog
-        fields = ('action_type','get_timesince', 'status', 'content_type','data')
+        fields = ("actor", 'action_type','get_timesince', 'status', 'content_type','data')
 
 
     def get_content_type(self, obj):
