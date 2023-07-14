@@ -9,7 +9,7 @@ from django.utils import timezone
 
 class ActivityLogJobMixin:
     def _get_user(self, request):
-        user = request.user.first_name if request.user.is_authenticated else None
+        user = request.user if request.user.is_authenticated else None
         return user
 
 
