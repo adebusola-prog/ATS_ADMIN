@@ -239,28 +239,29 @@ class InterviewInvitationAPIView(UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.is_invited_for_interview = True
-        instance.save()
-        serializer = InterviewInvitationSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        invitation = InterviewInvitation.objects.create(
-            job_application=instance,
-            title=serializer.validated_data.get('title'),
-            content=serializer.validated_data.get('content'),
-        )
+        if instance.is_invited_for_interview == False:
+            instance.is_invited_for_interview = True
+            instance.save()
+            serializer = InterviewInvitationSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            invitation = InterviewInvitation.objects.create(
+                job_application=instance,
+                title=serializer.validated_data.get('title'),
+                content=serializer.validated_data.get('content'),
+            )
 
-        send_mail(
-            invitation.title,
-            invitation.content,
-            "adebusolayeye@gmail.com",
-            [instance.applicant.email],
-            fail_silently=False,
-        )
-        response = {
-            "message": "Interview invitations sent successfully."
-        }
-        return Response(response, status=status.HTTP_200_OK)
-    
+            send_mail(
+                invitation.title,
+                invitation.content,
+                "adebusolayeye@gmail.com",
+                [instance.applicant.email],
+                fail_silently=False,
+            )
+            response = {
+                "message": "Interview invitations sent successfully."
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        return Response("This User has been sent an interview request")
 
 class HireCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_objects.all()
@@ -292,7 +293,7 @@ class HireCandidateView(UpdateAPIView):
             }
             return Response(response, status=status.HTTP_200_OK)
         
-        
+
 class RejectCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
