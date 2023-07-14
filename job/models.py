@@ -119,6 +119,7 @@ class JobApplication(models.Model):
 
     class Meta:
         ordering = ['-applied_at']
+        unique_together = ['job', 'applicant']
 
     def __str__(self):
         return f"{self.id}/{self.applicant.email}'s applicantion for {self.job}"

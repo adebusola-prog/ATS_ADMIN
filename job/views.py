@@ -262,7 +262,6 @@ class InterviewInvitationAPIView(UpdateAPIView):
         return Response(response, status=status.HTTP_200_OK)
     
 
-
 class HireCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
@@ -293,7 +292,7 @@ class HireCandidateView(UpdateAPIView):
             }
             return Response(response, status=status.HTTP_200_OK)
         
-
+        
 class RejectCandidateView(UpdateAPIView):
     queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
