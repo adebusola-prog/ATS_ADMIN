@@ -17,6 +17,7 @@ class ActivityLogListAdminAPIView(ListAPIView):
 
     def get_queryset(self):
         content_type = ContentType.objects.get_for_model(Job)
+        print(content_type)
         queryset = ActivityLog.objects.filter(content_type__in=content_type)
         return queryset
 
