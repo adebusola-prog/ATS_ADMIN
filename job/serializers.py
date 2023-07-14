@@ -17,12 +17,13 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     short_name = serializers.CharField(source='applicant.get_short_name', read_only=True)
     total_applicants = serializers.CharField(source='get_total_applicants', read_only=True)
     job_role = serializers.CharField(source='job.role', read_only=True)
+
     
 
     class Meta:
         model = JobApplication
-        fields = ("id", 'detail_url', 'job_role', 'applicant_name', 'cover_letter', 'resume', 
-                  'short_name', 'total_applicants', 'applicant_email', 'applicant_DOB', 'applicant_phone_number')
+        fields = ("id", 'detail_url', 'applicant_name', 'cover_letter', 'resume', 
+                  'job_role', 'short_name', 'total_applicants', 'applicant_email', 'applicant_DOB', 'applicant_phone_number')
 
     def get_detail_url(self, obj):
         request = self.context.get('request')
