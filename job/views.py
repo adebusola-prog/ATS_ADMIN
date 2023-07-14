@@ -25,15 +25,18 @@ import rest_framework
 
 
 class LocationListAPIView(ListAPIView):
+    """Lists all the locations"""
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
 class ApplicantJobListAPIView(ListAPIView):
+    """A public view that lists all the jobs"""
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
 
 
 class ApplicantJobDetailAPIView(RetrieveAPIView):
+    """A view to view each job's detail"""
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
 
@@ -47,6 +50,9 @@ class ApplicantJobDetailAPIView(RetrieveAPIView):
     
 
 class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCreateAPIView):
+    """A view that Lists a job and
+       Create a job
+    """
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAdmin]
@@ -72,6 +78,7 @@ class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCr
 
 
 class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, RetrieveUpdateAPIView):
+    """Retreives and Updates a job depending on the method used"""
     queryset = Job.active_objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAdmin]
@@ -101,6 +108,7 @@ class JobDetailUpdateAPIView(ActivityLogJobMixin, CustomMessageUpdateMixin, Retr
 
 
 class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAPIView):
+    """To delete a job"""
     serializer_class = JobSerializer
     permission_classes = [IsAdmin]
     queryset = Job.active_objects.all()
@@ -117,6 +125,7 @@ class JobDeleteAPIView(CustomMessageDestroyMixin, ActivityLogJobMixin, DestroyAP
 
 
 class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, CreateAPIView):
+    """Allows a user to apply for a job"""
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsApplicantAccess]
@@ -136,12 +145,14 @@ class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, C
 
 
 class JobApplicantListAPIView(ActivityLogJobMixin, ListAPIView):
+    """Lists all the job application"""
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
 
 
 class JobApplicantDetailAPIView(ActivityLogJobMixin, RetrieveAPIView):
+    """Retreives the full detais of each applicants"""
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]   
@@ -160,6 +171,7 @@ class JobViewsListCreateAPIView(ListCreateAPIView):
     
 
 class DaysRecentJobsAPIView(APIView):
+    """Returns jobs according to number of days"""
     serializer_class = RecentJobsSerializer
     permission_classes = [IsAdmin]
 
@@ -184,6 +196,7 @@ class DaysRecentJobsAPIView(APIView):
 
 
 class ExportApplicantsCSVView(APIView):
+    """Exports all selected applicants to a csv file"""
     permission_classes = [IsAdmin]
     serializer_class = IDValidationCustomSerializer
 
@@ -212,6 +225,7 @@ class ExportApplicantsCSVView(APIView):
     
 
 class ShortlistCandidateView(UpdateAPIView):
+    """Shortlists applicant selected """
     queryset = JobApplication.objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -233,6 +247,7 @@ class ShortlistCandidateView(UpdateAPIView):
     
 
 class InterviewInvitationAPIView(UpdateAPIView):
+    """Invites applicant f"""
     queryset = JobApplication.shortlisted_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]

@@ -45,6 +45,7 @@ from .utils import Utils
 #     }},
 
 class LoginView(generics.GenericAPIView):
+    """Login View for user to authenticate"""
     authentication_classes = ()
     serializer_class =  LoginSerializer
 
@@ -73,6 +74,7 @@ class LoginView(generics.GenericAPIView):
 
 
 class ForgotPasswordView(APIView):
+    """This is used when the user forget the password"""
     serializer_class = ResetPasswordSerializer
 
     def post(self, request, *args, **kwargs):
@@ -101,6 +103,7 @@ class ForgotPasswordView(APIView):
 
 
 class ResetPasswordView(APIView):
+    """View to reset password"""
     serializer_class = ResetPasswordSerializer
     def get(self, request, uuidb64, token):
         try:
@@ -115,6 +118,7 @@ class ResetPasswordView(APIView):
 
 
 class SetNewPasswordView(generics.UpdateAPIView):
+    """This view sets the password if the reset password link is correct"""
     serializer_class = SetNewPasswordSerializer
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -123,9 +127,8 @@ class SetNewPasswordView(generics.UpdateAPIView):
         return Response({"status": "success", "message": "Password was successfully reset"}, \
                         status=status.HTTP_200_OK)
 
-
-
 class PermissionLevelListAPIView(ListAPIView):
+    """Gives permission to SubAdmins"""
     queryset = PermissionLevel.objects.all()
     serializer_class = PermissionLevelSerializer
     permission_classes = [IsAdmin]

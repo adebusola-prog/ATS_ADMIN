@@ -17,6 +17,7 @@ from .paginations import CustomPagination
 
 
 class SuperAdminDetailView(generics.RetrieveAPIView):
+    """A user with the superadmin status can only view this"""
     queryset = CustomUser.active_objects.all()
     serializer_class = CustomUserSuperAdminSerializer
     permission_classes = [IsSuperAdmin]
@@ -26,6 +27,7 @@ class SuperAdminDetailView(generics.RetrieveAPIView):
 
   
 class ProfilePictureUpdateView(generics.UpdateAPIView):
+    """Allows a Super Admin to update profile picture"""
     queryset = CustomUser.active_objects.all()
     serializer_class = CustomUserPictureUpdateSerializer
     permission_classes = [IsSuperAdmin]
@@ -39,14 +41,15 @@ class ProfilePictureUpdateView(generics.UpdateAPIView):
         return context
     
 
-
 class SubAdminCreateView(generics.CreateAPIView):
+    """Create view for subadmins"""
     queryset = CustomUser.objects.all()
     permission_classes = [IsSuperAdmin]
     serializer_class = CustomUserSubAdminSerializer
    
 
 class SubAdminListView(generics.ListAPIView):
+    """Lists the subadmins created"""
     queryset = CustomUser.objects.filter(is_admin=True)
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
@@ -57,12 +60,14 @@ class SubAdminListView(generics.ListAPIView):
 
 
 class SubAdminDetailView(generics.RetrieveAPIView):
+    """retreives each sub admin"""
     queryset = CustomUser.objects.filter(is_admin=True)
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSuperAdmin]
     
     
 class SubAdminProfileView(generics.RetrieveAPIView):
+    """This view allows each subadmin to view their profile"""
     queryset = CustomUser.active_objects.all()
     serializer_class = CustomUserSubAdminSerializer
     permission_classes = [IsSubAdmin]
@@ -72,6 +77,7 @@ class SubAdminProfileView(generics.RetrieveAPIView):
 
 
 class SubAdminDeleteAPIView(DestroyAPIView):
+    """Allows a super admin delete a subadmin"""
     serializer_class = CustomUserSubAdminSerializer
     queryset = CustomUser.active_objects.all()
     permission_classes = [IsSuperAdmin]
