@@ -3,7 +3,8 @@ from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
     CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,\
-    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer, IDValidationCustomSerializer
+    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer,\
+          IDValidationCustomSerializer
 from rest_framework.views import APIView
 from django.utils import timezone, timesince
 from datetime import datetime, timedelta
@@ -126,7 +127,7 @@ class JobApplicantCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, C
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # self.perform_create(serializer)
+        self.perform_create(serializer)
         self._create_application_activity_log(serializer.instance, request)
         response = {
             "message": "New Application created successfully"
