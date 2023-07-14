@@ -29,8 +29,6 @@ class ActivityLog(models.Model):
     remarks = models.TextField(blank=True, null=True)
     status = models.CharField(choices=ACTION_STATUS, max_length=7, default=SUCCESS)
     data = models.JSONField(default=dict)
-
-    
     content_type = models.ForeignKey(
         ContentType, models.SET_NULL, blank=True, null=True
     )
@@ -39,9 +37,16 @@ class ActivityLog(models.Model):
 
     def __str__(self):
         return f"{self.action_type} by {self.actor} on {self.action_time}"
-    
+
     def get_timesince(self):
         time_difference = timezone.now() - self.action_time
         if time_difference.total_seconds() < 60:
             return "uploaded now"
-        return f"Uploaded {timesince(self.action_time, timezone.now())} ago"
+        elif time_difference.total_seconds() < 86400:
+            return f"Uploaded {timesince(self.created_at, timezone.now())} ago"
+        
+        days = time_difference.days
+        if days == 1:
+            return "Uploaded 1 day ago"
+        else:
+            return f"Uploaded {days} days ago"
