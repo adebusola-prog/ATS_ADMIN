@@ -353,7 +353,7 @@ class BulkShortlistCandidateView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         serializer = IDValidationCustomSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        selected_ids = serializer.validated_data['selected_ids'] 
+        selected_ids = serializer.validated_data.get('selected_ids') 
         applicants = JobApplication.active_objects.filter(id__in=selected_ids, is_shortlisted=False)
         
         if applicants.exists():
@@ -376,7 +376,9 @@ class BulkInterviewInvitationAPIView(UpdateAPIView):
     permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
-        selected_ids = request.data.get('selected_ids', [])
+        serializer = IDValidationCustomSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        selected_ids = serializer.validated_data.get('selected_ids') 
         applicants = JobApplication.shortlisted_objects.filter(id__in=selected_ids, \
                                 is_invited_for_interview=False)
         applicants.update(is_invited_for_interview=True)
@@ -413,7 +415,9 @@ class BulkHireCandidateView(UpdateAPIView):
     permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
-        selected_ids = request.data.get('selected_ids', "Pls select")
+        serializer = IDValidationCustomSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        selected_ids = serializer.validated_data.get('selected_ids') 
         applicants = JobApplication.interview_only_objects.filter(id__in=selected_ids)
         rejected_once = JobApplication.rejected_objects.filter(id__in=selected_ids)
        
@@ -434,7 +438,9 @@ class BulkRejectCandidateView(UpdateAPIView):
     permission_classes = [IsAdmin]
 
     def update(self, request, *args, **kwargs):
-        selected_ids = request.data.get('selected_ids', "Pls select")
+        serializer = IDValidationCustomSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        selected_ids = serializer.validated_data.get('selected_ids') 
         applicants = JobApplication.interview_only_objects.filter(id__in=selected_ids)
         hired_once = JobApplication.hired_objects.filter(id__in=selected_ids)
        
