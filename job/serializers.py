@@ -16,26 +16,26 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     applicant_phone_number = serializers.CharField(source='applicant.phone_number', read_only=True)
     short_name = serializers.CharField(source='applicant.get_short_name', read_only=True)
     total_applicants = serializers.CharField(source='get_total_applicants', read_only=True)
-    # job_role = serializers.CharField(source='job.role', read_only=True)
-    job = serializers.SerializerMethodField()
-
+    job_role = serializers.CharField(source='job.role', read_only=True)
+    # job = serializers.SerializerMethodField()
     
 
     class Meta:
         model = JobApplication
         fields = ("id", 'detail_url', 'job', 'applicant_name', 'cover_letter', 'resume', 
-        'short_name', 'total_applicants', 'applicant_email', 'applicant_DOB', 'applicant_phone_number')
+        'short_name', 'total_applicants', 'applicant_email', 'applicant_DOB',
+          'applicant_phone_number', "job_role")
 
     def get_detail_url(self, obj):
         request = self.context.get('request')
         absolute_url = reverse('jobs:job_application_detail', args=[str(obj.id)], request=request)
         return absolute_url
     
-    def get_job(self, obj):
-        job= obj.job
-        if job:
-            return job.role
-        return None
+    # def get_job(self, obj):
+    #     job= obj.job
+    #     if job:
+    #         return job.role
+    #     return None
     
 
 class JobSerializer(serializers.ModelSerializer):
