@@ -9,18 +9,18 @@ from django.utils import timezone
 
 class ActivityLogJobMixin:
     def _get_user(self, request):
-        user = request.user if request.user.is_authenticated else None
+        user = request.user.first_name if request.user.is_authenticated else None
         return user
 
 
     def _create_activity_log(self, instance, request):
-        actor = self._get_user(request.user.first_name)
+        actor = self._get_user(request)
         message = f"New job created by "
         ActivityLog.objects.create(actor=actor, action_type=CREATE, content_object=instance, data=message)
 
 
     def _update_activity_log(self, instance, request, old_role):
-        actor = self._get_user(request.user.first_name)
+        actor = self._get_user(request)
         # current_time = timezone.now()
         message = f"{old_role} was updated by "
         ActivityLog.objects.create(actor=actor, action_type=UPDATE, content_object=instance, 
@@ -28,7 +28,7 @@ class ActivityLogJobMixin:
 
 
     def _delete_activity_log(self, instance, old_role, request):
-        actor = self._get_user(request.user.first_name)
+        actor = self._get_user(request)
         message = f"{instance.role} deleted by "
         ActivityLog.objects.create(actor=actor, action_type=DELETE, content_object=instance, data=message)
 
