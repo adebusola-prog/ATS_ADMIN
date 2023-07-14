@@ -122,11 +122,19 @@ class JobApplication(models.Model):
         unique_together = ('job', 'applicant')
 
     def __str__(self):
-        return f"{self.id}/{self.applicant.email}'s applicantion for {self.job}"
+        return f"{self.id}/{self.applicant.email}'s applicantion for {self.job.role}"
     
     @classmethod
     def get_total_applicants(cls):
         return JobApplication.active_objects.count()
+    
+    def save(self, *args, **kwargs):
+        existing_application = JobApplication.objects.filter(
+            job=self.job, applicant=self.applicant).exists()
+        if existing_application:
+            raise ValidationError("This applicant has already applied for this job.")
+        super().save(*args, **kwargs)
+
 
 class InterviewInvitation(models.Model):
     job_application = models.OneToOneField(JobApplication, on_delete=models.CASCADE)
