@@ -83,13 +83,17 @@ class Job(models.Model):
         if time_difference.total_seconds() < 60:
             return "now"
         elif time_difference.total_seconds() < 86400:
-            return f"{timesince(self.created_at, timezone.now()).replace('minutes', 'm').replace('hours', 'hr')}ago"
-        
+            timesince_str = timesince(self.created_at, timezone.now())
+            timesince_str = timesince_str.replace('minutes', 'min').replace('hours', 'hr')
+            hours_str = timesince_str.split(",")[0].strip()  # Extract the hours part from the timesince string
+            return f"{hours_str} ago"
+    
         days = time_difference.days
         if days == 1:
             return "1 day ago"
         else:
             return f"{days} days ago"
+
 
 
     def views_count(self):

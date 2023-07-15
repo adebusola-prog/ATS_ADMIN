@@ -46,7 +46,10 @@ class ActivityLog(models.Model):
         if time_difference.total_seconds() < 60:
             return "now"
         elif time_difference.total_seconds() < 86400:
-             return f"{timesince(self.action_time, timezone.now()).replace('minutes', 'm').replace('hours', 'hr')} ago"
+            timesince_str = timesince(self.action_time, timezone.now())
+            timesince_str = timesince_str.replace('minutes', 'min').replace('hours', 'hr')
+            hours_str = timesince_str.split(",")[0].strip()
+            return f"{hours_str} ago"
         
         days = time_difference.days
         if days == 1:
