@@ -9,6 +9,9 @@ class LocationSerializer(serializers.ModelSerializer):
 
 
 class JobApplicationListCreateSerializer(serializers.ModelSerializer):
+    """
+    Serializer for JobApplication model used for listing and creating job applications.
+    """
     detail_url = serializers.SerializerMethodField()
     applicant_name = serializers.CharField(source='applicant.get_full_name', read_only=True)
     applicant_email = serializers.CharField(source='applicant.email', read_only=True)
