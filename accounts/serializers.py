@@ -31,6 +31,8 @@ class LoginSerializer(TokenObtainPairSerializer):
     first_name = serializers.CharField(read_only=True)
     last_name = serializers.CharField(read_only=True)
     email = serializers.EmailField()
+    is_admin = serializers.BooleanField(read_only=True)
+    is_superadmin = serializers.BooleanField(read_only=True)
     # profile_picture = serializers.FileField(read_only=True)
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
     
@@ -45,6 +47,12 @@ class LoginSerializer(TokenObtainPairSerializer):
         if not user.is_active:
             raise serializers.ValidationError("You have been suspended")
         return user
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['is_admin'] = instance.is_admin
+        representation['is_superadmin'] = instance.is_superadmin
+        return representation
      
 
 class ResetPasswordSerializer(serializers.Serializer):
