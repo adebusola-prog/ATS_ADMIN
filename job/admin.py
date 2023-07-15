@@ -9,6 +9,7 @@ class JobAdmin(admin.ModelAdmin):
     list_filter = ('is_active',)
     search_fields = ('role', 'posted_by__username')
 
+
 @admin.register(JobApplication)
 class JobApplicationAdmin(admin.ModelAdmin):
     list_display = ('id', 'job', 'applicant', 'applied_at', 'is_shortlisted', 'is_invited_for_interview', 'is_hired')

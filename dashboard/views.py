@@ -1,7 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import render
-from django.db import models
 from rest_framework.generics import ListAPIView
+
 from job.models import Job, JobApplication
 from .models import ActivityLog
 from .serializers import ActivityLogSerializer
@@ -9,8 +8,6 @@ from ats_admin.permissions import IsAdmin
 from ats_admin.paginations import JobPagination, NotificationPagination
 
 
-
-# Create your views here.
 class ActivityLogListAdminAPIView(ListAPIView):
     """
     API view that lists the activity logs of subadmins on Jobs.

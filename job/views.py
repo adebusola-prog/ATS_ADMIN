@@ -1,10 +1,15 @@
 import csv
+import rest_framework
 from django.shortcuts import render
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, \
+from rest_framework.generics import (
+    ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView,
     CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
-from .serializers import JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,\
-    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer,\
-          IDValidationCustomSerializer
+)
+from .serializers import (
+    JobSerializer, JobApplicationListCreateSerializer, JobViewsSerializer,
+    RecentJobsSerializer, InterviewInvitationSerializer, LocationSerializer,
+    IDValidationCustomSerializer
+)
 from rest_framework.views import APIView
 from django.utils import timezone, timesince
 from datetime import datetime, timedelta
@@ -21,7 +26,6 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-import rest_framework
 
 
 class LocationListAPIView(ListAPIView):
@@ -62,10 +66,8 @@ class JobListCreateAPIView(ActivityLogJobMixin, CustomMessageCreateMixin, ListCr
     filterset_fields = ['role', 'skill_level', 'job_type', 'job_schedule', 'location__name']
     search_fields = ['role', 'skill_level', 'job_type', 'job_schedule', 'location__name']
 
-    
     def perform_create(self, serializer):
         serializer.save(posted_by=self.request.user)
-
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -285,7 +287,6 @@ class InterviewInvitationAPIView(UpdateAPIView):
         return Response({"message":"This User has been sent an interview request"})
 
 
-
 class HireCandidateView(UpdateAPIView):
     """Use for hiring applicants"""
     queryset = JobApplication.interview_objects.all()
@@ -350,7 +351,6 @@ class RejectCandidateView(UpdateAPIView):
             return Response(response, status=status.HTTP_200_OK)
 
 
-
 class JobApplicationFilterAPIView(ListAPIView):
     """
     API view for filtering job applications by their status.
@@ -409,7 +409,6 @@ class BulkShortlistCandidateView(UpdateAPIView):
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         
-
 class BulkInterviewInvitationAPIView(UpdateAPIView):
     """
     API view for bulk sending interview invitations.
@@ -453,7 +452,6 @@ class BulkInterviewInvitationAPIView(UpdateAPIView):
         return Response(response, status=HTTP_200_OK)
 
 
-
 class BulkHireCandidateView(UpdateAPIView):
     """
     API view for bulk hiring candidates.
@@ -481,6 +479,7 @@ class BulkHireCandidateView(UpdateAPIView):
                 "message": "Candidate once rejected has now been hired"
         }
         return Response(response, status=HTTP_200_OK)
+  
             
 class BulkRejectCandidateView(UpdateAPIView):
     """

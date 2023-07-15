@@ -20,19 +20,18 @@ def validate_date_of_birth(value):
     if value >= age_limit:
         raise ValidationError("You must be at least 18 years old.")
     
-# class MyAccountManager(BaseUserManager):
-#     def create_user(self, first_name, last_name, username, email, password=None, is_superadmin=False):
-#         if not username:
-#             raise ValueError("User must have a username")
-#         if not email:
-#             raise ValueError("User must have an email address")
+class MyAccountManager(BaseUserManager):
+    def create_user(self, first_name, last_name, username, email, password=None):
+        if not username:
+            raise ValueError("User must have a username")
+        if not email:
+            raise ValueError("User must have an email address")
         
-#         user = self.model(username=username, first_name=first_name, last_name=last_name, 
-#                           email=self.normalize_email(email))
-#         user.set_password(password)
-#         user.is_superadmin = is_superadmin  # Set the is_superadmin status
-#         user.save(using=self._db)
-#         return user
+        user = self.model(username=username, first_name=first_name, last_name=last_name, 
+                          email=self.normalize_email(email))
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
        
 
 #     def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
@@ -47,11 +46,13 @@ def validate_date_of_birth(value):
         
 #         return self.create_user(first_name, last_name, email=email, password=password, **extra_fields)
 
+
 class PermissionLevel(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False)
 
     def __str__(self):
         return f"{self.name}_{self.id}"
+
 
 class CustomUser(AbstractUser):
     """Custom User Model that takes extra fields for easier authentication"""
@@ -61,7 +62,6 @@ class CustomUser(AbstractUser):
         (MOBILE_DEVELOPER, _( MOBILE_DEVELOPER)),
         (PRODUCT_MANAGER, _( PRODUCT_MANAGER)),
     )
-
 
     first_name = models.CharField(max_length=30, null=False, blank=False)
     middle_name = models.CharField(max_length=30, blank=True, null=True)

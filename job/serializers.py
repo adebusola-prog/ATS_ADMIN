@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Job, Location, JobApplication, JobViews, InterviewInvitation
 from rest_framework.reverse import reverse
 
+
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
@@ -41,6 +42,7 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
         
         return attrs
 
+
 class JobSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField()
     update_url = serializers.SerializerMethodField()
@@ -56,7 +58,6 @@ class JobSerializer(serializers.ModelSerializer):
                 'posted_by', 'uploaded_time', 'location', 'no_of_views', "applications")
         
         extra_kwargs = {
-            # 'skill_level': {"write_only": True},
             'posted_by': {"read_only": True},
         }
     
@@ -85,7 +86,6 @@ class JobSerializer(serializers.ModelSerializer):
         job = Job.objects.create(**validated_data)
         job.location.set(location_data)
         return job
-
 
 
 class JobViewsSerializer(serializers.ModelSerializer):

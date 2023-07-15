@@ -9,8 +9,6 @@ from base.managers import ActiveManager, InActiveManager, IsShortlistedManager, 
     InterviewInviteManager, HiredManager, RejectedManager, IsShortlistedOnlyManager,\
     InterviewInviteOnlyManager
 
-# from cities_light.models import City
-
 
 def _json_list():
     return list
@@ -30,7 +28,6 @@ class Location(models.Model):
 
     def __str__(self):
         return f"{self.name}_{self.id}"
-
 
 
 SKILL_LEVEL_CHOICES = (
@@ -77,24 +74,22 @@ class Job(models.Model):
     def __str__(self):
         return self.role
 
-
     def time_since_creation(self):
         time_difference = timezone.now() - self.created_at
         if time_difference.total_seconds() < 60:
             return "now"
         elif time_difference.total_seconds() < 86400:
             timesince_str = timesince(self.created_at, timezone.now())
-            timesince_str = timesince_str.replace('minutes', 'min').replace('hours', 'hr')
+            timesince_str = timesince_str.replace('minutes', 'mins').replace('hours', 'hr')
+            timesince_str = timesince_str.replace(' mins', 'min')
             hours_str = timesince_str.split(",")[0].strip()  # Extract the hours part from the timesince string
             return f"{hours_str} ago"
     
         days = time_difference.days
         if days == 1:
-            return "1 day ago"
+            return "1day ago"
         else:
-            return f"{days} days ago"
-
-
+            return f"{days}days ago"
 
     def views_count(self):
         total_views = Job.objects.aggregate(total_views=Sum('no_of_views'))['total_views']
@@ -103,7 +98,6 @@ class Job(models.Model):
     def get_total_applications(self):
         return self.applications.count()
     
-
 
 class JobViews(models.Model):
     """
@@ -155,7 +149,6 @@ class JobApplication(models.Model):
     def get_total_applicants(cls):
         return JobApplication.active_objects.count()
     
-
 
 class InterviewInvitation(models.Model):
     """
