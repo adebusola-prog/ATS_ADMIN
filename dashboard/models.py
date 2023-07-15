@@ -48,7 +48,7 @@ class ActivityLog(models.Model):
         elif time_difference.total_seconds() < 86400:
             timesince_str = timesince(self.action_time, timezone.now())
             timesince_str = timesince_str.replace('minutes', 'min').replace('hours', 'hrs').replace('hour', 'hr')
-            timesince_str = timesince_str.replace(' mins', 'min').replace(' min', 'min')
+            timesince_str = timesince_str.replace(' mins', 'mins').replace(' min', 'min').replace(' hr', 'hr')
             hours_str = timesince_str.split(",")[0].strip()
             return f"{hours_str} ago"
         
