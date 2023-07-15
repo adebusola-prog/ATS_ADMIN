@@ -17,9 +17,8 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     short_name = serializers.CharField(source='applicant.get_short_name', read_only=True)
     total_applicants = serializers.CharField(source='get_total_applicants', read_only=True)
     job_role = serializers.CharField(source='job.role', read_only=True)
-    # job = serializers.SerializerMethodField()
     
-
+    
     class Meta:
         model = JobApplication
         fields = ("id", 'detail_url', 'job', 'applicant_name', 'cover_letter', 'resume', 
@@ -31,12 +30,7 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
         absolute_url = reverse('jobs:job_application_detail', args=[str(obj.id)], request=request)
         return absolute_url
     
-    # def get_job(self, obj):
-    #     job= obj.job
-    #     if job:
-    #         return job.role
-    #     return None
-    
+   
 
 class JobSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField()
