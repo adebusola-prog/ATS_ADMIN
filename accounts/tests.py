@@ -40,7 +40,7 @@ class AdminAccountTests(TestCase):
         """Test that password is too short"""
         self.client.force_login(self.admin_user)
         response = self.client.post(reverse("authe:log_in"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         data = {
             "email": config.ADMIN_EMAIL,

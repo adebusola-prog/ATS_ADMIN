@@ -71,7 +71,8 @@ ELASTICSEARCH_INDEX_NAMES = {
 CSRF_TRUSTED_ORIGINS = ['https://ats-admin-dashboard.onrender.com']
 
 CORS_ALLOWED_ORIGINS = ['https://ats-admin-dashboard.onrender.com', 'http://localhost:4000',
-                        'http://localhost:8000', 'http://127.0.0.1:4000', 'http://127.0.0.1:8000']
+                        'http://localhost:8000', 'http://127.0.0.1:4000', 'http://127.0.0.1:8000',
+                        'https://ats-admin-dashboard.netlify.app/']
                     
 CORS_ALLOW_CREDENTIALS = True
 
