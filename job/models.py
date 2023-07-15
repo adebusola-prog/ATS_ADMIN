@@ -83,7 +83,7 @@ class Job(models.Model):
         if time_difference.total_seconds() < 60:
             return "now"
         elif time_difference.total_seconds() < 86400:
-            return f"{timesince(self.created_at, timezone.now())} ago"
+            return f"{timesince(self.created_at, timezone.now()).replace('minutes', 'm').replace('hours', 'hr')}ago"
         
         days = time_difference.days
         if days == 1:
