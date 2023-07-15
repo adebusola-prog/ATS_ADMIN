@@ -36,7 +36,7 @@ class LoginSerializer(TokenObtainPairSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ("email", "password", "first_name", "last_name")
+        fields = ("email", "password", "first_name", "last_name", "is_admin", "is_superadmin")
                 #  "profile_picture"
 
 

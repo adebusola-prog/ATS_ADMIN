@@ -4,7 +4,6 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import CustomUser, PermissionLevel
 
 
-
 class UserAdmin(BaseUserAdmin):
     ordering = ('email',) 
     list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_active',
@@ -26,6 +25,7 @@ class UserAdmin(BaseUserAdmin):
              'last_name', 'username', 'date_of_birth'),
         }),
     )
+
 
 admin.site.register(CustomUser, UserAdmin)
 admin.site.register(PermissionLevel)
