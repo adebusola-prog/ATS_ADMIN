@@ -10,13 +10,18 @@ from job.models import Job, JobApplication
 
 # Create your views here.
 class ActivityLogListAdminAPIView(ListAPIView):
-    """Logs the activities of subadmins on Jobs"""
+    """
+    API view that lists the activity logs of subadmins on Jobs.
+    """
     queryset = ActivityLog.objects.all()
     serializer_class = ActivityLogSerializer
     permission_classes = [IsAdmin]
     pagination_class = JobPagination
 
     def get_queryset(self):
+        """
+        Retrieve the queryset of activity logs filtered by content type.
+        """
         content_type = ContentType.objects.get_for_model(Job)
         print(content_type)
         queryset = ActivityLog.objects.filter(content_type=content_type)

@@ -23,6 +23,9 @@ ACTION_STATUS = [(SUCCESS, SUCCESS), (FAILED, FAILED)]
 
 
 class ActivityLog(models.Model):
+    """
+    Model representing an activity log.
+    """
     actor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     action_type = models.CharField(choices=ACTION_TYPES, max_length=15)
     action_time = models.DateTimeField(auto_now_add=True)
@@ -43,7 +46,8 @@ class ActivityLog(models.Model):
         if time_difference.total_seconds() < 60:
             return "uploaded now"
         elif time_difference.total_seconds() < 86400:
-            return f"Uploaded {timesince(self.action_time, timezone.now())} ago"
+             return f"Uploaded {timesince(self.action_time, timezone.now()).\
+                                replace('minutes', 'm').replace('hours', 'hr')} ago"
         
         days = time_difference.days
         if days == 1:

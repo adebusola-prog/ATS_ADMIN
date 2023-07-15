@@ -8,12 +8,14 @@ from django.utils import timezone
 
 
 class ActivityLogJobMixin:
+    """Retrieve the user from the request."""
     def _get_user(self, request):
         user = request.user if request.user.is_authenticated else None
         return user
 
 
     def _create_activity_log(self, instance, request):
+        
         actor = self._get_user(request)
         message = f"New job created "
         ActivityLog.objects.create(actor=actor, action_type=CREATE, content_object=instance, data=message)
