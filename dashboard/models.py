@@ -54,7 +54,7 @@ class ActivityLog(models.Model):
         
         days = time_difference.days
         if days == 1:
-            return "1 day ago"
+            return "1day ago"
         else:
-            return f"{days} days ago"
+            return f"{days}days ago"
         
