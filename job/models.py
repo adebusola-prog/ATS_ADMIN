@@ -28,6 +28,8 @@ class Location(models.Model):
     def __str__(self):
         return f"{self.name}_{self.id}"
 
+
+
 SKILL_LEVEL_CHOICES = (
     ('Junior', 'Junior'),
     ('Senior', 'Senior'),
