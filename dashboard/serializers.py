@@ -1,7 +1,8 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from .models import ActivityLog
-from accounts.models import CustomUser
-from ats_admin.serializers import CustomUserSubAdminSerializer
+
 
 class ActivityLogSerializer(serializers.ModelSerializer):
     """

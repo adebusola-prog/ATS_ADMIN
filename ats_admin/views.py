@@ -15,7 +15,6 @@ from .permissions import IsSuperAdmin, IsSubAdmin
 from .paginations import CustomPagination
 
 
-
 class SuperAdminDetailView(generics.RetrieveAPIView):
     """A user with the superadmin status can only view this"""
     queryset = CustomUser.active_objects.all()

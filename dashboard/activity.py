@@ -1,9 +1,11 @@
 import logging
+
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from rest_framework.exceptions import ValidationError
-from .models import ActivityLog, READ, CREATE, UPDATE, DELETE, SUCCESS, FAILED
 from django.utils import timezone
+from rest_framework.exceptions import ValidationError
+
+from .models import ActivityLog, READ, CREATE, UPDATE, DELETE, SUCCESS, FAILED
 
 
 

@@ -35,10 +35,11 @@ class LoginSerializer(TokenObtainPairSerializer):
     is_superadmin = serializers.BooleanField(read_only=True)
     # profile_picture = serializers.FileField(read_only=True)
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    role = serializers.SerializerMethodField()
     
     class Meta:
         model = CustomUser
-        fields = ("email", "password", "first_name", "last_name", "is_admin", "is_superadmin")
+        fields = ("email", "password", "first_name", "last_name", "is_admin", "is_superadmin", "role")
                 #  "profile_picture"
 
 
@@ -53,6 +54,14 @@ class LoginSerializer(TokenObtainPairSerializer):
         representation['is_admin'] = instance.is_admin
         representation['is_superadmin'] = instance.is_superadmin
         return representation
+    
+    def get_role(self, user):
+        if user.is_admin:
+            return 'is_admin'
+        elif user.is_superadmin:
+            return 'is_superadmin'
+        else:
+            return None
      
 
 class ResetPasswordSerializer(serializers.Serializer):
@@ -100,6 +109,7 @@ class SetNewPasswordSerializer(serializers.Serializer):
         instance.set_password(validated_data.get('password'))
         instance.save()
         return instance
+
 
 class PermissionLevelSerializer(serializers.ModelSerializer):
     class Meta:

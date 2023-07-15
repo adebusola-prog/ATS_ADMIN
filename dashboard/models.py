@@ -1,9 +1,10 @@
 from django.db import models
-from accounts.models import CustomUser
+from django.utils import timezone
+from django.utils.timesince import timesince
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.utils.timesince import timesince
-from django.utils import timezone
+from accounts.models import CustomUser
+
 
 
 CREATE, READ, UPDATE, DELETE = "Create", "Read", "Update", "Delete"
