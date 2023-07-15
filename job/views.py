@@ -228,7 +228,10 @@ class ExportApplicantsCSVView(APIView):
     
 
 class ShortlistCandidateView(UpdateAPIView):
-    """Shortlists the applicant selected """
+    """
+    API view for shortlisting a selected applicant.
+    Allows marking an applicant as shortlisted for further consideration.
+    """
     queryset = JobApplication.objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -349,7 +352,10 @@ class RejectCandidateView(UpdateAPIView):
 
 
 class JobApplicationFilterAPIView(ListAPIView):
-    """This filters job application by their status"""
+    """
+    API view for filtering job applications by their status.
+    Query parameter 'status' can be used to filter by different statuses.
+    """
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -375,6 +381,11 @@ class JobApplicationFilterAPIView(ListAPIView):
 
 
 class BulkShortlistCandidateView(UpdateAPIView):
+    """
+    API view for bulk shortlisting candidates.
+    Allows shortlisting multiple job applications at once.
+    Only accessible by admin users.
+    """
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -400,6 +411,11 @@ class BulkShortlistCandidateView(UpdateAPIView):
         
 
 class BulkInterviewInvitationAPIView(UpdateAPIView):
+    """
+    API view for bulk sending interview invitations.
+    Allows sending interview invitations to multiple shortlisted job applications at once.
+    Only accessible by admin users.
+    """
     queryset = JobApplication.shortlisted_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -439,6 +455,11 @@ class BulkInterviewInvitationAPIView(UpdateAPIView):
 
 
 class BulkHireCandidateView(UpdateAPIView):
+    """
+    API view for bulk hiring candidates.
+    Allows hiring multiple candidates from the shortlisted applicants who have been interviewed.
+    Only accessible by admin users.
+    """
     queryset = JobApplication.interview_only_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -462,6 +483,11 @@ class BulkHireCandidateView(UpdateAPIView):
         return Response(response, status=HTTP_200_OK)
             
 class BulkRejectCandidateView(UpdateAPIView):
+    """
+    API view for bulk rejecting candidates.
+    Allows rejecting multiple candidates from the shortlisted applicants who have been interviewed.
+    Only accessible by admin users.
+    """
     queryset = JobApplication.interview_only_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]

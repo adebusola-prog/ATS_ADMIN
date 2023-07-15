@@ -21,7 +21,6 @@ class ActivityLogJobMixin:
 
     def _update_activity_log(self, instance, request, old_role):
         actor = self._get_user(request)
-        # current_time = timezone.now()
         message = f"{old_role} was updated "
         ActivityLog.objects.create(actor=actor, action_type=UPDATE, content_object=instance, 
                         data=message)

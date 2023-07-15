@@ -22,6 +22,9 @@ def validate_pdf_file(value):
 
 
 class Location(models.Model):
+    """
+    Model representing a list of location.
+    """
     name = models.CharField(max_length=200, blank=False, null=False)
     address = models.CharField(max_length=200, null=True, blank=True)
 
@@ -49,6 +52,9 @@ JOB_SCHEDULE_CHOICES = (
 
 
 class Job(models.Model):
+    """
+    Model representing a job posting.
+    """
     role = models.CharField(max_length=100)
     skill_level = models.CharField(max_length=20, choices=SKILL_LEVEL_CHOICES)
     job_type = models.CharField(max_length=20, choices=JOB_TYPE_CHOICES)
@@ -96,6 +102,9 @@ class Job(models.Model):
 
 
 class JobViews(models.Model):
+    """
+    Model representing a job views.
+    """
     job = models.ForeignKey(Job, related_name="job_views", on_delete=models.SET_NULL, null=True)
     viewer_ip = models.JSONField(default=_json_list())
     is_active = models.BooleanField(default=True)
@@ -106,6 +115,9 @@ class JobViews(models.Model):
 
     
 class JobApplication(models.Model):
+    """
+    Model representing a job application.
+    """
     job = models.ForeignKey(Job, on_delete=models.SET_NULL, null=True, related_name='applications')
     applicant = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     cover_letter = models.TextField()
@@ -142,6 +154,9 @@ class JobApplication(models.Model):
 
 
 class InterviewInvitation(models.Model):
+    """
+    Model representing a job interview.
+    """
     job_application = models.OneToOneField(JobApplication, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
