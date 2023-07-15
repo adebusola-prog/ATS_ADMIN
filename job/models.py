@@ -80,8 +80,7 @@ class Job(models.Model):
             return "now"
         elif time_difference.total_seconds() < 86400:
             timesince_str = timesince(self.created_at, timezone.now())
-            timesince_str = timesince_str.replace('minutes', 'mins').replace('hours', 'hr')
-            timesince_str = timesince_str.replace(' mins', 'min')
+            timesince_str = timesince_str.replace('minutes', 'min').replace('hours', 'hr')
             hours_str = timesince_str.split(",")[0].strip()  # Extract the hours part from the timesince string
             return f"{hours_str} ago"
     
