@@ -161,6 +161,7 @@ class JobApplicantDetailAPIView(ActivityLogJobMixin, RetrieveAPIView):
 
 
 class JobViewsListCreateAPIView(ListCreateAPIView):
+    """No of times the job was viewed"""
     queryset = JobViews.objects.all()
     serializer_class = JobViewsSerializer
 
@@ -173,7 +174,7 @@ class JobViewsListCreateAPIView(ListCreateAPIView):
     
 
 class DaysRecentJobsAPIView(APIView):
-    """Returns jobs according to number of days"""
+    """Return jobs according to number of days"""
     serializer_class = RecentJobsSerializer
     permission_classes = [IsAdmin]
 
@@ -227,7 +228,7 @@ class ExportApplicantsCSVView(APIView):
     
 
 class ShortlistCandidateView(UpdateAPIView):
-    """Shortlists applicant selected """
+    """Shortlists the applicant selected """
     queryset = JobApplication.objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -249,7 +250,7 @@ class ShortlistCandidateView(UpdateAPIView):
     
 
 class InterviewInvitationAPIView(UpdateAPIView):
-    """Invites applicant f"""
+    """Invites shortlisted applicant for interview"""
     queryset = JobApplication.shortlisted_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -283,6 +284,7 @@ class InterviewInvitationAPIView(UpdateAPIView):
 
 
 class HireCandidateView(UpdateAPIView):
+    """Use for hiring applicants"""
     queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -314,6 +316,7 @@ class HireCandidateView(UpdateAPIView):
         
 
 class RejectCandidateView(UpdateAPIView):
+    """Performs candidate rejection"""
     queryset = JobApplication.interview_objects.all()
     serializer_class = JobApplicationListCreateSerializer
     permission_classes = [IsAdmin]
@@ -346,6 +349,7 @@ class RejectCandidateView(UpdateAPIView):
 
 
 class JobApplicationFilterAPIView(ListAPIView):
+    """This filters job application by their status"""
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
 

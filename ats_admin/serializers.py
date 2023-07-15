@@ -38,7 +38,7 @@ class CustomUserSubAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('detail_url','full_name', 'first_name', 'last_name', 'username', 'email', 'profile_picture', 'position',
+        fields = ('id', 'detail_url','full_name', 'first_name', 'last_name', 'username', 'email', 'profile_picture', 'position',
                   'permission_level', 'password', 'confirm_password', 'total_subadmins_created')
         extra_kwargs = {
             'position': {'required': True},
