@@ -18,8 +18,7 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
     total_applicants = serializers.CharField(source='get_total_applicants', read_only=True)
     job_role = serializers.CharField(source='job.role', read_only=True)
     
-    
-    class Meta:
+    class Meta:        
         model = JobApplication
         fields = ("id", 'detail_url', 'job', 'applicant_name', 'cover_letter', 'resume', 
         'short_name', 'total_applicants', 'applicant_email', 'applicant_DOB',
@@ -30,7 +29,14 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
         absolute_url = reverse('jobs:job_application_detail', args=[str(obj.id)], request=request)
         return absolute_url
     
-   
+    def validate(self, attrs):
+        job = attrs['job']
+        applicant = self.context['request'].user        
+        existing_application = JobApplication.objects.filter(job=job, applicant=applicant).exists()
+        if existing_application:
+            raise serializers.ValidationError("You have already applied for this job.")
+        
+        return attrs
 
 class JobSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField()
