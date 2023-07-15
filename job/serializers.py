@@ -30,7 +30,7 @@ class JobApplicationListCreateSerializer(serializers.ModelSerializer):
         return absolute_url
     
     def validate(self, attrs):
-        job = attrs['job']
+        job = attrs.get('job')
         applicant = self.context['request'].user        
         existing_application = JobApplication.objects.filter(job=job, applicant=applicant).exists()
         if existing_application:
