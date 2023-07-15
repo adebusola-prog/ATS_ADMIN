@@ -43,11 +43,11 @@ class LoginSerializer(TokenObtainPairSerializer):
                 #  "profile_picture"
 
 
-    def validate(self, validated_data):
-        user = authenticate(**validated_data)
-        if not user.is_active:
-            raise serializers.ValidationError("You have been suspended")
-        return user
+    # def validate(self, validated_data):
+    #     user = authenticate(**validated_data)
+    #     if not user.is_active:
+    #         raise serializers.ValidationError("You have been suspended")
+    #     return user
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
