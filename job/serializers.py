@@ -53,7 +53,7 @@ class JobSerializer(serializers.ModelSerializer):
                 'posted_by', 'uploaded_time', 'location', 'no_of_views', "applications")
         
         extra_kwargs = {
-            'skill_level': {"write_only": True},
+            # 'skill_level': {"write_only": True},
             'posted_by': {"read_only": True},
         }
     
