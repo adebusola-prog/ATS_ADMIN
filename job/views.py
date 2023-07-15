@@ -352,6 +352,7 @@ class JobApplicationFilterAPIView(ListAPIView):
     """This filters job application by their status"""
     queryset = JobApplication.active_objects.all()
     serializer_class = JobApplicationListCreateSerializer
+    permission_classes = [IsAdmin]
 
     def get_queryset(self):
         status = self.request.query_params.get('status')
